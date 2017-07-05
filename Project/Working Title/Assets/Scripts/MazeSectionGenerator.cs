@@ -41,7 +41,18 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         // helper booleans for identifying which wall
         bool vert = (wallIdx & 1) != 0, begin = wallIdx < 2;
-        int edge1 = 1, edge2 = size - 2, max = (size - 1) / 2;
+        int edge1 = 1, edge2 = size - 1, max = (size - 1) / 2;
+
+        // pick x and y - one on the edge, other random node
+        return new IVec2((vert ? (begin ? (edge1) : (edge2)) : (rand.Next(0, max) * 2 + 1)),
+                        (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
+    }
+
+    private IVec2 RandWallNode(int size, int wallIdx)
+    {
+        // helper booleans for identifying which wall
+        bool vert = (wallIdx & 1) != 0, begin = wallIdx < 2;
+        int edge1 = 0, edge2 = size - 1, max = (size - 1) / 2;
 
         // pick x and y - one on the edge, other random node
         return new IVec2((vert ? (begin ? (edge1) : (edge2)) : (rand.Next(0, max) * 2 + 1)),
@@ -52,9 +63,9 @@ public class MazeSectionGenerator : MonoBehaviour {
     private bool isEdge(IVec2 point, int size)
     {
         return (point.x == 1)
-            || (point.x == size - 2)
+            || (point.x == size - 1)
             || (point.z == 1)
-            || (point.z == size - 2);
+            || (point.z == size - 1);
     }
     private void GenerateMaze(int size)
     {
@@ -143,14 +154,30 @@ public class MazeSectionGenerator : MonoBehaviour {
         // color end
         mazeSections[longest.x, longest.z] = MazeSquare.END;
 
+        // remove chunks
+        for (int i = 0; i < 4; ++i)
+        {
+            IVec2 rmv = RandWallNode(size, i);
+            mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
+        }
+
+        // one giant floor object rather than tons of tiny ones - FPS++
+        GameObject floor = Instantiate(FloorPrefab);
+        floor.transform.parent = transform;
+        floor.transform.localPosition = Vector3.zero;
+        floor.transform.localScale = new Vector3(size * SquareSize, floor.transform.localScale.y, size * SquareSize);
+
         for (int x = 0; x < size; ++x)
         {
             for (int z = 0; z < size; ++z)
             {
-                Vector3 location = new Vector3((x - size / 2) * SquareSize, 0.0f,(z - size / 2) * SquareSize);
-                GameObject newCell = Instantiate(mazeSections[x, z] == MazeSquare.WALL ? WallPrefab: FloorPrefab);
-		        newCell.transform.parent = transform;
-                newCell.transform.localPosition = location;
+                if (mazeSections[x, z] == MazeSquare.WALL)
+                {
+                    Vector3 location = new Vector3((x - size / 2) * SquareSize, 0.0f, (z - size / 2) * SquareSize);
+                    GameObject newCell = Instantiate(WallPrefab);
+                    newCell.transform.parent = transform;
+                    newCell.transform.localPosition = location;
+                }
 
             }
         }
