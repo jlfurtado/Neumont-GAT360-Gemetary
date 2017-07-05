@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+public struct IVec2
+{
+    public IVec2(int x, int z) { this.x = x; this.z = z; }
+    public int x, z;
+}
 
 public class MazeSectionGenerator : MonoBehaviour {
     enum MazeSquare
@@ -14,11 +19,6 @@ public class MazeSectionGenerator : MonoBehaviour {
         END
     }
 
-    struct IVec2
-    {
-        public IVec2(int x, int z) { this.x = x; this.z = z; }
-        public int x, z;
-    }
 
     public float SquareSize;
     public GameObject FloorPrefab;
@@ -157,7 +157,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         // remove chunks
         for (int i = 0; i < 4; ++i)
         {
-            IVec2 rmv = RandWallNode(size, i);
+            IVec2 rmv = RandWallNode(size, i%2);
             mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
         }
 
