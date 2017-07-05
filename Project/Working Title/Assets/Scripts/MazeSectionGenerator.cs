@@ -143,10 +143,10 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
 
-        // color start
+        // mark start
         mazeSections[start.x, start.z] = MazeSquare.START;
 
-        // color end
+        // mark end
         mazeSections[longest.x, longest.z] = MazeSquare.END;
 
         // remove chunks
@@ -160,11 +160,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         GameObject floor = MakeAt(FloorPrefab, Vector3.zero);
         floor.transform.localScale = new Vector3(size * SquareSize, floor.transform.localScale.y, size * SquareSize);
 
+        int halfSize = size / 2;
         for (int x = 0; x < size; ++x)
         {
             for (int z = 0; z < size; ++z)
             {
-                Vector3 location = new Vector3((x - size / 2) * SquareSize, 0.5f, (z - size / 2) * SquareSize);
+                Vector3 location = new Vector3((x - halfSize) * SquareSize, 0.5f, (z - halfSize) * SquareSize);
 
                 if (mazeSections[x, z] == MazeSquare.WALL)
                 {
@@ -177,13 +178,12 @@ public class MazeSectionGenerator : MonoBehaviour {
             }
         }
 
-        MakeAt(PowerupPrefab, new Vector3((longest.x - size / 2) * SquareSize, 0.0f, (longest.z - size / 2) * SquareSize));
+        MakeAt(PowerupPrefab, new Vector3((longest.x - halfSize) * SquareSize, 1.0f, (longest.z - halfSize) * SquareSize));
     }
 
     private GameObject MakeAt(GameObject prefab, Vector3 location)
     {
-        GameObject obj = Instantiate(prefab);
-        obj.transform.parent = transform;
+        GameObject obj = Instantiate(prefab, transform);
         obj.transform.localPosition = location;
         return obj;
     }

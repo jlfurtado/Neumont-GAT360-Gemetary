@@ -10,6 +10,7 @@ public class MazeScript : MonoBehaviour {
  
     private Dictionary<IVec2, GameObject> generated = new Dictionary<IVec2, GameObject>();
     private int lastLowX, lastHighX, lastLowZ, lastHighZ;
+    private bool inCoroutine = false;
 
     // Use this for initialization
     void Start () {
@@ -20,12 +21,18 @@ public class MazeScript : MonoBehaviour {
 
     public void GenerateAround(Vector3 position)
     {
-        StartCoroutine(GenerateAround(position, Radius));
+        if (!inCoroutine)
+        {
+            StartCoroutine(GenerateAround(position, Radius));
+        }
     }
 
     private IEnumerator GenerateAround(Vector3 position, float radius)
     {
+        inCoroutine = true;
         WaitForSeconds wait = new WaitForSeconds(0.05f);
+        float mazeSize = SquareSize * SectionSize;
+
         int lowX = (int)(Mathf.Floor((position.x - radius) / SectionSize));
         int highX = (int)(Mathf.Ceil((position.x + radius) / SectionSize));
         int lowZ = (int)(Mathf.Floor((position.z - radius) / SectionSize));
@@ -48,7 +55,7 @@ public class MazeScript : MonoBehaviour {
                     {
                         GameObject mazeSection = Instantiate(MazeSectorPrefab);
                         mazeSection.transform.parent = transform;
-                        mazeSection.transform.localPosition = new Vector3(i * SectionSize * SquareSize, 0.0f, j * SquareSize * SectionSize);
+                        mazeSection.transform.localPosition = new Vector3(i * mazeSize, 0.0f, j * mazeSize);
                         generated.Add(currentSection, mazeSection);
                         yield return wait;
                     }
@@ -60,5 +67,6 @@ public class MazeScript : MonoBehaviour {
         lastLowZ = lowZ;
         lastHighX = highX;
         lastHighZ = highZ;
+        inCoroutine = false;
     }
 }
