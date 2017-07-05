@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+
 public struct IVec2
 {
     public IVec2(int x, int z) { this.x = x; this.z = z; }
@@ -19,11 +20,10 @@ public class MazeSectionGenerator : MonoBehaviour {
         END
     }
 
-
-    public float SquareSize;
+    public static float SquareSize;
+    public static int Size;
     public GameObject FloorPrefab;
     public GameObject WallPrefab;
-    public int Size = 15;
     private MazeSquare[,] mazeSections;
     private static System.Random rand = new System.Random();
 

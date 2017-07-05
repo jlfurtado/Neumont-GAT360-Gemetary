@@ -7,11 +7,14 @@ public class MazeScript : MonoBehaviour {
     public int SectionSize;
     public float SquareSize;
     public float Radius;
-
-    private Dictionary<IVec2, bool> generated = new Dictionary<IVec2, bool>();
+ 
+    private Dictionary<IVec2, GameObject> generated = new Dictionary<IVec2, GameObject>();
+    private int lastLowX, lastHighX, lastLowZ, lastHighZ;
 
     // Use this for initialization
     void Start () {
+        MazeSectionGenerator.Size = SectionSize;
+        MazeSectionGenerator.SquareSize = SquareSize;
         GenerateAround(Vector3.zero, Radius);
 	}
 
@@ -23,22 +26,35 @@ public class MazeScript : MonoBehaviour {
         int lowZ = (int)(Mathf.Floor((position.z - radius) / SectionSize));
         int highZ = (int)(Mathf.Ceil((position.z + radius) / SectionSize));
 
-        for (int i = lowX; i <= highX; ++i)
+        if (lastLowX != lowX || lastHighX != highX || lastLowZ != lowZ || lastHighZ != highZ)
         {
-            for (int j = lowZ; j <= highZ; ++j)
+            foreach (IVec2 v in generated.Keys)
             {
-                if (!generated.ContainsKey(new IVec2(i, j)))
+                bool outBounds = v.x < lowX || v.x > highX || v.z < lowZ || v.z > highZ;
+                generated[v].SetActive(!outBounds);
+            }
+
+            for (int i = lowX; i <= highX; ++i)
+            {
+                for (int j = lowZ; j <= highZ; ++j)
                 {
-                    generated.Add(new IVec2(i, j), true);
-                    GameObject mazeSection = Instantiate(MazeSectorPrefab);
-                    MazeSectionGenerator compRef = mazeSection.GetComponent<MazeSectionGenerator>();
-                    compRef.Size = SectionSize;
-                    compRef.SquareSize = SquareSize;
-                    mazeSection.transform.parent = transform;
-                    mazeSection.transform.localPosition = new Vector3(i * SectionSize * SquareSize, 0.0f, j * SquareSize * SectionSize);
+                    IVec2 currentSection = new IVec2(i, j);
+                    if (!generated.ContainsKey(currentSection))
+                    {
+                        GameObject mazeSection = Instantiate(MazeSectorPrefab);
+                        mazeSection.transform.parent = transform;
+                        mazeSection.transform.localPosition = new Vector3(i * SectionSize * SquareSize, 0.0f, j * SquareSize * SectionSize);
+                        generated.Add(currentSection, mazeSection);
+                    }
                 }
             }
         }
+
+        lastLowX = lowX;
+        lastLowZ = lowZ;
+        lastHighX = highX;
+        lastHighZ = highZ;
+        
 
     }
 }
