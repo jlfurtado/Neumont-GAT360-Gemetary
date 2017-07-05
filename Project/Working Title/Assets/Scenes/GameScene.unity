@@ -152,6 +152,10 @@ Prefab:
       propertyPath: Maze
       value: 
       objectReference: {fileID: 709646006}
+    - target: {fileID: 1344736837304578, guid: c056d3c78197f33478473f344f9e87e0, type: 2}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c056d3c78197f33478473f344f9e87e0, type: 2}
   m_IsPrefabParent: 0

@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\EatForPoints.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

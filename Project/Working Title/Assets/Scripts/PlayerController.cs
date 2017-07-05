@@ -21,6 +21,6 @@ public class PlayerController : MonoBehaviour {
         Vector3 move = new Vector3(horiz, 0.0f, vert);
         move.Normalize();
         myRigidBody.velocity = Speed * move;
-        Maze.GenerateAround(transform.position, Maze.Radius);
+        Maze.GenerateAround(transform.position);
 	}
 }

@@ -15,12 +15,17 @@ public class MazeScript : MonoBehaviour {
     void Start () {
         MazeSectionGenerator.Size = SectionSize;
         MazeSectionGenerator.SquareSize = SquareSize;
-        GenerateAround(Vector3.zero, Radius);
+        GenerateAround(Vector3.zero);
 	}
 
-
-    public void GenerateAround(Vector3 position, float radius)
+    public void GenerateAround(Vector3 position)
     {
+        StartCoroutine(GenerateAround(position, Radius));
+    }
+
+    private IEnumerator GenerateAround(Vector3 position, float radius)
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.05f);
         int lowX = (int)(Mathf.Floor((position.x - radius) / SectionSize));
         int highX = (int)(Mathf.Ceil((position.x + radius) / SectionSize));
         int lowZ = (int)(Mathf.Floor((position.z - radius) / SectionSize));
@@ -45,6 +50,7 @@ public class MazeScript : MonoBehaviour {
                         mazeSection.transform.parent = transform;
                         mazeSection.transform.localPosition = new Vector3(i * SectionSize * SquareSize, 0.0f, j * SquareSize * SectionSize);
                         generated.Add(currentSection, mazeSection);
+                        yield return wait;
                     }
                 }
             }
@@ -54,7 +60,5 @@ public class MazeScript : MonoBehaviour {
         lastLowZ = lowZ;
         lastHighX = highX;
         lastHighZ = highZ;
-        
-
     }
 }

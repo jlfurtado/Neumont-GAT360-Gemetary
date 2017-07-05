@@ -24,6 +24,9 @@ public class MazeSectionGenerator : MonoBehaviour {
     public static int Size;
     public GameObject FloorPrefab;
     public GameObject WallPrefab;
+    public GameObject PowerupPrefab;
+    public GameObject GemPrefab;
+
     private MazeSquare[,] mazeSections;
     private static System.Random rand = new System.Random();
 
@@ -59,14 +62,6 @@ public class MazeSectionGenerator : MonoBehaviour {
                         (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
     }
 
-    // returns if an edge node
-    private bool isEdge(IVec2 point, int size)
-    {
-        return (point.x == 1)
-            || (point.x == size - 1)
-            || (point.z == 1)
-            || (point.z == size - 1);
-    }
     private void GenerateMaze(int size)
     {
         // create tiles
@@ -113,7 +108,7 @@ public class MazeSectionGenerator : MonoBehaviour {
             if (nextIdx <= 0)
             {
                 // update end... do we need this?
-                if (traceback.Count > mostMoves && isEdge(currentPos, size))
+                if (traceback.Count > mostMoves)
                 {
                     longest = currentPos;
                     solution = traceback.ToArray();
@@ -162,25 +157,35 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = Instantiate(FloorPrefab);
-        floor.transform.parent = transform;
-        floor.transform.localPosition = Vector3.zero;
+        GameObject floor = MakeAt(FloorPrefab, Vector3.zero);
         floor.transform.localScale = new Vector3(size * SquareSize, floor.transform.localScale.y, size * SquareSize);
 
         for (int x = 0; x < size; ++x)
         {
             for (int z = 0; z < size; ++z)
             {
+                Vector3 location = new Vector3((x - size / 2) * SquareSize, 0.5f, (z - size / 2) * SquareSize);
+
                 if (mazeSections[x, z] == MazeSquare.WALL)
                 {
-                    Vector3 location = new Vector3((x - size / 2) * SquareSize, 0.0f, (z - size / 2) * SquareSize);
-                    GameObject newCell = Instantiate(WallPrefab);
-                    newCell.transform.parent = transform;
-                    newCell.transform.localPosition = location;
+                    MakeAt(WallPrefab, location);
                 }
-
+                else if (mazeSections[x, z] == MazeSquare.VISITED)
+                {
+                    MakeAt(GemPrefab, location);
+                }
             }
         }
+
+        MakeAt(PowerupPrefab, new Vector3((longest.x - size / 2) * SquareSize, 0.0f, (longest.z - size / 2) * SquareSize));
+    }
+
+    private GameObject MakeAt(GameObject prefab, Vector3 location)
+    {
+        GameObject obj = Instantiate(prefab);
+        obj.transform.parent = transform;
+        obj.transform.localPosition = location;
+        return obj;
     }
 
 }
