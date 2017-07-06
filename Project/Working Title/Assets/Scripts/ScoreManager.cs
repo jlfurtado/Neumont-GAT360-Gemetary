@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour {
     public Text scoreText;
     private int scoreValue = 0;
     //private int highScore = 0; TODO HIGH SCORES
-    private bool didWin = false;
+    //private bool didWin = false;
 
     void Start()
     {

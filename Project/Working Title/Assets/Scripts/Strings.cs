@@ -13,5 +13,6 @@ static class Strings
     public static string[] HIGH_SCORE_KEYS = { "HighScoreLVL1", "HighScoreLVL2", "HighScoreLVL3", "HighScoreLVL4" };
     public static string SCORE_MANAGER_TAG = "ScoreManager";
     public static string PLAYER_TAG = "Player";
+    public static string MAZE_TAG = "Maze";
 }
 

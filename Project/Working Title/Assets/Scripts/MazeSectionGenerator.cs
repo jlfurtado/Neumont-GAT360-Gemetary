@@ -17,24 +17,31 @@ public class MazeSectionGenerator : MonoBehaviour {
         VISITED,
         SOLUTION,
         START,
-        END
+        END,
+        NO_GEM
     }
 
     public static float SquareSize;
     public static int Size;
-    public GameObject FloorPrefab;
-    public GameObject WallPrefab;
-    public GameObject PowerupPrefab;
-    public GameObject GemPrefab;
+    public GameObject[] FloorPool;
+    public GameObject[] WallPool;
+    public GameObject[] PowerupPool;
+    public EatForPoints[] GemPool;
 
     private MazeSquare[,] mazeSections;
-    private static System.Random rand = new System.Random();
+    private System.Random rand;
+    private IVec2 powerupPos;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
-        GenerateMaze(Size);	
  	}
+
+    public void GenerateMaze(int seed)
+    {
+        rand = new System.Random(seed);
+        GenerateMaze();
+    }
 
     // returns a random node on the edge of a maze
     private IVec2 RandMazeEdgeVal(int size)
@@ -62,22 +69,27 @@ public class MazeSectionGenerator : MonoBehaviour {
                         (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
     }
 
-    private void GenerateMaze(int size)
+    public void EatGem(int x, int z)
+    {
+        mazeSections[x, z] = MazeSquare.NO_GEM;
+    }
+
+    private void GenerateMaze()
     {
         // create tiles
         mazeSections = new MazeSquare[Size, Size];
 
         // create base map
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < Size; ++i)
         {
-            for (int j = 0; j < size; ++j)
+            for (int j = 0; j < Size; ++j)
             {
                 mazeSections[i, j] = ((i & j & 1) == 0) ? MazeSquare.WALL : MazeSquare.UNVISITED; 
             }
         }
 
         // get random start
-        IVec2 start = RandMazeEdgeVal(size);
+        IVec2 start = RandMazeEdgeVal(Size);
 
         // add start to traceback, no solution yet
         List<IVec2> traceback = new List<IVec2>(new IVec2[] { start });
@@ -99,9 +111,9 @@ public class MazeSectionGenerator : MonoBehaviour {
             IVec2 currentPos = traceback.Last();
 
             // check moves, add to array accordingly
-            if (currentPos.x + 2 < size && mazeSections[currentPos.x + 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x + 2, currentPos.z); }
+            if (currentPos.x + 2 < Size && mazeSections[currentPos.x + 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x + 2, currentPos.z); }
             if (currentPos.x - 2 >= 0 && mazeSections[currentPos.x - 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x - 2, currentPos.z); }
-            if (currentPos.z + 2 < size && mazeSections[currentPos.x, currentPos.z + 2] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z + 2); }
+            if (currentPos.z + 2 < Size && mazeSections[currentPos.x, currentPos.z + 2] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z + 2); }
             if (currentPos.z - 2 >= 0 && mazeSections[currentPos.x, currentPos.z - 2] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z - 2); }
 
             // if no moves pop
@@ -152,40 +164,55 @@ public class MazeSectionGenerator : MonoBehaviour {
         // remove chunks
         for (int i = 0; i < 4; ++i)
         {
-            IVec2 rmv = RandWallNode(size, i%2);
+            IVec2 rmv = RandWallNode(Size, i%2);
             mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
         }
 
-        // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPrefab, Vector3.zero);
-        floor.transform.localScale = new Vector3(size * SquareSize, floor.transform.localScale.y, size * SquareSize);
+        powerupPos = longest;
+    }
 
-        int halfSize = size / 2;
-        for (int x = 0; x < size; ++x)
+    private GameObject MakeAt(GameObject[] pool, int index, Vector3 location)
+    {
+        return MakeAt(pool[index], location);
+    }
+
+    private GameObject MakeAt(GameObject obj, Vector3 location)
+    {
+        obj.SetActive(true);
+        obj.transform.parent = transform;
+        obj.transform.localPosition = location;
+        return obj;
+    }
+    
+    public void RedoMazeGeometry(IVec2 mazeLoc)
+    {
+        // one giant floor object rather than tons of tiny ones - FPS++
+        GameObject floor = MakeAt(FloorPool, 0, Vector3.zero);
+        floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
+
+        int halfSize = Size / 2;
+        int wallCount = 0, gemCount = 0;
+        for (int x = 0; x < Size; ++x)
         {
-            for (int z = 0; z < size; ++z)
+            for (int z = 0; z < Size; ++z)
             {
                 Vector3 location = new Vector3((x - halfSize) * SquareSize, 0.5f, (z - halfSize) * SquareSize);
 
                 if (mazeSections[x, z] == MazeSquare.WALL)
                 {
-                    MakeAt(WallPrefab, location);
+                    MakeAt(WallPool, wallCount++, location);
                 }
                 else if (mazeSections[x, z] == MazeSquare.VISITED)
                 {
-                    MakeAt(GemPrefab, location);
+                    MakeAt(GemPool[gemCount].gameObject, location);
+                    GemPool[gemCount].mazeLoc = mazeLoc;
+                    GemPool[gemCount].sectionLoc = new IVec2(x, z);
+                    gemCount++;
                 }
             }
         }
 
-        MakeAt(PowerupPrefab, new Vector3((longest.x - halfSize) * SquareSize, 1.0f, (longest.z - halfSize) * SquareSize));
-    }
-
-    private GameObject MakeAt(GameObject prefab, Vector3 location)
-    {
-        GameObject obj = Instantiate(prefab, transform);
-        obj.transform.localPosition = location;
-        return obj;
+        MakeAt(PowerupPool, 0, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
     }
 
 }

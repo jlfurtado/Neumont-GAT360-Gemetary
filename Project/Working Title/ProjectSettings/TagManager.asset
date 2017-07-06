@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - ScoreManager
+  - Maze
   layers:
   - Default
   - TransparentFX
