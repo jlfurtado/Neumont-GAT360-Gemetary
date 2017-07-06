@@ -9,6 +9,13 @@ public struct IVec2
     public int x, z;
 }
 
+public struct RefArray<T>
+{
+    public RefArray(T[] reference, int start, int count) { this.reference = reference; this.start = start; this.count = count; }
+    public int start, count;
+    public T[] reference;
+}
+
 public class MazeSectionGenerator : MonoBehaviour {
     enum MazeSquare
     {
@@ -23,10 +30,10 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public static float SquareSize;
     public static int Size;
-    public GameObject[] FloorPool;
-    public GameObject[] WallPool;
-    public GameObject[] PowerupPool;
-    public EatForPoints[] GemPool;
+    public RefArray<GameObject> FloorPool;
+    public RefArray<GameObject> WallPool;
+    public RefArray<GameObject> PowerupPool;
+    public RefArray<EatForPoints> GemPool;
 
     private MazeSquare[,] mazeSections;
     private System.Random rand;
@@ -171,27 +178,30 @@ public class MazeSectionGenerator : MonoBehaviour {
         powerupPos = longest;
     }
 
-    private GameObject MakeAt(GameObject[] pool, int index, Vector3 location)
+    private GameObject MakeAt(RefArray<GameObject> obj, int idx, Vector3 location)
     {
-        return MakeAt(pool[index], location);
+        obj.reference[idx].SetActive(true);
+        obj.reference[idx].transform.parent = transform;
+        obj.reference[idx].transform.localPosition = location;
+        return obj.reference[idx];
     }
 
-    private GameObject MakeAt(GameObject obj, Vector3 location)
+    private GameObject MakeAt<T>(RefArray<T> obj, int idx, Vector3 location) where T : Component
     {
-        obj.SetActive(true);
-        obj.transform.parent = transform;
-        obj.transform.localPosition = location;
-        return obj;
+        obj.reference[idx].gameObject.SetActive(true);
+        obj.reference[idx].gameObject.transform.parent = transform;
+        obj.reference[idx].gameObject.transform.localPosition = location;
+        return obj.reference[idx].gameObject;
     }
-    
+
     public void RedoMazeGeometry(IVec2 mazeLoc)
     {
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPool, 0, Vector3.zero);
+        GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.zero);
         floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
 
         int halfSize = Size / 2;
-        int wallCount = 0, gemCount = 0;
+        int wallCount = WallPool.start, gemCount = GemPool.start;
         for (int x = 0; x < Size; ++x)
         {
             for (int z = 0; z < Size; ++z)
@@ -204,15 +214,15 @@ public class MazeSectionGenerator : MonoBehaviour {
                 }
                 else if (mazeSections[x, z] == MazeSquare.VISITED)
                 {
-                    MakeAt(GemPool[gemCount].gameObject, location);
-                    GemPool[gemCount].mazeLoc = mazeLoc;
-                    GemPool[gemCount].sectionLoc = new IVec2(x, z);
+                    MakeAt(GemPool, gemCount, location);
+                    GemPool.reference[gemCount].mazeLoc = mazeLoc;
+                    GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;
                 }
             }
         }
 
-        MakeAt(PowerupPool, 0, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
+        MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
     }
 
 }

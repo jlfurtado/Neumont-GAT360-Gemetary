@@ -175,6 +175,24 @@ public class MazeScript : MonoBehaviour {
 
         if (!lastBounds.Equals(currentBounds))
         {
+            //Bounds combined = Bounds.ContainBoth(lastBounds, currentBounds);
+
+            //for (int i = combined.x; i < combined.w; ++i)
+            //{
+            //    for (int j = combined.z; j < combined.h; ++j)
+            //    {
+            //        IVec2 currentPos = new IVec2(i, j);
+            //        bool last = lastBounds.InBounds(currentPos), current = currentBounds.InBounds(currentPos);
+            //        if (last && !current)
+            //        {
+            //            Disable(current, );
+            //        }
+            //        else if (current & !last)
+            //        {
+            //            Enable(current, )
+            //        }
+            //    }
+            //}
             for (int i = lastBounds.x; i <= lastBounds.w; ++i)
             {
                 for (int j = lastBounds.z; j <= lastBounds.h; ++j)
@@ -191,6 +209,25 @@ public class MazeScript : MonoBehaviour {
                 }
             }
         }
+
+        //if (!lastBounds.Equals(currentBounds))
+        //{
+        //    for (int i = lastBounds.x; i <= lastBounds.w; ++i)
+        //    {
+        //        for (int j = lastBounds.z; j <= lastBounds.h; ++j)
+        //        {
+        //            Disable(new IVec2(i, j), (i - lastBounds.x) * (lastBounds.h - lastBounds.z + 1) + (j - lastBounds.z));
+        //        }
+        //    }
+
+        //    for (int i = currentBounds.x; i <= currentBounds.w; ++i)
+        //    {
+        //        for (int j = currentBounds.z; j <= currentBounds.h; ++j)
+        //        {
+        //            Enable(new IVec2(i, j), (i - currentBounds.x) * (currentBounds.h - currentBounds.z + 1) + (j - currentBounds.z));
+        //        }
+        //    }
+        //}
 
         lastBounds = currentBounds;
     }
@@ -223,10 +260,17 @@ public class MazeScript : MonoBehaviour {
 
     private void SetMazeParams(MazeSectionGenerator gen, int idx)
     {
-        gen.FloorPool[0] = floorPool[idx];
-        gen.PowerupPool[0] = powerupPool[idx];
-        System.Array.Copy(wallPool, idx * genTiles, gen.WallPool, 0, genTiles);
-        System.Array.Copy(gemPool, idx * genTiles, gen.GemPool, 0, genTiles);
+        gen.FloorPool.start = idx;
+        gen.FloorPool.count = 1;
+
+        gen.PowerupPool.start = idx;
+        gen.PowerupPool.count = 1;
+
+        gen.WallPool.start = idx * genTiles;
+        gen.WallPool.count = genTiles;
+
+        gen.GemPool.start = idx * genTiles;
+        gen.GemPool.count = genTiles;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
@@ -234,10 +278,10 @@ public class MazeScript : MonoBehaviour {
         GameObject obj = Parent(Instantiate(MazeSectorPrefab), this.gameObject);
         obj.name = ("MazeSection[" + x + "," + z + "]");
         MazeSectionGenerator gen = obj.GetComponent<MazeSectionGenerator>();
-        gen.FloorPool = new GameObject[1];
-        gen.PowerupPool = new GameObject[1];
-        gen.WallPool = new GameObject[genTiles];
-        gen.GemPool = new EatForPoints[genTiles];
+        gen.FloorPool = new RefArray<GameObject>(floorPool, 0, 0);
+        gen.PowerupPool = new RefArray<GameObject>(powerupPool, 0, 0);
+        gen.WallPool = new RefArray<GameObject>(wallPool, 0, 0);
+        gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         return gen;
     }
 }
