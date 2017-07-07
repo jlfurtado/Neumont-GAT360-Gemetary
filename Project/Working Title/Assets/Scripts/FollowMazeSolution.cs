@@ -8,7 +8,8 @@ public class FollowMazeSolution : MonoBehaviour {
     private MazeSectionGenerator mazeSection;
     private int goingTo, goingFrom;
     private bool forward = true;
-    private const float CLOSE_ENOUGH = 0.25f;
+    private const float CLOSE_ENOUGH = 0.1f;
+    private const float PAST = 0.01f;
     private Rigidbody myRigidBody;
 
 	// Use this for initialization
@@ -22,8 +23,9 @@ public class FollowMazeSolution : MonoBehaviour {
         IVec2 to = mazeSection.MazeSolution[goingTo], from = mazeSection.MazeSolution[goingFrom];
         Vector3 tp = mazeSection.PositionAt(to), fp = mazeSection.PositionAt(from);
         Vector3 toPos = new Vector3(tp.x, transform.position.y, tp.z), fromPos = new Vector3(fp.x, transform.position.y, fp.z);
+        Vector3 moving = toPos - transform.position;
 
-        if ((transform.position - toPos).magnitude < CLOSE_ENOUGH)
+        if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
         {
             if (forward) { ++goingFrom; ++goingTo; }
             else { --goingFrom; --goingTo; }
