@@ -63,4 +63,4 @@ MonoBehaviour:
     type: 2}
   SectionSize: 16
   SquareSize: 1
-  RenderDistance: 0
+  RenderDistance: 2

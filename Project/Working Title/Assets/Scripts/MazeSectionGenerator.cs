@@ -33,6 +33,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         NO_GEM
     }
 
+    public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
     public RefArray<GameObject> FloorPool;
@@ -177,7 +178,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         mazeSections[longest.x, longest.z] = MazeSquare.END;
 
         // remove chunks
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 2*RemoveCount; ++i)
         {
             IVec2 rmv = RandWallNode(Size, i%2);
             mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
