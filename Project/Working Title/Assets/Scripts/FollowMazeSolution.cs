@@ -8,12 +8,13 @@ public class FollowMazeSolution : MonoBehaviour {
     private MazeSectionGenerator mazeSection;
     private int goingTo, goingFrom;
     private bool forward = true;
-    private const float CLOSE_ENOUGH = 0.1f;
+    private const float CLOSE_ENOUGH = 0.25f;
     private Rigidbody myRigidBody;
 
 	// Use this for initialization
 	void Start () {
-        myRigidBody = GetComponent<Rigidbody>();	
+        myRigidBody = GetComponent<Rigidbody>();
+        myRigidBody.velocity = Vector3.zero;
 	}
 
     // Update is called once per frame
@@ -21,6 +22,7 @@ public class FollowMazeSolution : MonoBehaviour {
         IVec2 to = mazeSection.MazeSolution[goingTo], from = mazeSection.MazeSolution[goingFrom];
         Vector3 tp = mazeSection.PositionAt(to), fp = mazeSection.PositionAt(from);
         Vector3 toPos = new Vector3(tp.x, transform.position.y, tp.z), fromPos = new Vector3(fp.x, transform.position.y, fp.z);
+
         if ((transform.position - toPos).magnitude < CLOSE_ENOUGH)
         {
             if (forward) { ++goingFrom; ++goingTo; }
@@ -31,6 +33,7 @@ public class FollowMazeSolution : MonoBehaviour {
                 forward = false;
                 goingFrom = mazeSection.MazeSolution.Length - 1;
                 goingTo = goingFrom - 1;
+                myRigidBody.velocity = Vector3.zero;
             }
             else if (goingTo < 0)
             {
@@ -52,6 +55,6 @@ public class FollowMazeSolution : MonoBehaviour {
         forward = true;
         goingTo = 1;
         goingFrom = 0;
-        // TODO: OTHER UPDATE/ON LOAD UNLOAD FOR ENEMY HERE!?!?!
+        if (myRigidBody != null) { myRigidBody.velocity = Vector3.zero; }
     }
 }

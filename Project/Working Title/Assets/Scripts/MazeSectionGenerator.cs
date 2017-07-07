@@ -8,7 +8,7 @@ public struct IVec2
     public IVec2(int x, int z) { this.x = x; this.z = z; }
     public int x, z;
 
-    public bool EquaLs(IVec2 other)
+    public bool Equals(IVec2 other)
     {
         return this.x == other.x && this.z == other.z;
     }
@@ -246,5 +246,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         int halfSize = Size / 2;
         return gameObject.transform.position + (new Vector3((position.x - halfSize) * SquareSize, 0.0f, (position.z - halfSize) * SquareSize));
     }
+
+    //public IVec2 PositionAt(Vector3 position)
+    //{
+    //    int halfSize = Size / 2;
+    //    Vector3 alt = (position - gameObject.transform.position) / SquareSize;
+    //    return new IVec2(halfSize + (int)Mathf.Floor(alt.x), halfSize + (int)Mathf.Floor(alt.z));
+    //}
 
 }
