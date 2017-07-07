@@ -59,6 +59,8 @@ MonoBehaviour:
     type: 2}
   PowerupPrefab: {fileID: 1680408948265108, guid: 7ec24664edf11174e96d44256d4de70c,
     type: 2}
+  FollowEnemyPrefab: {fileID: 1456538493995154, guid: 716ca3e734955594bba32c5d981ecf92,
+    type: 2}
   SectionSize: 16
   SquareSize: 1
-  Radius: 25
+  RenderDistance: 0

@@ -2,36 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//public struct Bounds
-//{
-//    public Bounds(int x, int z, int w, int h) { this.x = x; this.z = z; this.h = h; this.w = w; }
-//    public int x, w, z, h;
-
-//    public bool Equals(Bounds other)
-//    {
-//        return this.x == other.x && this.h == other.h && this.z == other.z && this.w == other.w;
-//    }
-
-//    public static Bounds ContainBoth(Bounds a, Bounds b)
-//    {
-//        return new Bounds(Mathf.Min(a.x, b.x),
-//                          Mathf.Min(a.z, b.z),
-//                          Mathf.Max(a.w, b.w),
-//                          Mathf.Max(a.h, b.h));
-//    }
-
-//    public bool InBounds(IVec2 pos)
-//    {
-//        return pos.x >= x && pos.x <= w && pos.z >= z && pos.z <= h;
-//    }
-//}
-
 public class MazeScript : MonoBehaviour {
     public GameObject MazeSectorPrefab;
     public GameObject WallPrefab;
     public GameObject GemPrefab;
     public GameObject FloorPrefab;
     public GameObject PowerupPrefab;
+    public GameObject FollowEnemyPrefab;
+
     public int SectionSize;
     public float SquareSize;
     public int RenderDistance;
@@ -44,12 +22,14 @@ public class MazeScript : MonoBehaviour {
     //private Dictionary<IVec2, int> sectionSeeds = new Dictionary<IVec2, int>();
     private GameObject[] wallPool;
     private EatForPoints[] gemPool;
+    private FollowMazeSolution[] followSolutionPool;
     private GameObject[] floorPool;
     private GameObject[] powerupPool;
     private GameObject wallHolder;
     private GameObject gemHolder;
     private GameObject floorHolder;
     private GameObject powerupHolder;
+    private GameObject followHolder;
     private IVec2 lastSection;
     private System.Random rand = new System.Random();
     private int sideLength;
@@ -75,13 +55,18 @@ public class MazeScript : MonoBehaviour {
         Parent(powerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
         Parent(wallHolder = new GameObject(), this.gameObject).name = "WallHolder";
         Parent(gemHolder = new GameObject(), this.gameObject).name = "GemHolder";
+        Parent(followHolder = new GameObject(), this.gameObject).name = "FollowEnemyHolder";
 
+        followSolutionPool = new FollowMazeSolution[numSections];
         floorPool = new GameObject[numSections];
         powerupPool = new GameObject[numSections];
         for (int i = 0; i < numSections; ++i)
         {
+            Parent((followSolutionPool[i] = Instantiate(FollowEnemyPrefab).GetComponent<FollowMazeSolution>()).gameObject, followHolder);
             Parent(floorPool[i] = Instantiate(FloorPrefab), floorHolder);
             Parent(powerupPool[i] = Instantiate(PowerupPrefab), powerupHolder);
+
+            followSolutionPool[i].gameObject.SetActive(false);
             floorPool[i].SetActive(false);
             powerupPool[i].SetActive(false);
         }
@@ -223,6 +208,9 @@ public class MazeScript : MonoBehaviour {
 
         gen.GemPool.start = idx * genTiles;
         gen.GemPool.count = genTiles;
+
+        gen.FollowSolutionPool.start = idx;
+        gen.FollowSolutionPool.count = 1;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
@@ -234,6 +222,7 @@ public class MazeScript : MonoBehaviour {
         gen.PowerupPool = new RefArray<GameObject>(powerupPool, 0, 0);
         gen.WallPool = new RefArray<GameObject>(wallPool, 0, 0);
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
+        gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
         return gen;
     }
 }

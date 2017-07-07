@@ -39,7 +39,9 @@ public class MazeSectionGenerator : MonoBehaviour {
     public RefArray<GameObject> WallPool;
     public RefArray<GameObject> PowerupPool;
     public RefArray<EatForPoints> GemPool;
+    public RefArray<FollowMazeSolution> FollowSolutionPool;
 
+    public IVec2[] MazeSolution;
     private MazeSquare[,] mazeSections;
     private System.Random rand;
     private IVec2 powerupPos;
@@ -105,7 +107,7 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         // add start to traceback, no solution yet
         List<IVec2> traceback = new List<IVec2>(new IVec2[] { start });
-        IVec2[] solution = new IVec2[0];
+        MazeSolution = new IVec2[0];
 
         // track longest route
         IVec2 longest = start;
@@ -135,7 +137,8 @@ public class MazeSectionGenerator : MonoBehaviour {
                 if (traceback.Count > mostMoves)
                 {
                     longest = currentPos;
-                    solution = traceback.ToArray();
+                    MazeSolution = traceback.ToArray();
+                    mostMoves = traceback.Count;
                 }
 
                 // backtrack
@@ -156,9 +159,9 @@ public class MazeSectionGenerator : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < solution.Length - 1; ++i)
+        for (int i = 0; i < MazeSolution.Length - 1; ++i)
         {
-            IVec2 mv = solution[i], ot = solution[i + 1];
+            IVec2 mv = MazeSolution[i], ot = MazeSolution[i + 1];
             IVec2 b = new IVec2((mv.x + ot.x) / 2, (mv.z + ot.z) / 2);
 
             // we visited the node and take out wall between
@@ -222,7 +225,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 {
                     MakeAt(WallPool, wallCount++, location);
                 }
-                else if (mazeSections[x, z] == MazeSquare.VISITED)
+                else if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
                 {
                     MakeAt(GemPool, gemCount, location);
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
@@ -234,6 +237,14 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
+        MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+        FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
+    }
+
+    public Vector3 PositionAt(IVec2 position)
+    {
+        int halfSize = Size / 2;
+        return gameObject.transform.position + (new Vector3((position.x - halfSize) * SquareSize, 0.0f, (position.z - halfSize) * SquareSize));
     }
 
 }

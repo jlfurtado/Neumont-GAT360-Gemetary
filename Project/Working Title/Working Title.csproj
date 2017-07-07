@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\EatForPoints.cs" />
+    <Compile Include="Assets\Scripts\FollowMazeSolution.cs" />
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />
