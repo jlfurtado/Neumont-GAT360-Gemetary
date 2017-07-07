@@ -30,7 +30,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         SOLUTION,
         START,
         END,
-        NO_GEM
+        EMPTY
     }
 
     public int RemoveCount = 1;
@@ -41,11 +41,12 @@ public class MazeSectionGenerator : MonoBehaviour {
     public RefArray<GameObject> PowerupPool;
     public RefArray<EatForPoints> GemPool;
     public RefArray<FollowMazeSolution> FollowSolutionPool;
-
     public IVec2[] MazeSolution;
+
     private MazeSquare[,] mazeSections;
     private System.Random rand;
     private IVec2 powerupPos;
+    private int numGems;
 
     // Use this for initialization
     void Start ()
@@ -84,9 +85,14 @@ public class MazeSectionGenerator : MonoBehaviour {
                         (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
     }
 
-    public void EatGem(int x, int z)
+    public void EatAt(int x, int z)
     {
-        mazeSections[x, z] = MazeSquare.NO_GEM;
+        mazeSections[x, z] = MazeSquare.EMPTY;
+        --numGems;
+        if (numGems == 0)
+        {
+            Debug.Log("SECTION CLEARED");
+        }
     }
 
     private void GenerateMaze()
@@ -237,6 +243,7 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         }
 
+        numGems = gemCount - GemPool.start;
         MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
         MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);

@@ -19,7 +19,6 @@ public class MazeScript : MonoBehaviour {
     private int totalTiles;
     private float mazeSize;
     private Dictionary<IVec2, MazeSectionGenerator> generatedMazes = new Dictionary<IVec2, MazeSectionGenerator>(); // TODO: PREVENT DUPLICATE DICTIONARIES
-    //private Dictionary<IVec2, int> sectionSeeds = new Dictionary<IVec2, int>();
     private GameObject[] wallPool;
     private EatForPoints[] gemPool;
     private FollowMazeSolution[] followSolutionPool;
@@ -96,9 +95,9 @@ public class MazeScript : MonoBehaviour {
         GenerateAround(Vector3.zero);
 	}
 
-    public void EatGem(IVec2 mazeLoc, IVec2 sectionLoc)
+    public void EatAt(IVec2 mazeLoc, IVec2 sectionLoc)
     {
-        generatedMazes[mazeLoc].EatGem(sectionLoc.x, sectionLoc.z);
+        generatedMazes[mazeLoc].EatAt(sectionLoc.x, sectionLoc.z);
     }
 
     private int Mod(int n, int m)

@@ -23,7 +23,7 @@ public class EatForPoints : MonoBehaviour {
         if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
         {
             scoreRef.AddScore(Value);
-            maze.EatGem(mazeLoc, sectionLoc);
+            maze.EatAt(mazeLoc, sectionLoc);
             gameObject.SetActive(false);
         }
     }
