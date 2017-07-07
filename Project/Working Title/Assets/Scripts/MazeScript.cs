@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct Bounds
-{
-    public Bounds(int x, int z, int w, int h) { this.x = x; this.z = z; this.h = h; this.w = w; }
-    public int x, w, z, h;
+//public struct Bounds
+//{
+//    public Bounds(int x, int z, int w, int h) { this.x = x; this.z = z; this.h = h; this.w = w; }
+//    public int x, w, z, h;
 
-    public bool Equals(Bounds other)
-    {
-        return this.x == other.x && this.h == other.h && this.z == other.z && this.w == other.w;
-    }
+//    public bool Equals(Bounds other)
+//    {
+//        return this.x == other.x && this.h == other.h && this.z == other.z && this.w == other.w;
+//    }
 
-    public static Bounds ContainBoth(Bounds a, Bounds b)
-    {
-        return new Bounds(Mathf.Min(a.x, b.x),
-                          Mathf.Min(a.z, b.z),
-                          Mathf.Max(a.w, b.w),
-                          Mathf.Max(a.h, b.h));
-    }
+//    public static Bounds ContainBoth(Bounds a, Bounds b)
+//    {
+//        return new Bounds(Mathf.Min(a.x, b.x),
+//                          Mathf.Min(a.z, b.z),
+//                          Mathf.Max(a.w, b.w),
+//                          Mathf.Max(a.h, b.h));
+//    }
 
-    public bool InBounds(IVec2 pos)
-    {
-        return pos.x >= x && pos.x <= w && pos.z >= z && pos.z <= h;
-    }
-}
+//    public bool InBounds(IVec2 pos)
+//    {
+//        return pos.x >= x && pos.x <= w && pos.z >= z && pos.z <= h;
+//    }
+//}
 
 public class MazeScript : MonoBehaviour {
     public GameObject MazeSectorPrefab;
@@ -34,7 +34,7 @@ public class MazeScript : MonoBehaviour {
     public GameObject PowerupPrefab;
     public int SectionSize;
     public float SquareSize;
-    public float Radius;
+    public int RenderDistance;
 
     private int genTiles;
     private int numSections;
@@ -50,8 +50,9 @@ public class MazeScript : MonoBehaviour {
     private GameObject gemHolder;
     private GameObject floorHolder;
     private GameObject powerupHolder;
-    private Bounds lastBounds;
+    private IVec2 lastSection;
     private System.Random rand = new System.Random();
+    private int sideLength;
 
     private GameObject Parent(GameObject obj, GameObject parent)
     {
@@ -64,12 +65,12 @@ public class MazeScript : MonoBehaviour {
         MazeSectionGenerator.Size = SectionSize;
         MazeSectionGenerator.SquareSize = SquareSize;
 
-        int sideLength = 2 + (2 * (int)Mathf.Ceil(Radius / (SquareSize * SectionSize)));
+        sideLength = 1 + 2 * RenderDistance;
         numSections = sideLength * sideLength;
         genTiles = SectionSize * SectionSize;
         totalTiles = genTiles * numSections;
         mazeSize = SectionSize * SquareSize;
-
+        
         Parent(floorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
         Parent(powerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
         Parent(wallHolder = new GameObject(), this.gameObject).name = "WallHolder";
@@ -96,20 +97,16 @@ public class MazeScript : MonoBehaviour {
             gemPool[i].gameObject.SetActive(false);
         }
 
-        Bounds currentBounds = new Bounds((int)(Mathf.Floor((-Radius) / SectionSize)),
-                                          (int)(Mathf.Floor((-Radius) / SectionSize)),
-                                          (int)(Mathf.Ceil((+Radius) / SectionSize)),
-                                          (int)(Mathf.Ceil((+Radius) / SectionSize)));
-
-        for (int i = currentBounds.x; i <= currentBounds.w; ++i)
+        int halfSide = (sideLength-1) / 2;
+        for (int i = -halfSide; i <= halfSide; ++i)
         {
-            for (int j = currentBounds.z; j <= currentBounds.h; ++j)
+            for (int j = -halfSide; j <= halfSide; ++j)
             {
-                Enable(new IVec2(i, j), (i - currentBounds.x) * (currentBounds.h - currentBounds.z + 1) + (j - currentBounds.z));
+                Enable(new IVec2(i, j));
             }
         }
 
-        lastBounds = currentBounds;
+        lastSection = new IVec2(0, 0);
 
         GenerateAround(Vector3.zero);
 	}
@@ -119,121 +116,75 @@ public class MazeScript : MonoBehaviour {
         generatedMazes[mazeLoc].EatGem(sectionLoc.x, sectionLoc.z);
     }
 
-    public void GenerateAround(Vector3 position)
+    private int Mod(int n, int m)
     {
-        GenerateAround(position, Radius);
+        return ((n % m) + m) % m;
     }
 
-    private void GenerateAround(Vector3 position, float radius)
+    private int MagicMath(IVec2 xz)
     {
-        Bounds currentBounds = new Bounds((int)(Mathf.Floor((position.x - radius) / SectionSize)),
-                                        (int)(Mathf.Floor((position.z - radius) / SectionSize)),
-                                        (int)(Mathf.Ceil((position.x + radius) / SectionSize)),
-                                        (int)(Mathf.Ceil((position.z + radius) / SectionSize)));
+        return Mod(xz.x, sideLength) * sideLength + Mod(xz.z, sideLength);
+    }
 
-        //if (!lastBounds.Equals(currentBounds))
-        //{
-        //    if (currentBounds.w > lastBounds.w)
-        //    {
-        //        int height = (currentBounds.h - currentBounds.z + 1);
-        //        for (int i = 0; i < height; ++i)
-        //        {
-        //            Disable(i);
-        //            Enable((currentBounds.w - currentBounds.x) * height + i, new IVec2(currentBounds.x, i + currentBounds.z));
-        //        }
-        //    }
-        //    if (currentBounds.x < lastBounds.x)
-        //    {
-        //        int height = (currentBounds.h - currentBounds.z);
-        //        for (int i = 0; i < height; ++i)
-        //        {
-        //            Disable((lastBounds.w - lastBounds.x) * height + i);
-        //            Enable(i, new IVec2(currentBounds.x, i + currentBounds.z));
-        //        }
-        //    }
+    public void GenerateAround(Vector3 position)
+    {
+        GenerateNear(position);
+    }
 
-        //    if (currentBounds.h > lastBounds.h)
-        //    {
-        //        int width = (currentBounds.w - currentBounds.x);
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            Disable(i * width + (currentBounds.h - currentBounds.z));
-        //            Enable(i* width, new IVec2(i + currentBounds.x, currentBounds.h));
-        //        }
-        //    }
+    private void GenerateNear(Vector3 position)
+    {
+        IVec2 currentSection = new IVec2((int)(Mathf.Floor((position.x) / mazeSize)),
+                                        (int)(Mathf.Floor((position.z) / mazeSize)));
 
-        //    if (currentBounds.z < lastBounds.z)
-        //    {
-        //        int width = (currentBounds.w - currentBounds.x);
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            Disable(i * width);
-        //            Enable(i * width + (currentBounds.h - currentBounds.z), new IVec2(i + currentBounds.x, currentBounds.z));
-        //        }
-        //    }
-        //}
-
-        if (!lastBounds.Equals(currentBounds))
+        if (!lastSection.Equals(currentSection))
         {
-            //Bounds combined = Bounds.ContainBoth(lastBounds, currentBounds);
-
-            //for (int i = combined.x; i < combined.w; ++i)
-            //{
-            //    for (int j = combined.z; j < combined.h; ++j)
-            //    {
-            //        IVec2 currentPos = new IVec2(i, j);
-            //        bool last = lastBounds.InBounds(currentPos), current = currentBounds.InBounds(currentPos);
-            //        if (last && !current)
-            //        {
-            //            Disable(current, );
-            //        }
-            //        else if (current & !last)
-            //        {
-            //            Enable(current, )
-            //        }
-            //    }
-            //}
-            for (int i = lastBounds.x; i <= lastBounds.w; ++i)
+            if (currentSection.x > lastSection.x)
             {
-                for (int j = lastBounds.z; j <= lastBounds.h; ++j)
+                // move all the old left ones to the new right
+                for (int i = 0; i < sideLength; ++i)
                 {
-                    Disable(new IVec2(i, j), (i - lastBounds.x) * (lastBounds.h - lastBounds.z + 1) + (j - lastBounds.z));
+                    Disable(new IVec2(lastSection.x - RenderDistance, i + lastSection.z - RenderDistance));
+                    Enable(new IVec2(currentSection.x + RenderDistance, i + currentSection.z - RenderDistance));
+                }
+            }
+            else if (currentSection.x < lastSection.x)
+            {
+                // move all the old right ones to the new left
+                for (int i = 0; i < sideLength; ++i)
+                {
+                    Disable(new IVec2(lastSection.x + RenderDistance, i + lastSection.z - RenderDistance));
+                    Enable(new IVec2(currentSection.x - RenderDistance, i + currentSection.z - RenderDistance));
                 }
             }
 
-            for (int i = currentBounds.x; i <= currentBounds.w; ++i)
+            if (currentSection.z > lastSection.z)
             {
-                for (int j = currentBounds.z; j <= currentBounds.h; ++j)
+                // move all the top old ones to the new bottom
+                for (int i = 0; i < sideLength; ++i)
                 {
-                    Enable(new IVec2(i, j), (i - currentBounds.x) * (currentBounds.h - currentBounds.z + 1) + (j - currentBounds.z));
+                    Disable(new IVec2(lastSection.x - RenderDistance + i, lastSection.z - RenderDistance));
+                    Enable(new IVec2(currentSection.x - RenderDistance + i, currentSection.z + RenderDistance));
+                }
+            }
+            else if (currentSection.z < lastSection.z)
+            {
+                // move all the bottom old ones to the new top
+                for (int i = 0; i < sideLength; ++i)
+                {
+                    Disable(new IVec2(lastSection.x - RenderDistance + i, lastSection.z + RenderDistance));
+                    Enable(new IVec2(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance));
                 }
             }
         }
 
-        //if (!lastBounds.Equals(currentBounds))
-        //{
-        //    for (int i = lastBounds.x; i <= lastBounds.w; ++i)
-        //    {
-        //        for (int j = lastBounds.z; j <= lastBounds.h; ++j)
-        //        {
-        //            Disable(new IVec2(i, j), (i - lastBounds.x) * (lastBounds.h - lastBounds.z + 1) + (j - lastBounds.z));
-        //        }
-        //    }
-
-        //    for (int i = currentBounds.x; i <= currentBounds.w; ++i)
-        //    {
-        //        for (int j = currentBounds.z; j <= currentBounds.h; ++j)
-        //        {
-        //            Enable(new IVec2(i, j), (i - currentBounds.x) * (currentBounds.h - currentBounds.z + 1) + (j - currentBounds.z));
-        //        }
-        //    }
-        //}
-
-        lastBounds = currentBounds;
+        lastSection = currentSection;
     }
 
-    private void Disable(IVec2 loc, int idx)
+    private void Disable(IVec2 loc)
     {
+        int idx = MagicMath(loc);
+        if (!generatedMazes.ContainsKey(loc)) { return; }
+
         generatedMazes[loc].gameObject.SetActive(false);
 
         for (int k = 0; k < genTiles; ++k)
@@ -244,8 +195,9 @@ public class MazeScript : MonoBehaviour {
         }
     }
 
-    private void Enable(IVec2 loc, int idx)
+    private void Enable(IVec2 loc)
     {
+        int idx = MagicMath(loc);
         bool newMaze = !generatedMazes.ContainsKey(loc);
         if (newMaze) { generatedMazes.Add(loc, GenerateMazeSection(loc.x, loc.z)); }
         
@@ -255,7 +207,7 @@ public class MazeScript : MonoBehaviour {
         SetMazeParams(gen, idx);
 
         if (newMaze) { gen.GenerateMaze(rand.Next()); }
-        gen.RedoMazeGeometry(loc);
+        gen.RedoGeometry(loc);
     }
 
     private void SetMazeParams(MazeSectionGenerator gen, int idx)

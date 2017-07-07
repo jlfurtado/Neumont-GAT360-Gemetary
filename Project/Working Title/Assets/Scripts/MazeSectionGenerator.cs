@@ -7,6 +7,11 @@ public struct IVec2
 {
     public IVec2(int x, int z) { this.x = x; this.z = z; }
     public int x, z;
+
+    public bool EquaLs(IVec2 other)
+    {
+        return this.x == other.x && this.z == other.z;
+    }
 }
 
 public struct RefArray<T>
@@ -194,7 +199,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         return obj.reference[idx].gameObject;
     }
 
-    public void RedoMazeGeometry(IVec2 mazeLoc)
+    public void RedoGeometry(IVec2 mazeLoc)
+    {
+        RedoMazeGeometry(mazeLoc);
+    }
+
+    private void RedoMazeGeometry(IVec2 mazeLoc)
     {
         // one giant floor object rather than tons of tiny ones - FPS++
         GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.zero);
@@ -220,6 +230,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                     gemCount++;
                 }
             }
+
         }
 
         MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
