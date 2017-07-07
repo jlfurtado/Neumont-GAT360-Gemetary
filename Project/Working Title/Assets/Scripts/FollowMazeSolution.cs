@@ -11,11 +11,13 @@ public class FollowMazeSolution : MonoBehaviour {
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
     private Rigidbody myRigidBody;
+    private SceneMover sceneMoverRef;
 
 	// Use this for initialization
 	void Start () {
         myRigidBody = GetComponent<Rigidbody>();
         myRigidBody.velocity = Vector3.zero;
+        sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
 	}
 
     // Update is called once per frame
@@ -50,6 +52,14 @@ public class FollowMazeSolution : MonoBehaviour {
             myRigidBody.velocity = vel.normalized * speed;
         }
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals(Strings.PLAYER_TAG))
+        {
+            sceneMoverRef.MoveToGameOver();
+        }
+    }
 
     public void UpdateRef(MazeSectionGenerator mazeSection)
     {

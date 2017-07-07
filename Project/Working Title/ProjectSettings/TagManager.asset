@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ScoreManager
   - Maze
+  - TitleMusic
+  - SceneMover
   layers:
   - Default
   - TransparentFX

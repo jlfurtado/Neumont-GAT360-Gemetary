@@ -51,9 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 658a8d9e0f6005d4899e48dfeaa3d06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FloorPrefab: {fileID: 1568364569993144, guid: 95e79ff3a9b031a4f93014b2f8d2c61b,
-    type: 2}
-  WallPrefab: {fileID: 1270254335555134, guid: 7fe41c1b603e8574eaa34a0af469c4f5, type: 2}
-  PowerupPrefab: {fileID: 1680408948265108, guid: 7ec24664edf11174e96d44256d4de70c,
-    type: 2}
-  GemPrefab: {fileID: 1254880983954834, guid: 07803455a6cd9ee4c9d34e29518ca18b, type: 2}
+  RemoveCount: 1
