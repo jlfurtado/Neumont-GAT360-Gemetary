@@ -22,5 +22,13 @@ public class PlayerController : MonoBehaviour {
         move.Normalize();
         myRigidBody.velocity = Speed * move;
         Maze.GenerateAround(transform.position);
-	}
+
+        IVec2 dir = new IVec2((int)Mathf.Sign(horiz), (int)Mathf.Sign(vert));
+        RaycastHit hit;
+        if (Input.GetKeyDown(KeyCode.Space) && Physics.Raycast(transform.position, move, out hit, 1.0f))
+        {
+            Maze.EatAt(hit.transform.position);
+            hit.transform.gameObject.SetActive(false);
+        }
+    }
 }

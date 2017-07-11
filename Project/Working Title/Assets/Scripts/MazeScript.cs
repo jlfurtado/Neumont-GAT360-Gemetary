@@ -100,6 +100,16 @@ public class MazeScript : MonoBehaviour {
         generatedMazes[mazeLoc].EatAt(sectionLoc.x, sectionLoc.z);
     }
 
+    public void EatAt(Vector3 pos)
+    {
+        int halfSize = SectionSize / 2;
+        float mhs = mazeSize / 2;
+        IVec2 mazeLoc = new IVec2((int)Mathf.Floor((pos.x + mhs) / mazeSize), (int)Mathf.Floor((pos.z + mhs) / mazeSize));
+        IVec2 sectionLoc = new IVec2((int)Mathf.Floor((pos.x - (mazeLoc.x * mazeSize)) / SquareSize) + (halfSize), (int)Mathf.Floor((pos.z - (mazeLoc.z * mazeSize)) / SquareSize) + (halfSize));
+        Debug.Log(sectionLoc.x + ", " + sectionLoc.z);
+        EatAt(mazeLoc, sectionLoc);
+    }
+
     private int Mod(int n, int m)
     {
         return ((n % m) + m) % m;

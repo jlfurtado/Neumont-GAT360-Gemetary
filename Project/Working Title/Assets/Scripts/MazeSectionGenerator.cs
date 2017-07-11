@@ -87,8 +87,13 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public void EatAt(int x, int z)
     {
+        if (mazeSections[x, z] == MazeSquare.VISITED)
+        {
+            --numGems;
+        }
+
         mazeSections[x, z] = MazeSquare.EMPTY;
-        --numGems;
+     
         if (numGems == 0)
         {
             Debug.Log("SECTION CLEARED");

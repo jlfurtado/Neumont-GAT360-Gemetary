@@ -5,8 +5,9 @@ using UnityEngine;
 public class FollowTarget : MonoBehaviour {
     public GameObject TargetToFollow;
     public Vector3 Offset;
+    public float Speed;
 
-    void Update()
+    void LateUpdate()
     {
         transform.position = TargetToFollow.transform.position + Offset;
     }
