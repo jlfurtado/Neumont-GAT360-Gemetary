@@ -226,16 +226,6 @@ Prefab:
       propertyPath: Maze
       value: 
       objectReference: {fileID: 709646006}
-    - target: {fileID: 54434666261551706, guid: c056d3c78197f33478473f344f9e87e0,
-        type: 2}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 114765838601836160, guid: c056d3c78197f33478473f344f9e87e0,
-        type: 2}
-      propertyPath: Speed
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c056d3c78197f33478473f344f9e87e0, type: 2}
   m_IsPrefabParent: 0
@@ -478,6 +468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetToFollow: {fileID: 1335946172}
   Offset: {x: 0, y: 13, z: -7}
+  Speed: 0
 --- !u!1001 &1664417590
 Prefab:
   m_ObjectHideFlags: 0

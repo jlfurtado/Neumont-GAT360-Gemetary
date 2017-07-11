@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class FollowMazeSolution : MonoBehaviour {
+    public int Value;
     public float speed = 1.0f;
     private MazeSectionGenerator mazeSection;
     private int goingTo, goingFrom;
@@ -12,13 +13,16 @@ public class FollowMazeSolution : MonoBehaviour {
     private const float PAST = 0.01f;
     private Rigidbody myRigidBody;
     private SceneMover sceneMoverRef;
+    private ScoreManager scoreRef;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         myRigidBody = GetComponent<Rigidbody>();
         myRigidBody.velocity = Vector3.zero;
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
-	}
+        scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
+
+    }
 
     // Update is called once per frame
     void Update() {
@@ -57,7 +61,19 @@ public class FollowMazeSolution : MonoBehaviour {
     {
         if (other.tag.Equals(Strings.PLAYER_TAG))
         {
-            sceneMoverRef.MoveToGameOver();
+            // only get comp if we hit the player
+            PlayerController pc = other.gameObject.GetComponent<PlayerController>();
+            if (pc.PoweredUp)
+            {
+                // oh no, we died!
+                scoreRef.AddScore(Value);
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                // only move to game over if they aren't powered up
+                sceneMoverRef.MoveToGameOver();
+            }
         }
     }
 
