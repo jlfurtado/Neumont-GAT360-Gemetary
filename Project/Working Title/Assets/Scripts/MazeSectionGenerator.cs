@@ -273,6 +273,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         return gameObject.transform.position + (new Vector3((position.x - halfSize) * SquareSize, 0.0f, (position.z - halfSize) * SquareSize));
     }
 
+
+    public bool IsWall(IVec2 loc)
+    {
+        return mazeSections[loc.x, loc.z] == MazeSquare.WALL;
+    }
+
     //public IVec2 PositionAt(Vector3 position)
     //{
     //    int halfSize = Size / 2;

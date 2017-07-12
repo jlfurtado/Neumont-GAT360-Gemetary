@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Renderer))]
 public class FollowMazeSolution : MonoBehaviour {
     public int Value;
-    public float speed = 1.0f;
+    public float Speed = 1.0f;
     public Material NormalMat;
     public Material StoppedMat;
     private MazeSectionGenerator mazeSection;
@@ -71,7 +71,7 @@ public class FollowMazeSolution : MonoBehaviour {
             else
             {
                 Vector3 vel = toPos - fromPos;
-                myRigidBody.velocity = vel.normalized * speed;
+                myRigidBody.velocity = vel.normalized * Speed;
             }
         }
 

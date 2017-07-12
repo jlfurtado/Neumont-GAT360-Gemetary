@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 100
-  StopTime: 5
+  StopTime: 10
 --- !u!136 &136569008354812782
 CapsuleCollider:
   m_ObjectHideFlags: 1
