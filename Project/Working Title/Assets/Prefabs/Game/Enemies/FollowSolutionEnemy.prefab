@@ -111,6 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Value: 1000
   speed: 5
+  NormalMat: {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
+  StoppedMat: {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
 --- !u!136 &136861200133600596
 CapsuleCollider:
   m_ObjectHideFlags: 1

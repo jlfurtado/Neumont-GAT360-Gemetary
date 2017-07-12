@@ -37,6 +37,7 @@ public class Powerup : MonoBehaviour {
             {
                 enemy.StopFor(StopTime);
             }
+
             gameObject.SetActive(false);
         }
     }

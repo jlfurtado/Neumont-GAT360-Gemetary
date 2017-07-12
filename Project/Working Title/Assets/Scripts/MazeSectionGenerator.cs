@@ -255,7 +255,14 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         numGems = gemCount - GemPool.start;
-        MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
+
+        if (mazeSections[powerupPos.x, powerupPos.z] != MazeSquare.EMPTY)
+        {
+            Powerup powerUp = MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize)).GetComponent<Powerup>();
+            powerUp.mazeLoc = mazeLoc;
+            powerUp.sectionLoc = powerupPos;
+        }
+
         MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
     }
