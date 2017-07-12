@@ -33,6 +33,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         EMPTY
     }
 
+    public int Value;
     public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
@@ -44,6 +45,8 @@ public class MazeSectionGenerator : MonoBehaviour {
     public IVec2[] MazeSolution;
 
     private MazeSquare[,] mazeSections;
+    private PlayerController playerRef;
+    private ScoreManager scoreRef;
     private System.Random rand;
     private IVec2 powerupPos;
     private int numGems;
@@ -51,7 +54,9 @@ public class MazeSectionGenerator : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
- 	}
+        playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
+        scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
+    }
 
     public void GenerateMaze(int seed)
     {
@@ -87,17 +92,18 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public void EatAt(int x, int z)
     {
-        if (mazeSections[x, z] == MazeSquare.VISITED)
+        if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
         {
             --numGems;
+            if (numGems == 0)
+            {
+                // TODO: MORE AESTHETIC LIKE TEXT POPUP
+                scoreRef.AddScore(Value);
+                playerRef.PowerUp();
+            }
         }
 
         mazeSections[x, z] = MazeSquare.EMPTY;
-     
-        if (numGems == 0)
-        {
-            Debug.Log("SECTION CLEARED");
-        }
     }
 
     private void GenerateMaze()

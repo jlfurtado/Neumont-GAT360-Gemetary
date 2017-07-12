@@ -34,20 +34,15 @@ public class PlayerController : MonoBehaviour {
         {
             IVec2 dir = new IVec2((int)Mathf.Sign(horiz), (int)Mathf.Sign(vert));
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, move, out hit, 1.0f))
+            if (Physics.Raycast(transform.position, move, out hit, 0.5f))
             {
                 Maze.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);
             }
 
-            myRenderer.material = Colors[((int)Mathf.Floor(remainingPowerTime*15)) % Colors.Length];
+            myRenderer.material = Colors[((int)Mathf.Floor(remainingPowerTime*25)) % Colors.Length];
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { PoweredUp = false; myRenderer.material = DefaultMat; }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PowerUp();
         }
     }
 

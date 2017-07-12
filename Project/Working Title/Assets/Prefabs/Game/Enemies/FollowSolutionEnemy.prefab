@@ -24,9 +24,9 @@ GameObject:
   - component: {fileID: 23721593681472248}
   - component: {fileID: 114149409809986100}
   - component: {fileID: 54674026098916062}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FollowSolutionEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

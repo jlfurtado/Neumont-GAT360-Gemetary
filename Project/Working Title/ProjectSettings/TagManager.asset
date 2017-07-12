@@ -8,6 +8,7 @@ TagManager:
   - Maze
   - TitleMusic
   - SceneMover
+  - Enemy
   layers:
   - Default
   - TransparentFX

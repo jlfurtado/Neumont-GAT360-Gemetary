@@ -16,6 +16,7 @@ static class Strings
     public static readonly string MAZE_TAG = "Maze";
     public static readonly string TITLE_MUSIC_TAG = "TitleMusic";
     public static readonly string SCENE_MOVER_TAG = "SceneMover";
+    public static readonly string ENEMY_TAG = "Enemy";
 
 }
 
