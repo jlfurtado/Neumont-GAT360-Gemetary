@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class Powerup : MonoBehaviour {
     public int Value;
     public float StopTime;
@@ -9,7 +10,8 @@ public class Powerup : MonoBehaviour {
     public IVec2 sectionLoc;
     private ScoreManager scoreRef;
     private MazeScript maze;
-    private FollowMazeSolution[] enemies;
+    private FollowMazeSolution[] followEnemies;
+    private DepthFirstExplore[] depthEnemies;
 
     //private Collider myCollider;
     // Use this for initialization
@@ -18,11 +20,19 @@ public class Powerup : MonoBehaviour {
         //myCollider = GetComponent<Collider>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
-        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag(Strings.ENEMY_TAG);
-        enemies = new FollowMazeSolution[enemyObjects.Length];
-        for (int i = 0; i < enemyObjects.Length; ++i)
+        GameObject[] followEnemyObjects = GameObject.FindGameObjectsWithTag(Strings.FOLLOW_ENEMY_TAG);
+        GameObject[] depthEnemyObjects = GameObject.FindGameObjectsWithTag(Strings.DEPTH_ENEMY_TAG);
+
+        followEnemies = new FollowMazeSolution[followEnemyObjects.Length];
+        for (int i = 0; i < followEnemyObjects.Length; ++i)
         {
-            enemies[i] = enemyObjects[i].GetComponent<FollowMazeSolution>();
+            followEnemies[i] = followEnemyObjects[i].GetComponent<FollowMazeSolution>();
+        }
+
+        depthEnemies = new DepthFirstExplore[depthEnemyObjects.Length];
+        for (int i = 0; i < depthEnemyObjects.Length; ++i)
+        {
+            depthEnemies[i] = depthEnemyObjects[i].GetComponent<DepthFirstExplore>();
         }
     }
 
@@ -33,7 +43,12 @@ public class Powerup : MonoBehaviour {
             scoreRef.AddScore(Value);
             maze.EatAt(mazeLoc, sectionLoc);
             
-            foreach (FollowMazeSolution enemy in enemies)
+            foreach (FollowMazeSolution enemy in followEnemies)
+            {
+                enemy.StopFor(StopTime);
+            }
+
+            foreach (DepthFirstExplore enemy in depthEnemies)
             {
                 enemy.StopFor(StopTime);
             }

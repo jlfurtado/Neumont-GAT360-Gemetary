@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\DepthFirstExplore.cs" />
     <Compile Include="Assets\Scripts\EatForPoints.cs" />
     <Compile Include="Assets\Scripts\FollowMazeSolution.cs" />
     <Compile Include="Assets\Scripts\FollowTarget.cs" />

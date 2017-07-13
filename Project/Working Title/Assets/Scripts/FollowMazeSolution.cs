@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Renderer))]
+[RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
 public class FollowMazeSolution : MonoBehaviour {
     public int Value;
     public float Speed = 1.0f;

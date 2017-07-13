@@ -39,10 +39,12 @@ public class MazeSectionGenerator : MonoBehaviour {
     public static int Size;
     public RefArray<GameObject> FloorPool;
     public RefArray<GameObject> WallPool;
-    public RefArray<GameObject> PowerupPool;
+    public RefArray<Powerup> PowerupPool;
     public RefArray<EatForPoints> GemPool;
     public RefArray<FollowMazeSolution> FollowSolutionPool;
+    public RefArray<DepthFirstExplore> DepthEnemyPool;
     public IVec2[] MazeSolution;
+    public Material GemMat;
 
     private MazeSquare[,] mazeSections;
     private PlayerController playerRef;
@@ -246,6 +248,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 else if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
                 {
                     MakeAt(GemPool, gemCount, location);
+                    GemPool.reference[gemCount].gameObject.GetComponent<Renderer>().material = GemMat; // TODO: GET COMPONENT BEFORE SOMEHOW!!! 
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;
@@ -258,13 +261,17 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         if (mazeSections[powerupPos.x, powerupPos.z] != MazeSquare.EMPTY)
         {
-            Powerup powerUp = MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize)).GetComponent<Powerup>();
-            powerUp.mazeLoc = mazeLoc;
-            powerUp.sectionLoc = powerupPos;
+            MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
+            PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
+            PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
         }
 
         MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
+
+
+        MakeAt(DepthEnemyPool, DepthEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+        DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
     }
 
     public Vector3 PositionAt(IVec2 position)
@@ -276,7 +283,12 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public bool IsWall(IVec2 loc)
     {
-        return mazeSections[loc.x, loc.z] == MazeSquare.WALL;
+        return IsWall(loc.x, loc.z);
+    }
+
+    public bool IsWall(int x, int z)
+    {
+        return mazeSections[x, z] == MazeSquare.WALL;
     }
 
     //public IVec2 PositionAt(Vector3 position)

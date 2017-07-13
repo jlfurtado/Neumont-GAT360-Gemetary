@@ -9,6 +9,8 @@ public class MazeScript : MonoBehaviour {
     public GameObject FloorPrefab;
     public GameObject PowerupPrefab;
     public GameObject FollowEnemyPrefab;
+    public GameObject DepthEnemyPrefab;
+    public Material[] Colors;
 
     public int SectionSize;
     public float SquareSize;
@@ -22,13 +24,15 @@ public class MazeScript : MonoBehaviour {
     private GameObject[] wallPool;
     private EatForPoints[] gemPool;
     private FollowMazeSolution[] followSolutionPool;
+    private DepthFirstExplore[] depthEnemyPool;
     private GameObject[] floorPool;
-    private GameObject[] powerupPool;
+    private Powerup[] powerupPool;
     private GameObject wallHolder;
     private GameObject gemHolder;
     private GameObject floorHolder;
     private GameObject powerupHolder;
     private GameObject followHolder;
+    private GameObject depthHolder;
     private IVec2 lastSection;
     private System.Random rand = new System.Random();
     private int sideLength;
@@ -49,7 +53,8 @@ public class MazeScript : MonoBehaviour {
         genTiles = SectionSize * SectionSize;
         totalTiles = genTiles * numSections;
         mazeSize = SectionSize * SquareSize;
-        
+
+        Parent(depthHolder = new GameObject(), this.gameObject).name = "DepthEnemyHolder";
         Parent(floorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
         Parent(powerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
         Parent(wallHolder = new GameObject(), this.gameObject).name = "WallHolder";
@@ -57,17 +62,20 @@ public class MazeScript : MonoBehaviour {
         Parent(followHolder = new GameObject(), this.gameObject).name = "FollowEnemyHolder";
 
         followSolutionPool = new FollowMazeSolution[numSections];
+        depthEnemyPool = new DepthFirstExplore[numSections];
         floorPool = new GameObject[numSections];
-        powerupPool = new GameObject[numSections];
+        powerupPool = new Powerup[numSections];
         for (int i = 0; i < numSections; ++i)
         {
             Parent((followSolutionPool[i] = Instantiate(FollowEnemyPrefab).GetComponent<FollowMazeSolution>()).gameObject, followHolder);
+            Parent((depthEnemyPool[i] = Instantiate(DepthEnemyPrefab).GetComponent<DepthFirstExplore>()).gameObject, depthHolder);
+            Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, powerupHolder);
             Parent(floorPool[i] = Instantiate(FloorPrefab), floorHolder);
-            Parent(powerupPool[i] = Instantiate(PowerupPrefab), powerupHolder);
 
             followSolutionPool[i].gameObject.SetActive(false);
+            powerupPool[i].gameObject.SetActive(false);
+            depthEnemyPool[i].gameObject.SetActive(false);
             floorPool[i].SetActive(false);
-            powerupPool[i].SetActive(false);
         }
 
         wallPool = new GameObject[totalTiles];
@@ -234,6 +242,9 @@ public class MazeScript : MonoBehaviour {
 
         gen.FollowSolutionPool.start = idx;
         gen.FollowSolutionPool.count = 1;
+
+        gen.DepthEnemyPool.start = idx;
+        gen.DepthEnemyPool.count = 1;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
@@ -242,10 +253,12 @@ public class MazeScript : MonoBehaviour {
         obj.name = ("MazeSection[" + x + "," + z + "]");
         MazeSectionGenerator gen = obj.GetComponent<MazeSectionGenerator>();
         gen.FloorPool = new RefArray<GameObject>(floorPool, 0, 0);
-        gen.PowerupPool = new RefArray<GameObject>(powerupPool, 0, 0);
+        gen.PowerupPool = new RefArray<Powerup>(powerupPool, 0, 0);
         gen.WallPool = new RefArray<GameObject>(wallPool, 0, 0);
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
+        gen.DepthEnemyPool = new RefArray<DepthFirstExplore>(depthEnemyPool, 0, 0);
+        gen.GemMat = Colors[Mod(x - z, Colors.Length)];
         return gen;
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Renderer))]
 public class EatForPoints : MonoBehaviour {
     public int Value;
     public IVec2 mazeLoc;
@@ -13,7 +13,6 @@ public class EatForPoints : MonoBehaviour {
     //private Collider myCollider;
 	// Use this for initialization
 	void Start () {
-        //myCollider = GetComponent<Collider>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
 	}

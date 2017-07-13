@@ -61,6 +61,15 @@ MonoBehaviour:
     type: 2}
   FollowEnemyPrefab: {fileID: 1456538493995154, guid: 716ca3e734955594bba32c5d981ecf92,
     type: 2}
+  DepthEnemyPrefab: {fileID: 1097862188447872, guid: 5a05f21c19f6c82479b308a251bacaf6,
+    type: 2}
+  Colors:
+  - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
+  - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
+  - {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
+  - {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
+  - {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
+  - {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
   SectionSize: 16
   SquareSize: 1
   RenderDistance: 2
