@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour {
     public static int StoreScore;
     public Text scoreText;
+    public BonusText BonusText;
+    public float DisplayTime;
+    public int BonusThreshold;
     private int scoreValue = 0;
     private int[] highScores;
     //private bool didWin = false;
@@ -26,6 +29,10 @@ public class ScoreManager : MonoBehaviour {
     {
         scoreValue += value;
         SetScoreText();
+        if (Mathf.Abs(value) >= BonusThreshold)
+        {
+            BonusText.ResetText(value, DisplayTime, 100.0f);
+        }
     }
 
     private void SetScoreText()
