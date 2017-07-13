@@ -40,6 +40,7 @@ public class FollowMazeSolution : MonoBehaviour {
         if (stopped)
         {
             stopTime -= Time.deltaTime;
+            myRenderer.material = Mathf.Sqrt(stopTime) * 100 % 7 < 2 ? NormalMat : StoppedMat;
             if (stopTime < 0.0f)
             {
                 stopTime = 0.0f;

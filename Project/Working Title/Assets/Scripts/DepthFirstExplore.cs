@@ -53,6 +53,7 @@ public class DepthFirstExplore : MonoBehaviour {
         if (stopped)
         {
             stopTime -= Time.deltaTime;
+            myRenderer.material = Mathf.Sqrt(stopTime) * 100 % 7 < 3 ? NormalMat : StoppedMat;
             if (stopTime < 0.0f)
             {
                 stopTime = 0.0f;
@@ -72,10 +73,10 @@ public class DepthFirstExplore : MonoBehaviour {
                 IVec2 current = next;
 
                 // get moves
-                if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !visited[current.x + 2, current.z]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
-                if (current.x - 2 >= 0                        && !mazeSection.IsWall(current.x - 1, current.z) && !visited[current.x - 2, current.z]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
-                if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !visited[current.x, current.z + 2]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
-                if (current.z - 2 >= 0                        && !mazeSection.IsWall(current.x, current.z - 1) && !visited[current.x, current.z - 2]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
+                if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !mazeSection.IsWall(current.x + 2, current.z) && !visited[current.x + 2, current.z]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
+                if (current.x - 2 >= 0                        && !mazeSection.IsWall(current.x - 1, current.z) && !mazeSection.IsWall(current.x - 2, current.z) && !visited[current.x - 2, current.z]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
+                if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !mazeSection.IsWall(current.x, current.z + 2) && !visited[current.x, current.z + 2]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
+                if (current.z - 2 >= 0                        && !mazeSection.IsWall(current.x, current.z - 1) && !mazeSection.IsWall(current.x, current.z - 2) && !visited[current.x, current.z - 2]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
 
                 // no moves
                 if (nextIdx <= 0)

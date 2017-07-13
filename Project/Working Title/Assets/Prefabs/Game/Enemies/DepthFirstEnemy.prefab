@@ -112,7 +112,7 @@ MonoBehaviour:
   Value: 1500
   Speed: 5
   NormalMat: {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
-  StoppedMat: {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
+  StoppedMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
 --- !u!136 &136065628107628768
 CapsuleCollider:
   m_ObjectHideFlags: 1
