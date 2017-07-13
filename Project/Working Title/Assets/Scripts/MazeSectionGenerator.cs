@@ -82,7 +82,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                         (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
     }
 
-    private IVec2 RandWallNode(int size, int wallIdx)
+    private IVec2 RandWallEdgeNode(int size, int wallIdx)
     {
         // helper booleans for identifying which wall
         bool vert = (wallIdx & 1) != 0, begin = wallIdx < 2;
@@ -91,6 +91,13 @@ public class MazeSectionGenerator : MonoBehaviour {
         // pick x and y - one on the edge, other random node
         return new IVec2((vert ? (begin ? (edge1) : (edge2)) : (rand.Next(0, max) * 2 + 1)),
                         (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
+    }
+
+    private IVec2 RandBetweenNodes(int size)
+    {
+        int max = (size - 1) / 2;
+        return new IVec2((rand.Next(0, max) * 2),
+                         (rand.Next(0, max) * 2));
     }
 
     public void EatAt(int x, int z)
@@ -127,7 +134,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         IVec2 start = RandMazeEdgeVal(Size);
 
         // add start to traceback, no solution yet
-        List<IVec2> traceback = new List<IVec2>(new IVec2[] { start });
+        Stack<IVec2> traceback = new Stack<IVec2>(new IVec2[] { start });
         MazeSolution = new IVec2[0];
 
         // track longest route
@@ -143,7 +150,7 @@ public class MazeSectionGenerator : MonoBehaviour {
             // get moves, current pos
             IVec2[] moves = new IVec2[4];
             int nextIdx = 0;
-            IVec2 currentPos = traceback.Last();
+            IVec2 currentPos = traceback.Peek();
 
             // check moves, add to array accordingly
             if (currentPos.x + 2 < Size && mazeSections[currentPos.x + 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x + 2, currentPos.z); }
@@ -163,7 +170,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 }
 
                 // backtrack
-                traceback.RemoveAt(traceback.Count - 1);
+                traceback.Pop();
             }
             else
             {
@@ -176,7 +183,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 mazeSections[between.x, between.z] = MazeSquare.VISITED;
 
                 // make the move
-                traceback.Add(moveChosen);
+                traceback.Push(moveChosen);
             }
         }
 
@@ -190,7 +197,6 @@ public class MazeSectionGenerator : MonoBehaviour {
             mazeSections[b.x, b.z] = MazeSquare.SOLUTION;
         }
 
-
         // mark start
         mazeSections[start.x, start.z] = MazeSquare.START;
 
@@ -200,11 +206,16 @@ public class MazeSectionGenerator : MonoBehaviour {
         // remove chunks
         for (int i = 0; i < 2*RemoveCount; ++i)
         {
-            IVec2 rmv = RandWallNode(Size, i%2);
+            IVec2 rmv = RandWallEdgeNode(Size, i%2);
             mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
         }
 
         powerupPos = longest;
+    }
+
+    private bool WallOrEdge(int x, int z)
+    {
+        return (x <= 0 || x >= (Size - 1) || z <= 0 || z >= (Size - 1) || IsWall(x, z));
     }
 
     private GameObject MakeAt(RefArray<GameObject> obj, int idx, Vector3 location)
@@ -249,7 +260,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 else if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
                 {
                     MakeAt(GemPool, gemCount, location);
-                    GemPool.reference[gemCount].gameObject.GetComponent<Renderer>().material = GemMat; // TODO: GET COMPONENT BEFORE SOMEHOW!!! 
+                    GemPool.reference[gemCount].SetMat(GemMat); 
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;

@@ -48,33 +48,31 @@ public class FollowMazeSolution : MonoBehaviour {
                 myRenderer.material = NormalMat;
             }
         }
+
+        if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
+        {
+            if (forward) { ++goingFrom; ++goingTo; }
+            else { --goingFrom; --goingTo; }
+
+            if (goingTo >= mazeSection.MazeSolution.Length)
+            {
+                forward = false;
+                goingFrom = mazeSection.MazeSolution.Length - 1;
+                goingTo = goingFrom - 1;
+                myRigidBody.position = toPos;
+                myRigidBody.velocity = Vector3.zero;
+            }
+            else if (goingTo < 0)
+            {
+                forward = true;
+                goingFrom = 0;
+                goingTo = 1;
+            }
+        }
         else
         {
-            if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
-            {
-                if (forward) { ++goingFrom; ++goingTo; }
-                else { --goingFrom; --goingTo; }
-
-                if (goingTo >= mazeSection.MazeSolution.Length)
-                {
-                    forward = false;
-                    goingFrom = mazeSection.MazeSolution.Length - 1;
-                    goingTo = goingFrom - 1;
-                    myRigidBody.position = toPos;
-                    myRigidBody.velocity = Vector3.zero;
-                }
-                else if (goingTo < 0)
-                {
-                    forward = true;
-                    goingFrom = 0;
-                    goingTo = 1;
-                }
-            }
-            else
-            {
-                Vector3 vel = toPos - fromPos;
-                myRigidBody.velocity = vel.normalized * Speed;
-            }
+            Vector3 vel = toPos - fromPos;
+            myRigidBody.velocity = vel.normalized * Speed;
         }
 
 	}

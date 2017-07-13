@@ -248,7 +248,7 @@ public class MazeScript : MonoBehaviour {
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
-    {
+    {    
         GameObject obj = Parent(Instantiate(MazeSectorPrefab), this.gameObject);
         obj.name = ("MazeSection[" + x + "," + z + "]");
         MazeSectionGenerator gen = obj.GetComponent<MazeSectionGenerator>();

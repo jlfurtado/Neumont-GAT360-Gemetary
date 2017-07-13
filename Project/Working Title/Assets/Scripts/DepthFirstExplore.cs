@@ -62,58 +62,56 @@ public class DepthFirstExplore : MonoBehaviour {
                 myRenderer.material = NormalMat;
             }
         }
-        else
+        
+        if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
         {
-            if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
+            // arrived at a section
+            int nextIdx = 0;
+            IVec2[] moves = new IVec2[4];
+
+            // we're at the new next
+            IVec2 current = next;
+
+            // get moves
+            if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !mazeSection.IsWall(current.x + 2, current.z) && !visited[current.x + 2, current.z]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
+            if (current.x - 2 >= 0                        && !mazeSection.IsWall(current.x - 1, current.z) && !mazeSection.IsWall(current.x - 2, current.z) && !visited[current.x - 2, current.z]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
+            if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !mazeSection.IsWall(current.x, current.z + 2) && !visited[current.x, current.z + 2]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
+            if (current.z - 2 >= 0                        && !mazeSection.IsWall(current.x, current.z - 1) && !mazeSection.IsWall(current.x, current.z - 2) && !visited[current.x, current.z - 2]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
+
+            // no moves
+            if (nextIdx <= 0)
             {
-                // arrived at a section
-                int nextIdx = 0;
-                IVec2[] moves = new IVec2[4];
-
-                // we're at the new next
-                IVec2 current = next;
-
-                // get moves
-                if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !mazeSection.IsWall(current.x + 2, current.z) && !visited[current.x + 2, current.z]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
-                if (current.x - 2 >= 0                        && !mazeSection.IsWall(current.x - 1, current.z) && !mazeSection.IsWall(current.x - 2, current.z) && !visited[current.x - 2, current.z]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
-                if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !mazeSection.IsWall(current.x, current.z + 2) && !visited[current.x, current.z + 2]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
-                if (current.z - 2 >= 0                        && !mazeSection.IsWall(current.x, current.z - 1) && !mazeSection.IsWall(current.x, current.z - 2) && !visited[current.x, current.z - 2]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
-
-                // no moves
-                if (nextIdx <= 0)
+                if (explore.Count > 0)
                 {
+                    from = explore.Pop();
+                    visited[from.x, from.z] = true;
                     if (explore.Count > 0)
                     {
-                        from = explore.Pop();
-                        visited[from.x, from.z] = true;
-                        if (explore.Count > 0)
-                        {
-                            next = explore.Peek();
-                        }
-                        else
-                        {
-                            next = from;
-                            ClearVisited();
-                        }
+                        next = explore.Peek();
+                    }
+                    else
+                    {
+                        next = from;
+                        ClearVisited();
                     }
                 }
-                else
-                {
-                    IVec2 moveChosen = moves[rand.Next(0, nextIdx)];
-                    explore.Push(moveChosen);
-                    from = next;
-                    next = moveChosen;
-                    visited[from.x, from.z] = true;
-                }
-
-                myRigidBody.position = toPos;
-                myRigidBody.velocity = Vector3.zero;
             }
             else
             {
-                Vector3 vel = toPos - fromPos;
-                myRigidBody.velocity = vel.normalized * Speed;
+                IVec2 moveChosen = moves[rand.Next(0, nextIdx)];
+                explore.Push(moveChosen);
+                from = next;
+                next = moveChosen;
+                visited[from.x, from.z] = true;
             }
+
+            myRigidBody.position = toPos;
+            myRigidBody.velocity = Vector3.zero;
+        }
+        else
+        {
+            Vector3 vel = toPos - fromPos;
+            myRigidBody.velocity = vel.normalized * Speed;
         }
 
     }

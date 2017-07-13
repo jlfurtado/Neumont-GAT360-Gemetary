@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23411525296632584}
   - component: {fileID: 114695019893043198}
   - component: {fileID: 54245014850984508}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DepthFirstEnemy
   m_TagString: DepthEnemy
   m_Icon: {fileID: 0}
