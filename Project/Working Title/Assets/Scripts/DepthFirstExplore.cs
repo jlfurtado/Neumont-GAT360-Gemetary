@@ -106,6 +106,7 @@ public class DepthFirstExplore : MonoBehaviour {
                     visited[from.x, from.z] = true;
                 }
 
+                myRigidBody.position = toPos;
                 myRigidBody.velocity = Vector3.zero;
             }
             else
@@ -137,7 +138,7 @@ public class DepthFirstExplore : MonoBehaviour {
             if (pc.PoweredUp || stopped)
             {
                 // oh no, we died!
-                scoreRef.AddScore(Value);
+                scoreRef.AddScore((int)Mathf.Floor(Value * Speed));
                 gameObject.SetActive(false);
             }
             else

@@ -52,6 +52,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     private System.Random rand;
     private IVec2 powerupPos;
     private int numGems;
+    private float diffMult;
 
     // Use this for initialization
     void Start ()
@@ -100,7 +101,7 @@ public class MazeSectionGenerator : MonoBehaviour {
             if (numGems == 0)
             {
                 // TODO: MORE AESTHETIC LIKE TEXT POPUP
-                scoreRef.AddScore(Value);
+                scoreRef.AddScore((int)(Mathf.Floor(Value * Difficulty())));
                 playerRef.PowerUp();
             }
         }
@@ -266,12 +267,21 @@ public class MazeSectionGenerator : MonoBehaviour {
             PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
         }
 
+        float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
+        float dist = Mathf.Sqrt(xPos * xPos + zPos * zPos);
+        diffMult = Mathf.Log(10.0f + dist);
         MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
-
+        FollowSolutionPool.reference[FollowSolutionPool.start].Speed = 1.25f * diffMult;
 
         MakeAt(DepthEnemyPool, DepthEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
+        DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.1f * diffMult;
+    }
+
+    public float Difficulty()
+    {
+        return diffMult;
     }
 
     public Vector3 PositionAt(IVec2 position)

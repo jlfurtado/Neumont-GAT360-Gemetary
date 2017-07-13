@@ -512,11 +512,6 @@ Prefab:
       propertyPath: BonusText
       value: 
       objectReference: {fileID: 1980533421}
-    - target: {fileID: 114456985601674962, guid: 6a9a13a51f57c214eab608529f83b909,
-        type: 2}
-      propertyPath: BonusThreshold
-      value: 500
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a9a13a51f57c214eab608529f83b909, type: 2}
   m_IsPrefabParent: 0

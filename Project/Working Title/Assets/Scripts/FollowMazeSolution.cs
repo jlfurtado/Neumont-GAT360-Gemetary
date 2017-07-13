@@ -60,6 +60,7 @@ public class FollowMazeSolution : MonoBehaviour {
                     forward = false;
                     goingFrom = mazeSection.MazeSolution.Length - 1;
                     goingTo = goingFrom - 1;
+                    myRigidBody.position = toPos;
                     myRigidBody.velocity = Vector3.zero;
                 }
                 else if (goingTo < 0)
@@ -87,7 +88,7 @@ public class FollowMazeSolution : MonoBehaviour {
             if (pc.PoweredUp || stopped)
             {
                 // oh no, we died!
-                scoreRef.AddScore(Value);
+                scoreRef.AddScore((int)Mathf.Floor(Value * Speed));
                 gameObject.SetActive(false);
             }
             else
