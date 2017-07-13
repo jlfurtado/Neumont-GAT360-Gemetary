@@ -11,7 +11,6 @@ public class SceneMover : MonoBehaviour {
         SceneManager.LoadScene(Strings.TITLE_SCENE_NAME);
     }
 
-
     public void MoveToGameOver()
     {
         DontKeepTitleMusic();

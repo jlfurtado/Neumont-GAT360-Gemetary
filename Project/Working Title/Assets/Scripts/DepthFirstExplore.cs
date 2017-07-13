@@ -42,6 +42,7 @@ public class DepthFirstExplore : MonoBehaviour {
         {
             next = mazeRef.SectionLocFor(transform.position);
             from = mazeRef.SectionLocFor(transform.position);
+            ClearVisited();
             visited[from.x, from.z] = true;
             explore.Push(from);
         }
@@ -53,7 +54,7 @@ public class DepthFirstExplore : MonoBehaviour {
         if (stopped)
         {
             stopTime -= Time.deltaTime;
-            myRenderer.material = Mathf.Sqrt(stopTime) * 100 % 7 < 3 ? NormalMat : StoppedMat;
+            myRenderer.material = Mathf.Sqrt(stopTime) * 100 % 7 < 2 ? NormalMat : StoppedMat;
             if (stopTime < 0.0f)
             {
                 stopTime = 0.0f;
@@ -92,13 +93,7 @@ public class DepthFirstExplore : MonoBehaviour {
                         else
                         {
                             next = from;
-                            for (int x = 0; x < mazeRef.SectionSize; ++x)
-                            {
-                                for (int z = 0; z < mazeRef.SectionSize; ++z)
-                                {
-                                    visited[x, z] = false;
-                                }
-                            }
+                            ClearVisited();
                         }
                     }
                 }
@@ -120,6 +115,17 @@ public class DepthFirstExplore : MonoBehaviour {
             }
         }
 
+    }
+
+    private void ClearVisited()
+    {
+        for (int x = 0; x < mazeRef.SectionSize; ++x)
+        {
+            for (int z = 0; z < mazeRef.SectionSize; ++z)
+            {
+                visited[x, z] = false;
+            }
+        }
     }
 
     void OnTriggerEnter(Collider other)
