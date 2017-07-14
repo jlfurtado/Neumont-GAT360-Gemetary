@@ -37,7 +37,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
-    public RefArray<GameObject> FloorPool;
+    public RefArray<Renderer> FloorPool;
     public RefArray<GameObject> WallPool;
     public RefArray<Powerup> PowerupPool;
     public RefArray<EatForPoints> GemPool;
@@ -45,6 +45,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public RefArray<DepthFirstExplore> DepthEnemyPool;
     public IVec2[] MazeSolution;
     public Material GemMat;
+    public Material FloorMat;
 
     private MazeSquare[,] mazeSections;
     private PlayerController playerRef;
@@ -165,7 +166,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 if (traceback.Count > mostMoves)
                 {
                     longest = currentPos;
-                    MazeSolution = traceback.ToArray();
+                    MazeSolution = traceback.Reverse().ToArray();
                     mostMoves = traceback.Count;
                 }
 
@@ -244,7 +245,8 @@ public class MazeSectionGenerator : MonoBehaviour {
         // one giant floor object rather than tons of tiny ones - FPS++
         GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.zero);
         floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
-
+        FloorPool.reference[FloorPool.start].material = FloorMat;
+       
         int halfSize = Size / 2;
         int wallCount = WallPool.start, gemCount = GemPool.start;
         for (int x = 0; x < Size; ++x)

@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour {
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
-    private FollowMazeSolution[] followEnemies;
-    private DepthFirstExplore[] depthEnemies;
+    private Enemy[] enemies;
+
     public bool PoweredUp { get; private set; }
     private float remainingPowerTime;
     private Rigidbody myRigidBody = null;
@@ -27,19 +27,12 @@ public class PlayerController : MonoBehaviour {
         myRenderer = GetComponent<Renderer>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
 
-        GameObject[] followEnemyObjects = GameObject.FindGameObjectsWithTag(Strings.FOLLOW_ENEMY_TAG);
-        GameObject[] depthEnemyObjects = GameObject.FindGameObjectsWithTag(Strings.DEPTH_ENEMY_TAG);
+        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag(Strings.ENEMY_TAG);
 
-        followEnemies = new FollowMazeSolution[followEnemyObjects.Length];
-        for (int i = 0; i < followEnemyObjects.Length; ++i)
+        enemies = new Enemy[enemyObjects.Length];
+        for (int i = 0; i < enemyObjects.Length; ++i)
         {
-            followEnemies[i] = followEnemyObjects[i].GetComponent<FollowMazeSolution>();
-        }
-
-        depthEnemies = new DepthFirstExplore[depthEnemyObjects.Length];
-        for (int i = 0; i < depthEnemyObjects.Length; ++i)
-        {
-            depthEnemies[i] = depthEnemyObjects[i].GetComponent<DepthFirstExplore>();
+            enemies[i] = enemyObjects[i].GetComponent<Enemy>();
         }
     }
 	
@@ -90,8 +83,6 @@ public class PlayerController : MonoBehaviour {
             this.fromPos = fromPos;
             this.toPos = toPos;
 
-            
-
         }
         
         if (moving && Vector3.Dot((toPos - transform.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - transform.position).magnitude < CLOSE_ENOUGH)
@@ -125,12 +116,7 @@ public class PlayerController : MonoBehaviour {
         PoweredUp = true;
         remainingPowerTime = PowerupTime;
 
-        foreach (FollowMazeSolution enemy in followEnemies)
-        {
-            enemy.StopFor(PowerupTime);
-        }
-
-        foreach (DepthFirstExplore enemy in depthEnemies)
+        foreach (Enemy enemy in enemies)
         {
             enemy.StopFor(PowerupTime);
         }

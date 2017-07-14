@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 54674026098916062}
   m_Layer: 2
   m_Name: FollowSolutionEnemy
-  m_TagString: FollowEnemy
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
   Speed: 6
   NormalMat: {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
   StoppedMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
+  EatenMat: {fileID: 2100000, guid: b724f46bd25095c46bb6bacd63a525a0, type: 2}
 --- !u!136 &136861200133600596
 CapsuleCollider:
   m_ObjectHideFlags: 1

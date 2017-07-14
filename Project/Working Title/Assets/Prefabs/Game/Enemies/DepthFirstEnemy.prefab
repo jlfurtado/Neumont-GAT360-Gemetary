@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 54245014850984508}
   m_Layer: 2
   m_Name: DepthFirstEnemy
-  m_TagString: DepthEnemy
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
   Speed: 5
   NormalMat: {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
   StoppedMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
+  EatenMat: {fileID: 2100000, guid: b724f46bd25095c46bb6bacd63a525a0, type: 2}
 --- !u!136 &136065628107628768
 CapsuleCollider:
   m_ObjectHideFlags: 1

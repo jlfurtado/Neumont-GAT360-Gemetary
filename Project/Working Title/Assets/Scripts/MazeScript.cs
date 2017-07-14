@@ -25,7 +25,7 @@ public class MazeScript : MonoBehaviour {
     private EatForPoints[] gemPool;
     private FollowMazeSolution[] followSolutionPool;
     private DepthFirstExplore[] depthEnemyPool;
-    private GameObject[] floorPool;
+    private Renderer[] floorPool;
     private Powerup[] powerupPool;
     private GameObject wallHolder;
     private GameObject gemHolder;
@@ -63,19 +63,19 @@ public class MazeScript : MonoBehaviour {
 
         followSolutionPool = new FollowMazeSolution[numSections];
         depthEnemyPool = new DepthFirstExplore[numSections];
-        floorPool = new GameObject[numSections];
+        floorPool = new Renderer[numSections];
         powerupPool = new Powerup[numSections];
         for (int i = 0; i < numSections; ++i)
         {
             Parent((followSolutionPool[i] = Instantiate(FollowEnemyPrefab).GetComponent<FollowMazeSolution>()).gameObject, followHolder);
             Parent((depthEnemyPool[i] = Instantiate(DepthEnemyPrefab).GetComponent<DepthFirstExplore>()).gameObject, depthHolder);
             Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, powerupHolder);
-            Parent(floorPool[i] = Instantiate(FloorPrefab), floorHolder);
+            Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, floorHolder);
 
             followSolutionPool[i].gameObject.SetActive(false);
             powerupPool[i].gameObject.SetActive(false);
             depthEnemyPool[i].gameObject.SetActive(false);
-            floorPool[i].SetActive(false);
+            floorPool[i].gameObject.SetActive(false);
         }
 
         wallPool = new GameObject[totalTiles];
@@ -252,13 +252,14 @@ public class MazeScript : MonoBehaviour {
         GameObject obj = Parent(Instantiate(MazeSectorPrefab), this.gameObject);
         obj.name = ("MazeSection[" + x + "," + z + "]");
         MazeSectionGenerator gen = obj.GetComponent<MazeSectionGenerator>();
-        gen.FloorPool = new RefArray<GameObject>(floorPool, 0, 0);
+        gen.FloorPool = new RefArray<Renderer>(floorPool, 0, 0);
         gen.PowerupPool = new RefArray<Powerup>(powerupPool, 0, 0);
         gen.WallPool = new RefArray<GameObject>(wallPool, 0, 0);
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
         gen.DepthEnemyPool = new RefArray<DepthFirstExplore>(depthEnemyPool, 0, 0);
         gen.GemMat = Colors[Mod(x - z, Colors.Length)];
+        gen.FloorMat = Colors[Mod(x - z + 1, Colors.Length)];
         return gen;
     }
 }
