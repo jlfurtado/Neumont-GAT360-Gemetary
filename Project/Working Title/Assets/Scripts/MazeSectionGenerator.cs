@@ -37,6 +37,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
+    public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
     public RefArray<GameObject> WallPool;
     public RefArray<Powerup> PowerupPool;
@@ -242,12 +243,15 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     private void RedoMazeGeometry(IVec2 mazeLoc)
     {
+        int halfSize = Size / 2;
+
         // one giant floor object rather than tons of tiny ones - FPS++
         GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.zero);
         floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
         FloorPool.reference[FloorPool.start].material = FloorMat;
-       
-        int halfSize = Size / 2;
+
+        MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize));
+
         int wallCount = WallPool.start, gemCount = GemPool.start;
         for (int x = 0; x < Size; ++x)
         {

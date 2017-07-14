@@ -63,6 +63,8 @@ MonoBehaviour:
     type: 2}
   DepthEnemyPrefab: {fileID: 1097862188447872, guid: 5a05f21c19f6c82479b308a251bacaf6,
     type: 2}
+  RestorerPrefab: {fileID: 1215656122041782, guid: 03a39d75b2cdde1478b64f85a0d25984,
+    type: 2}
   Colors:
   - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
   - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
