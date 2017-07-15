@@ -28,9 +28,29 @@ public class DepthFirstExplore : Enemy {
 
         base.Update();
     }
-    
+
+    protected override void OnLandReturn(Vector3 toPos)
+    {
+        // snap
+        base.OnLandReturn(toPos);
+
+        if (explore.Count > 0)
+        {
+            from = explore.Pop();
+            ClearVisited();
+
+            if (explore.Count > 0)
+            {
+                next = explore.Peek();
+            }
+        }
+    }
+
     protected override void OnLand(Vector3 toPos)
     {
+        // snap :)
+        base.OnLand(toPos);
+
         // arrived at a section
         int nextIdx = 0;
         IVec2[] moves = new IVec2[4];
@@ -71,6 +91,7 @@ public class DepthFirstExplore : Enemy {
             visited[from.x, from.z] = true;
         }
     }
+
     private void ClearVisited()
     {
         for (int x = 0; x < mazeRef.SectionSize; ++x)

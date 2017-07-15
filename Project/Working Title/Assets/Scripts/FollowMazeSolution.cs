@@ -15,8 +15,38 @@ public class FollowMazeSolution : Enemy {
         base.Update();
 	}
 
+    protected override void OnLandReturn(Vector3 toPos)
+    {
+        // snap
+        base.OnLandReturn(toPos);
+
+        forward = false;
+
+        if (goingFrom < goingTo)
+        {
+            int t = goingTo;
+            goingTo = goingFrom;
+            goingFrom = t;
+        }
+        else
+        {
+            --goingFrom;
+            --goingTo;
+
+            if (goingTo < 0)
+            {
+                forward = true;
+                goingFrom = 0;
+                goingTo = 1;
+            }
+        }
+    }
+
     protected override void OnLand(Vector3 toPos)
     {
+        // snap :)
+        base.OnLand(toPos);
+
         if (forward) { ++goingFrom; ++goingTo; }
         else { --goingFrom; --goingTo; }
 
@@ -25,8 +55,6 @@ public class FollowMazeSolution : Enemy {
             forward = false;
             goingFrom = mazeSection.MazeSolution.Length - 1;
             goingTo = goingFrom - 1;
-            myRigidBody.position = toPos;
-            myRigidBody.velocity = Vector3.zero;
         }
         else if (goingTo < 0)
         {

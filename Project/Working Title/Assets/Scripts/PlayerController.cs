@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour {
                 hit.transform.gameObject.SetActive(false);
             }
 
-            myRenderer.material = Colors[((int)Mathf.Floor(remainingPowerTime * 25)) % Colors.Length];
+            myRenderer.material = Colors[((int)Mathf.Floor(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length];
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { PoweredUp = false; myRenderer.material = DefaultMat; }
         }

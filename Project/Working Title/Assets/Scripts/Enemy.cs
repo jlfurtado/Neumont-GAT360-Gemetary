@@ -56,7 +56,9 @@ public class Enemy : MonoBehaviour {
         if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
         {
             if (Eaten && next.Equals(home)) { Restore(); }
-            OnLand(toPos);
+            if (stopped && next.Equals(home)) { UnStop(); }
+            if (stopped || Eaten) { OnLandReturn(toPos); }
+            else { OnLand(toPos); }
         }
         else
         {
@@ -70,7 +72,13 @@ public class Enemy : MonoBehaviour {
         myRigidBody.velocity = Vector3.zero;
     }
 
-    protected virtual void Move(Vector3 toPos, Vector3 fromPos)
+    protected virtual void OnLandReturn(Vector3 toPos)
+    {
+        myRigidBody.position = toPos;
+        myRigidBody.velocity = Vector3.zero;
+    }
+
+    private void Move(Vector3 toPos, Vector3 fromPos)
     {
         Vector3 vel = toPos - fromPos;
         myRigidBody.velocity = vel.normalized * Speed;

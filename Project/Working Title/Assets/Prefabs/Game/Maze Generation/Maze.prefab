@@ -65,13 +65,20 @@ MonoBehaviour:
     type: 2}
   RestorerPrefab: {fileID: 1215656122041782, guid: 03a39d75b2cdde1478b64f85a0d25984,
     type: 2}
-  Colors:
-  - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
+  GemColors:
   - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
   - {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
   - {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
   - {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
+  - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
   - {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
+  FloorColors:
+  - {fileID: 2100000, guid: 0d00dbc6c435090498c0f686e347b24d, type: 2}
+  - {fileID: 2100000, guid: b1ac16fb7c3722047ab96d1867ca4f13, type: 2}
+  - {fileID: 2100000, guid: ded2b7c237d67dd42bae7411e353e76e, type: 2}
+  - {fileID: 2100000, guid: b14a5c9d8af13b84db4c3b683be2f16e, type: 2}
+  - {fileID: 2100000, guid: e5cd4df91f17a19438dac5f90ee1c558, type: 2}
+  - {fileID: 2100000, guid: a46eb35b6afa2324d9cefeb57a2d90b5, type: 2}
   SectionSize: 16
   SquareSize: 1
   RenderDistance: 2

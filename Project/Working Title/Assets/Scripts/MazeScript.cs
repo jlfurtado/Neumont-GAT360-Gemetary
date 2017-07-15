@@ -11,7 +11,8 @@ public class MazeScript : MonoBehaviour {
     public GameObject FollowEnemyPrefab;
     public GameObject DepthEnemyPrefab;
     public GameObject RestorerPrefab;
-    public Material[] Colors;
+    public Material[] GemColors;
+    public Material[] FloorColors;
 
     public int SectionSize;
     public float SquareSize;
@@ -269,8 +270,8 @@ public class MazeScript : MonoBehaviour {
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
         gen.DepthEnemyPool = new RefArray<DepthFirstExplore>(depthEnemyPool, 0, 0);
-        gen.GemMat = Colors[Mod(x - z, Colors.Length)];
-        gen.FloorMat = Colors[Mod(x - z + 2, Colors.Length)];
+        gen.GemMat = GemColors[Mod(x - z, GemColors.Length)];
+        gen.FloorMat = FloorColors[Mod(x - z, FloorColors.Length)];
         return gen;
     }
 }
