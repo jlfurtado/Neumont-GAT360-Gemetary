@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
 public class DepthFirstExplore : Enemy {
-    private Stack<IVec2> explore = new Stack<IVec2>();
+    private Stack<IVec2> explore = null;
     private bool[] visited = null;
 
     // Use this for initialization
@@ -12,6 +12,7 @@ public class DepthFirstExplore : Enemy {
     {
         base.Start();
         visited = new bool[mazeRef.SectionSize * mazeRef.SectionSize];
+        explore = new Stack<IVec2>(visited.Length); // make default size greater than we ever expect it to be, avoid cost of dynamic resize copy
     }
 
     private int IdxFromXZ(int x, int z)

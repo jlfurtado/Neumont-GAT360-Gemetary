@@ -142,7 +142,8 @@ public class MazeSectionGenerator : MonoBehaviour {
         int startIdx = IdxFromXZ(start.x, start.z);
 
         // add start to traceback, no solution yet
-        Stack<IVec2> traceback = new Stack<IVec2>(new IVec2[] { start });
+        Stack<IVec2> traceback = new Stack<IVec2>(Size * Size); // make default size greater than we ever expect it to be, avoid cost of dynamic resize copy
+        traceback.Push(start);
         MazeSolution = new IVec2[0];
 
         // track longest route
