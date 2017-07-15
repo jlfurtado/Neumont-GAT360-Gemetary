@@ -115,7 +115,6 @@ public class MazeSectionGenerator : MonoBehaviour {
             --numGems;
             if (numGems == 0)
             {
-                // TODO: MORE AESTHETIC LIKE TEXT POPUP
                 scoreRef.AddScore((int)(Mathf.Floor(Value * Difficulty())));
                 playerRef.PowerUp();
             }
@@ -278,9 +277,8 @@ public class MazeSectionGenerator : MonoBehaviour {
         DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
         DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.25f * diffMult;
 
-        int wallCount = WallPool.start, gemCount = GemPool.start;
-
-        for (int x = 0, idx = 0; x < Size; ++x)
+        int wallCount = WallPool.start, gemCount = GemPool.start, idx = 0;
+        for (int x = 0; x < Size; ++x)
         {
             for (int z = 0; z < Size; ++z)
             {

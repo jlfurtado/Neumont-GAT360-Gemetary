@@ -6,9 +6,17 @@ public class FollowTarget : MonoBehaviour {
     public GameObject TargetToFollow;
     public Vector3 Offset;
     public float Speed;
+    public float SlowdownRadius;
 
+    private Vector3 vel;
     void LateUpdate()
     {
-        transform.position = TargetToFollow.transform.position + Offset;
+        Vector3 toPos = TargetToFollow.transform.position + Offset;
+        Vector3 move = (toPos - transform.position);
+        float dist = move.magnitude;
+        float rampSpeed = Speed * (dist / SlowdownRadius);
+        float clipSpeed = Mathf.Min(rampSpeed, Speed);
+        vel = clipSpeed / dist * move;
+        transform.position += vel * Time.deltaTime;
     }
 }

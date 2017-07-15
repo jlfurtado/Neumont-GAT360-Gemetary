@@ -457,7 +457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetToFollow: {fileID: 1335946172}
   Offset: {x: 0, y: 13, z: -7}
-  Speed: 0
+  Speed: 15
+  SlowdownRadius: 3
 --- !u!1001 &1432755152
 Prefab:
   m_ObjectHideFlags: 0

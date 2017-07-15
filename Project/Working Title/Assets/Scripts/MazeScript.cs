@@ -22,7 +22,7 @@ public class MazeScript : MonoBehaviour {
     private int numSections;
     private int totalTiles;
     private float mazeSize;
-    private Dictionary<string, MazeSectionGenerator> generatedMazes = new Dictionary<string, MazeSectionGenerator>(); // TODO: PREVENT DUPLICATE DICTIONARIES
+    private Dictionary<string, MazeSectionGenerator> generatedMazes = new Dictionary<string, MazeSectionGenerator>(10000);
     private GameObject[] wallPool;
     private GameObject[] restorerPool;
     private EatForPoints[] gemPool;
@@ -216,10 +216,11 @@ public class MazeScript : MonoBehaviour {
 
     private void Disable(int x, int z)
     {
+        string mazeKey = ToKey(x, z);
         int idx = MagicMath(x, z);
-        if (!generatedMazes.ContainsKey(ToKey(x, z))) { return; }
+        if (!generatedMazes.ContainsKey(mazeKey)) { return; }
 
-        generatedMazes[ToKey(x, z)].gameObject.SetActive(false);
+        generatedMazes[mazeKey].gameObject.SetActive(false);
 
         for (int k = 0; k < genTiles; ++k)
         {
@@ -231,11 +232,12 @@ public class MazeScript : MonoBehaviour {
 
     private void Enable(int x, int z)
     {
+        string mazeKey = ToKey(x, z);
         int idx = MagicMath(x, z);
-        bool newMaze = !generatedMazes.ContainsKey(ToKey(x, z));
-        if (newMaze) { generatedMazes.Add(ToKey(x, z), GenerateMazeSection(x, z)); }
+        bool newMaze = !generatedMazes.ContainsKey(mazeKey);
+        if (newMaze) { generatedMazes.Add(mazeKey, GenerateMazeSection(x, z)); }
         
-        MazeSectionGenerator gen = generatedMazes[ToKey(x, z)];
+        MazeSectionGenerator gen = generatedMazes[mazeKey];
         gen.gameObject.SetActive(true);
         gen.gameObject.transform.localPosition = new Vector3(x * mazeSize, 0.0f, z * mazeSize);
         SetMazeParams(gen, idx);
