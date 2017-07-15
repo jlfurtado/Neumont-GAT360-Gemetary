@@ -48,7 +48,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public Material GemMat;
     public Material FloorMat;
 
-    private MazeSquare[,] mazeSections;
+    private MazeSquare[] mazeSections;
     private PlayerController playerRef;
     private ScoreManager scoreRef;
     private System.Random rand;
@@ -102,9 +102,15 @@ public class MazeSectionGenerator : MonoBehaviour {
                          (rand.Next(0, max) * 2));
     }
 
+    private int IdxFromXZ(int x, int z)
+    {
+        return x * Size + z;
+    }
+
     public void EatAt(int x, int z)
     {
-        if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
+        int idx = IdxFromXZ(x, z);
+        if (mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION)
         {
             --numGems;
             if (numGems == 0)
@@ -115,25 +121,26 @@ public class MazeSectionGenerator : MonoBehaviour {
             }
         }
 
-        mazeSections[x, z] = MazeSquare.EMPTY;
+        mazeSections[idx] = MazeSquare.EMPTY;
     }
 
     private void GenerateMaze()
     {
         // create tiles
-        mazeSections = new MazeSquare[Size, Size];
+        mazeSections = new MazeSquare[Size * Size];
 
         // create base map
-        for (int i = 0; i < Size; ++i)
+        for (int i = 0, x = 0; i < Size; ++i)
         {
             for (int j = 0; j < Size; ++j)
             {
-                mazeSections[i, j] = ((i & j & 1) == 0) ? MazeSquare.WALL : MazeSquare.UNVISITED; 
+                mazeSections[x++] = ((i & j & 1) == 0) ? MazeSquare.WALL : MazeSquare.UNVISITED; 
             }
         }
 
         // get random start
         IVec2 start = RandMazeEdgeVal(Size);
+        int startIdx = IdxFromXZ(start.x, start.z);
 
         // add start to traceback, no solution yet
         Stack<IVec2> traceback = new Stack<IVec2>(new IVec2[] { start });
@@ -144,7 +151,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         int mostMoves = 0;
 
         // mark start as visited
-        mazeSections[start.x, start.z] = MazeSquare.VISITED;
+        mazeSections[startIdx] = MazeSquare.VISITED;
 
         // depth-first generation
         while (traceback.Count > 0)
@@ -155,10 +162,10 @@ public class MazeSectionGenerator : MonoBehaviour {
             IVec2 currentPos = traceback.Peek();
 
             // check moves, add to array accordingly
-            if (currentPos.x + 2 < Size && mazeSections[currentPos.x + 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x + 2, currentPos.z); }
-            if (currentPos.x - 2 >= 0 && mazeSections[currentPos.x - 2, currentPos.z] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x - 2, currentPos.z); }
-            if (currentPos.z + 2 < Size && mazeSections[currentPos.x, currentPos.z + 2] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z + 2); }
-            if (currentPos.z - 2 >= 0 && mazeSections[currentPos.x, currentPos.z - 2] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z - 2); }
+            if (currentPos.x + 2 < Size && mazeSections[IdxFromXZ(currentPos.x + 2, currentPos.z)] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x + 2, currentPos.z); }
+            if (currentPos.x - 2 >= 0 && mazeSections[IdxFromXZ(currentPos.x - 2, currentPos.z)] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x - 2, currentPos.z); }
+            if (currentPos.z + 2 < Size && mazeSections[IdxFromXZ(currentPos.x, currentPos.z + 2)] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z + 2); }
+            if (currentPos.z - 2 >= 0 && mazeSections[IdxFromXZ(currentPos.x, currentPos.z - 2)] == MazeSquare.UNVISITED) { moves[nextIdx++] = new IVec2(currentPos.x, currentPos.z - 2); }
 
             // if no moves pop
             if (nextIdx <= 0)
@@ -181,8 +188,8 @@ public class MazeSectionGenerator : MonoBehaviour {
                 IVec2 between = new IVec2((moveChosen.x + currentPos.x) / 2, (moveChosen.z + currentPos.z) / 2);
 
                 // we visited the node and take out wall between
-                mazeSections[moveChosen.x, moveChosen.z] = MazeSquare.VISITED;
-                mazeSections[between.x, between.z] = MazeSquare.VISITED;
+                mazeSections[IdxFromXZ(moveChosen.x, moveChosen.z)] = MazeSquare.VISITED;
+                mazeSections[IdxFromXZ(between.x, between.z)] = MazeSquare.VISITED;
 
                 // make the move
                 traceback.Push(moveChosen);
@@ -195,21 +202,21 @@ public class MazeSectionGenerator : MonoBehaviour {
             IVec2 b = new IVec2((mv.x + ot.x) / 2, (mv.z + ot.z) / 2);
 
             // we visited the node and take out wall between
-            mazeSections[mv.x, mv.z] = MazeSquare.SOLUTION;
-            mazeSections[b.x, b.z] = MazeSquare.SOLUTION;
+            mazeSections[IdxFromXZ(mv.x, mv.z)] = MazeSquare.SOLUTION;
+            mazeSections[IdxFromXZ(b.x, b.z)] = MazeSquare.SOLUTION;
         }
 
         // mark start
-        mazeSections[start.x, start.z] = MazeSquare.START;
+        mazeSections[startIdx] = MazeSquare.START;
 
         // mark end
-        mazeSections[longest.x, longest.z] = MazeSquare.END;
+        mazeSections[IdxFromXZ(longest.x, longest.z)] = MazeSquare.END;
 
         // remove chunks
         for (int i = 0; i < 2*RemoveCount; ++i)
         {
             IVec2 rmv = RandWallEdgeNode(Size, i%2);
-            mazeSections[rmv.x, rmv.z] = MazeSquare.VISITED;
+            mazeSections[IdxFromXZ(rmv.x, rmv.z)] = MazeSquare.VISITED;
         }
 
         powerupPos = longest;
@@ -252,7 +259,7 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize));
 
-        if (mazeSections[powerupPos.x, powerupPos.z] != MazeSquare.EMPTY)
+        if (mazeSections[IdxFromXZ(powerupPos.x, powerupPos.z)] != MazeSquare.EMPTY)
         {
             MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
             PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
@@ -272,17 +279,18 @@ public class MazeSectionGenerator : MonoBehaviour {
         DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.25f * diffMult;
 
         int wallCount = WallPool.start, gemCount = GemPool.start;
-        for (int x = 0; x < Size; ++x)
+
+        for (int x = 0, idx = 0; x < Size; ++x)
         {
             for (int z = 0; z < Size; ++z)
             {
                 Vector3 location = new Vector3((x - halfSize) * SquareSize, 0.5f, (z - halfSize) * SquareSize);
 
-                if (mazeSections[x, z] == MazeSquare.WALL)
+                if (mazeSections[idx] == MazeSquare.WALL)
                 {
                     MakeAt(WallPool, wallCount++, location);
                 }
-                else if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
+                else if (mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION)
                 {
                     MakeAt(GemPool, gemCount, location);
                     GemPool.reference[gemCount].SetMat(GemMat);
@@ -290,6 +298,8 @@ public class MazeSectionGenerator : MonoBehaviour {
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;
                 }
+
+                idx++;
             }
         }
 
@@ -315,7 +325,7 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public bool IsWall(int x, int z)
     {
-        return mazeSections[x, z] == MazeSquare.WALL;
+        return mazeSections[IdxFromXZ(x, z)] == MazeSquare.WALL;
     }
 
     //public IVec2 PositionAt(Vector3 position)

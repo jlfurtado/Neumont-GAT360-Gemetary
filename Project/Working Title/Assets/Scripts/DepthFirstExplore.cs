@@ -5,13 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
 public class DepthFirstExplore : Enemy {
     private Stack<IVec2> explore = new Stack<IVec2>();
-    private bool[,] visited = null;
+    private bool[] visited = null;
 
     // Use this for initialization
     public override void Start()
     {
         base.Start();
-        visited = new bool[mazeRef.SectionSize, mazeRef.SectionSize];
+        visited = new bool[mazeRef.SectionSize * mazeRef.SectionSize];
+    }
+
+    private int IdxFromXZ(int x, int z)
+    {
+        return x * mazeRef.SectionSize + z;
     }
 
     // Update is called once per frame
@@ -22,7 +27,7 @@ public class DepthFirstExplore : Enemy {
             next = mazeRef.SectionLocFor(transform.position);
             from = mazeRef.SectionLocFor(transform.position);
             ClearVisited();
-            visited[from.x, from.z] = true;
+            visited[IdxFromXZ(from.x, from.z)] = true;
             explore.Push(from);
         }
 
@@ -59,10 +64,10 @@ public class DepthFirstExplore : Enemy {
         IVec2 current = next;
 
         // get moves
-        if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !mazeSection.IsWall(current.x + 2, current.z) && !visited[current.x + 2, current.z]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
-        if (current.x - 2 >= 0 && !mazeSection.IsWall(current.x - 1, current.z) && !mazeSection.IsWall(current.x - 2, current.z) && !visited[current.x - 2, current.z]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
-        if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !mazeSection.IsWall(current.x, current.z + 2) && !visited[current.x, current.z + 2]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
-        if (current.z - 2 >= 0 && !mazeSection.IsWall(current.x, current.z - 1) && !mazeSection.IsWall(current.x, current.z - 2) && !visited[current.x, current.z - 2]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
+        if (current.x + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x + 1, current.z) && !mazeSection.IsWall(current.x + 2, current.z) && !visited[IdxFromXZ(current.x + 2, current.z)]) { moves[nextIdx++] = new IVec2(current.x + 2, current.z); }
+        if (current.x - 2 >= 0 && !mazeSection.IsWall(current.x - 1, current.z) && !mazeSection.IsWall(current.x - 2, current.z) && !visited[IdxFromXZ(current.x - 2, current.z)]) { moves[nextIdx++] = new IVec2(current.x - 2, current.z); }
+        if (current.z + 2 < MazeSectionGenerator.Size && !mazeSection.IsWall(current.x, current.z + 1) && !mazeSection.IsWall(current.x, current.z + 2) && !visited[IdxFromXZ(current.x, current.z + 2)]) { moves[nextIdx++] = new IVec2(current.x, current.z + 2); }
+        if (current.z - 2 >= 0 && !mazeSection.IsWall(current.x, current.z - 1) && !mazeSection.IsWall(current.x, current.z - 2) && !visited[IdxFromXZ(current.x, current.z - 2)]) { moves[nextIdx++] = new IVec2(current.x, current.z - 2); }
 
         // no moves
         if (nextIdx <= 0)
@@ -70,7 +75,7 @@ public class DepthFirstExplore : Enemy {
             if (explore.Count > 0)
             {
                 from = explore.Pop();
-                visited[from.x, from.z] = true;
+                visited[IdxFromXZ(from.x, from.z)] = true;
                 if (explore.Count > 0)
                 {
                     next = explore.Peek();
@@ -88,18 +93,15 @@ public class DepthFirstExplore : Enemy {
             explore.Push(moveChosen);
             from = next;
             next = moveChosen;
-            visited[from.x, from.z] = true;
+            visited[IdxFromXZ(from.x, from.z)] = true;
         }
     }
 
     private void ClearVisited()
     {
-        for (int x = 0; x < mazeRef.SectionSize; ++x)
+        for (int i = 0; i < visited.Length; ++i)
         {
-            for (int z = 0; z < mazeRef.SectionSize; ++z)
-            {
-                visited[x, z] = false;
-            }
+            visited[i] = false;
         }
     }
 
