@@ -236,9 +236,9 @@ public class MazeSectionGenerator : MonoBehaviour {
         return obj.reference[idx].gameObject;
     }
 
-    public void RedoGeometry(IVec2 mazeLoc)
+    public void RedoGeometry(int x, int z)
     {
-        RedoMazeGeometry(mazeLoc);
+        RedoMazeGeometry(new IVec2(x, z));
     }
 
     private void RedoMazeGeometry(IVec2 mazeLoc)
@@ -251,6 +251,25 @@ public class MazeSectionGenerator : MonoBehaviour {
         FloorPool.reference[FloorPool.start].material = FloorMat;
 
         MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize));
+
+        if (mazeSections[powerupPos.x, powerupPos.z] != MazeSquare.EMPTY)
+        {
+            MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
+            PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
+            PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
+        }
+
+        float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
+        float distSqrd = xPos * xPos + zPos * zPos;
+        diffMult = Mathf.Log10(10.0f + distSqrd);
+
+        MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+        FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
+        FollowSolutionPool.reference[FollowSolutionPool.start].Speed = 1.5f * diffMult;
+
+        MakeAt(DepthEnemyPool, DepthEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+        DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
+        DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.25f * diffMult;
 
         int wallCount = WallPool.start, gemCount = GemPool.start;
         for (int x = 0; x < Size; ++x)
@@ -266,36 +285,17 @@ public class MazeSectionGenerator : MonoBehaviour {
                 else if (mazeSections[x, z] == MazeSquare.VISITED || mazeSections[x, z] == MazeSquare.SOLUTION)
                 {
                     MakeAt(GemPool, gemCount, location);
-                    GemPool.reference[gemCount].SetMat(GemMat); 
+                    GemPool.reference[gemCount].SetMat(GemMat);
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;
                 }
             }
-
         }
 
         numGems = gemCount - GemPool.start;
-
-        if (mazeSections[powerupPos.x, powerupPos.z] != MazeSquare.EMPTY)
-        {
-            MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
-            PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
-            PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
-        }
-
-        float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
-        float dist = Mathf.Sqrt(xPos * xPos + zPos * zPos);
-        diffMult = Mathf.Log(10.0f + dist);
-        MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
-        FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
-        FollowSolutionPool.reference[FollowSolutionPool.start].Speed = 1.25f * diffMult;
-
-        MakeAt(DepthEnemyPool, DepthEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
-        DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
-        DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.1f * diffMult;
     }
-
+    
     public float Difficulty()
     {
         return diffMult;

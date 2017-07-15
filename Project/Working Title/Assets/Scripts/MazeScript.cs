@@ -22,7 +22,7 @@ public class MazeScript : MonoBehaviour {
     private int numSections;
     private int totalTiles;
     private float mazeSize;
-    private Dictionary<IVec2, MazeSectionGenerator> generatedMazes = new Dictionary<IVec2, MazeSectionGenerator>(); // TODO: PREVENT DUPLICATE DICTIONARIES
+    private Dictionary<string, MazeSectionGenerator> generatedMazes = new Dictionary<string, MazeSectionGenerator>(); // TODO: PREVENT DUPLICATE DICTIONARIES
     private GameObject[] wallPool;
     private GameObject[] restorerPool;
     private EatForPoints[] gemPool;
@@ -40,6 +40,16 @@ public class MazeScript : MonoBehaviour {
     private IVec2 lastSection;
     private System.Random rand = new System.Random();
     private int sideLength;
+
+    private string ToKey(int x, int z)
+    {
+        return "X:" + x + "-Z:" + z;
+    }
+
+    private string ToKey(IVec2 pos)
+    {
+        return ToKey(pos.x, pos.z);
+    }
 
     private GameObject Parent(GameObject obj, GameObject parent)
     {
@@ -102,7 +112,7 @@ public class MazeScript : MonoBehaviour {
         {
             for (int j = -halfSide; j <= halfSide; ++j)
             {
-                Enable(new IVec2(i, j));
+                Enable(i, j);
             }
         }
 
@@ -113,7 +123,7 @@ public class MazeScript : MonoBehaviour {
 
     public void EatAt(IVec2 mazeLoc, IVec2 sectionLoc)
     {
-        generatedMazes[mazeLoc].EatAt(sectionLoc.x, sectionLoc.z);
+        generatedMazes[ToKey(mazeLoc)].EatAt(sectionLoc.x, sectionLoc.z);
     }
 
     public void EatAt(Vector3 pos)
@@ -129,7 +139,7 @@ public class MazeScript : MonoBehaviour {
     {
         float mhs = mazeSize / 2;
         IVec2 mazeLoc = new IVec2((int)Mathf.Floor((pos.x + mhs) / mazeSize), (int)Mathf.Floor((pos.z + mhs) / mazeSize));
-        return generatedMazes[mazeLoc];
+        return generatedMazes[ToKey(mazeLoc)];
     }
 
     public IVec2 SectionLocFor(Vector3 pos)
@@ -145,9 +155,9 @@ public class MazeScript : MonoBehaviour {
         return ((n % m) + m) % m;
     }
 
-    private int MagicMath(IVec2 xz)
+    private int MagicMath(int x, int z)
     {
-        return Mod(xz.x, sideLength) * sideLength + Mod(xz.z, sideLength);
+        return Mod(x, sideLength) * sideLength + Mod(z, sideLength);
     }
 
     public void GenerateAround(Vector3 position)
@@ -167,8 +177,8 @@ public class MazeScript : MonoBehaviour {
                 // move all the old left ones to the new right
                 for (int i = 0; i < sideLength; ++i)
                 {
-                    Disable(new IVec2(lastSection.x - RenderDistance, i + lastSection.z - RenderDistance));
-                    Enable(new IVec2(currentSection.x + RenderDistance, i + currentSection.z - RenderDistance));
+                    Disable(lastSection.x - RenderDistance, i + lastSection.z - RenderDistance);
+                    Enable(currentSection.x + RenderDistance, i + currentSection.z - RenderDistance);
                 }
             }
             else if (currentSection.x < lastSection.x)
@@ -176,8 +186,8 @@ public class MazeScript : MonoBehaviour {
                 // move all the old right ones to the new left
                 for (int i = 0; i < sideLength; ++i)
                 {
-                    Disable(new IVec2(lastSection.x + RenderDistance, i + lastSection.z - RenderDistance));
-                    Enable(new IVec2(currentSection.x - RenderDistance, i + currentSection.z - RenderDistance));
+                    Disable(lastSection.x + RenderDistance, i + lastSection.z - RenderDistance);
+                    Enable(currentSection.x - RenderDistance, i + currentSection.z - RenderDistance);
                 }
             }
 
@@ -186,8 +196,8 @@ public class MazeScript : MonoBehaviour {
                 // move all the top old ones to the new bottom
                 for (int i = 0; i < sideLength; ++i)
                 {
-                    Disable(new IVec2(lastSection.x - RenderDistance + i, lastSection.z - RenderDistance));
-                    Enable(new IVec2(currentSection.x - RenderDistance + i, currentSection.z + RenderDistance));
+                    Disable(lastSection.x - RenderDistance + i, lastSection.z - RenderDistance);
+                    Enable(currentSection.x - RenderDistance + i, currentSection.z + RenderDistance);
                 }
             }
             else if (currentSection.z < lastSection.z)
@@ -195,8 +205,8 @@ public class MazeScript : MonoBehaviour {
                 // move all the bottom old ones to the new top
                 for (int i = 0; i < sideLength; ++i)
                 {
-                    Disable(new IVec2(lastSection.x - RenderDistance + i, lastSection.z + RenderDistance));
-                    Enable(new IVec2(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance));
+                    Disable(lastSection.x - RenderDistance + i, lastSection.z + RenderDistance);
+                    Enable(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance);
                 }
             }
         }
@@ -204,12 +214,12 @@ public class MazeScript : MonoBehaviour {
         lastSection = currentSection;
     }
 
-    private void Disable(IVec2 loc)
+    private void Disable(int x, int z)
     {
-        int idx = MagicMath(loc);
-        if (!generatedMazes.ContainsKey(loc)) { return; }
+        int idx = MagicMath(x, z);
+        if (!generatedMazes.ContainsKey(ToKey(x, z))) { return; }
 
-        generatedMazes[loc].gameObject.SetActive(false);
+        generatedMazes[ToKey(x, z)].gameObject.SetActive(false);
 
         for (int k = 0; k < genTiles; ++k)
         {
@@ -219,19 +229,19 @@ public class MazeScript : MonoBehaviour {
         }
     }
 
-    private void Enable(IVec2 loc)
+    private void Enable(int x, int z)
     {
-        int idx = MagicMath(loc);
-        bool newMaze = !generatedMazes.ContainsKey(loc);
-        if (newMaze) { generatedMazes.Add(loc, GenerateMazeSection(loc.x, loc.z)); }
+        int idx = MagicMath(x, z);
+        bool newMaze = !generatedMazes.ContainsKey(ToKey(x, z));
+        if (newMaze) { generatedMazes.Add(ToKey(x, z), GenerateMazeSection(x, z)); }
         
-        MazeSectionGenerator gen = generatedMazes[loc];
+        MazeSectionGenerator gen = generatedMazes[ToKey(x, z)];
         gen.gameObject.SetActive(true);
-        gen.gameObject.transform.localPosition = new Vector3(loc.x * mazeSize, 0.0f, loc.z * mazeSize);
+        gen.gameObject.transform.localPosition = new Vector3(x * mazeSize, 0.0f, z * mazeSize);
         SetMazeParams(gen, idx);
 
         if (newMaze) { gen.GenerateMaze(rand.Next()); }
-        gen.RedoGeometry(loc);
+        gen.RedoGeometry(x, z);
     }
 
     private void SetMazeParams(MazeSectionGenerator gen, int idx)
