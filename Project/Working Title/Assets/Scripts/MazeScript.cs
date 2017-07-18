@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MazeScript : MonoBehaviour {
+    public Text GemsInSectionText;
     public GameObject MazeSectorPrefab;
     public GameObject WallPrefab;
     public GameObject GemPrefab;
@@ -116,6 +118,8 @@ public class MazeScript : MonoBehaviour {
             }
         }
 
+        SetGemsText(generatedMazes[ToKey(0, 0)].NumGems());
+
         lastSection = new IVec2(0, 0);
 
         GenerateAround(Vector3.zero);
@@ -124,6 +128,8 @@ public class MazeScript : MonoBehaviour {
     public void EatAt(IVec2 mazeLoc, IVec2 sectionLoc)
     {
         generatedMazes[ToKey(mazeLoc)].EatAt(sectionLoc.x, sectionLoc.z);
+        SetGemsText(generatedMazes[ToKey(mazeLoc)].NumGems());
+
     }
 
     public void EatAt(Vector3 pos)
@@ -167,8 +173,8 @@ public class MazeScript : MonoBehaviour {
 
     private void GenerateNear(Vector3 position)
     {
-        IVec2 currentSection = new IVec2((int)(Mathf.Floor((position.x) / mazeSize)),
-                                        (int)(Mathf.Floor((position.z) / mazeSize)));
+        IVec2 currentSection = new IVec2((int)(Mathf.Floor((position.x + (mazeSize / 2)) / mazeSize)),
+                                        (int)(Mathf.Floor((position.z + (mazeSize / 2)) / mazeSize)));
 
         if (!lastSection.Equals(currentSection))
         {
@@ -209,9 +215,16 @@ public class MazeScript : MonoBehaviour {
                     Enable(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance);
                 }
             }
+
+            SetGemsText(generatedMazes[ToKey(currentSection.x, currentSection.z)].NumGems());
         }
 
         lastSection = currentSection;
+    }
+
+    private void SetGemsText(int numGems)
+    {
+        GemsInSectionText.text = "Gems In Section: " + numGems;
     }
 
     private void Disable(int x, int z)

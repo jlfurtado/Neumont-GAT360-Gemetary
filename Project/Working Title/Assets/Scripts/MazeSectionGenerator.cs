@@ -123,6 +123,11 @@ public class MazeSectionGenerator : MonoBehaviour {
         mazeSections[idx] = MazeSquare.EMPTY;
     }
 
+    public int NumGems()
+    {
+        return numGems;
+    }
+
     private void GenerateMaze()
     {
         // create tiles
