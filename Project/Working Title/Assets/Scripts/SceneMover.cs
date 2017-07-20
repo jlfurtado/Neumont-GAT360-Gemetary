@@ -56,11 +56,16 @@ public class SceneMover : MonoBehaviour {
 
     private void SetPlayerName()
     {
-        InputField inputField = GameObject.FindGameObjectWithTag(Strings.PLAYER_NAME_INPUT_TAG).GetComponent<InputField>();
+        GameObject inputObj = GameObject.FindGameObjectWithTag(Strings.PLAYER_NAME_INPUT_TAG);
 
-        if (inputField != null)
+        if (inputObj != null)
         {
-            ScoreManager.SetName(inputField.text);
+            InputField inputField = inputObj.GetComponent<InputField>();
+
+            if (inputField != null)
+            {
+                ScoreManager.SetName(inputField.text);
+            }
         }
     }
 }
