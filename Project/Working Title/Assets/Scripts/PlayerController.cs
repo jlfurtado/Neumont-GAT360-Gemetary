@@ -53,27 +53,27 @@ public class PlayerController : MonoBehaviour {
 
         if (!moving && (dir.x != 0 || dir.z != 0))
         {
-            Vector3 toHoriz = new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z);
-            Vector3 toVert = new Vector3(transform.position.x, transform.position.y, transform.position.z + dir.z);
+            Vector3 toHoriz = new Vector3(myRigidBody.position.x + dir.x, myRigidBody.position.y, myRigidBody.position.z);
+            Vector3 toVert = new Vector3(myRigidBody.position.x, myRigidBody.position.y, myRigidBody.position.z + dir.z);
 
             MazeSectionGenerator toSectionH = mazeRef.SectionAt(toHoriz), toSectionV = mazeRef.SectionAt(toVert);
-            MazeSectionGenerator fromSection = mazeRef.SectionAt(transform.position);
-            IVec2 fromLoc = mazeRef.SectionLocFor(transform.position);
+            MazeSectionGenerator fromSection = mazeRef.SectionAt(myRigidBody.position);
+            IVec2 fromLoc = mazeRef.SectionLocFor(myRigidBody.position);
             IVec2 toLocH = mazeRef.SectionLocFor(toHoriz), toLocV = mazeRef.SectionLocFor(toVert);
 
             Vector3 tph = toSectionH.PositionAt(toLocH), tpv = toSectionV.PositionAt(toLocV), fp = fromSection.PositionAt(fromLoc);
-            Vector3 fromPos = new Vector3(fp.x, transform.position.y, fp.z);
+            Vector3 fromPos = new Vector3(fp.x, myRigidBody.position.y, fp.z);
 
             Vector3 toPos = fromPos;
             if (horizLast)
             {
-                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, transform.position.y, tph.z); horizLast = true; }
-                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, transform.position.y, tpv.z); horizLast = false; }
+                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
+                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
             }
             else
             {
-                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, transform.position.y, tpv.z); horizLast = false; }
-                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, transform.position.y, tph.z); horizLast = true; }
+                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
+                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
             }            
 
             Vector3 vel = toPos - fromPos;
@@ -85,18 +85,18 @@ public class PlayerController : MonoBehaviour {
 
         }
         
-        if (moving && Vector3.Dot((toPos - transform.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - transform.position).magnitude < CLOSE_ENOUGH)
+        if (moving && Vector3.Dot((toPos - myRigidBody.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - myRigidBody.position).magnitude < CLOSE_ENOUGH)
         {
             // do something on land!?!?!
             myRigidBody.velocity = Vector3.zero;
-            transform.position = toPos;
+            myRigidBody.position = toPos;
             moving = false;
         }
 
         if (PoweredUp)
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, new Vector3(dir.x, 0.0f, dir.z), out hit, 0.5f))
+            if (Physics.Raycast(myRigidBody.position, new Vector3(dir.x, 0.0f, dir.z), out hit, 0.5f))
             {
                 mazeRef.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);
@@ -106,8 +106,11 @@ public class PlayerController : MonoBehaviour {
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { PoweredUp = false; myRenderer.material = DefaultMat; }
         }
-
-        mazeRef.GenerateAround(transform.position);
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PowerUp();
+        }
+        mazeRef.GenerateAround(myRigidBody.position);
 
     }
 
@@ -125,6 +128,6 @@ public class PlayerController : MonoBehaviour {
 
     public IVec2 GetPos()
     {
-        return mazeRef.SectionLocFor(transform.position);
+        return mazeRef.SectionLocFor(myRigidBody.position);
     }
 }

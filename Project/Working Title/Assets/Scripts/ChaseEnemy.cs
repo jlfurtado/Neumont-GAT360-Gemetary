@@ -26,8 +26,8 @@ public class ChaseEnemy : Enemy
 
         if (mazeRef != null)
         {
-            next = mazeRef.SectionLocFor(transform.position);
-            from = mazeRef.SectionLocFor(transform.position);
+            next = mazeRef.SectionLocFor(myRigidBody.position);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
         }
     }
 
@@ -48,13 +48,13 @@ public class ChaseEnemy : Enemy
 
         if (path.Count == 0)
         {
-            ForceToBeNode(next = mazeRef.SectionLocFor(toPos));
-            from = mazeRef.SectionLocFor(toPos);
+            next = mazeRef.SectionLocFor(myRigidBody.position);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
         if (path != null && path.Count > 0)
         {
-            from = mazeRef.SectionLocFor(toPos);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
             next = path.Pop();
         }
     }
@@ -66,19 +66,19 @@ public class ChaseEnemy : Enemy
 
         if (path.Count == 0)
         {
-            ForceToBeNode(next = mazeRef.SectionLocFor(toPos));
-            from = mazeRef.SectionLocFor(toPos);
+            next = mazeRef.SectionLocFor(myRigidBody.position);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
         bool playerFound = mazeRef.SectionAt(playerRef.transform.position) ==  mazeSection && GetPath(playerRef.GetPos(), ref playerPath);
         GetPath(myFriendOne.GetPos(), ref friendOnePath);
         GetPath(myFriendTwo.GetPos(), ref friendTwoPath);
-        path = (playerFound && playerPath.Count < friendTwoPath.Count) ? (playerPath.Count < friendOnePath.Count ? playerPath : friendOnePath)
-                                                                       : (friendTwoPath.Count < friendOnePath.Count ? friendTwoPath : friendOnePath);
+        path = (playerFound && playerPath.Count <= friendTwoPath.Count) ? (playerPath.Count <= friendOnePath.Count ? playerPath : friendOnePath)
+                                                                       : (friendTwoPath.Count <= friendOnePath.Count ? friendTwoPath : friendOnePath);
 
         if (path != null && path.Count > 0)
         {
-            from = mazeRef.SectionLocFor(toPos);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
             next = path.Pop();
         }
     }
@@ -87,10 +87,10 @@ public class ChaseEnemy : Enemy
     {
         base.UpdateRef(mazeSection);
         if (path != null && path.Count > 0) { path.Clear(); }
-        if (mazeRef != null)
+        if (mazeRef != null && myRigidBody != null)
         { 
-            next = mazeRef.SectionLocFor(transform.position);
-            from = mazeRef.SectionLocFor(transform.position);
+            next = mazeRef.SectionLocFor(myRigidBody.position);
+            from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
         myFriendOne = mazeSection.DepthEnemyPool.reference[mazeSection.DepthEnemyPool.start];
@@ -119,6 +119,6 @@ public class ChaseEnemy : Enemy
 
     private bool GetPath(IVec2 destinaton, ref Stack<IVec2> cPath)
     {
-        return AStarPathFinder.FindPath(mazeRef.SectionLocFor(transform.position), destinaton, MOVE_COST, FindNodes, ref cPath);
+        return AStarPathFinder.FindPath(mazeRef.SectionLocFor(myRigidBody.position), destinaton, MOVE_COST, FindNodes, ref cPath);
     }
 }

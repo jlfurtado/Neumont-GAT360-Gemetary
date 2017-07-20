@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour {
 
     public IVec2 GetPos()
     {
-        return mazeRef.SectionLocFor(transform.position);
+        return mazeRef.SectionLocFor(myRigidBody.position);
     }
 
     // Update is called once per frame
@@ -79,8 +79,8 @@ public class Enemy : MonoBehaviour {
         }
 
         Vector3 tp = mazeSection.PositionAt(next), fp = mazeSection.PositionAt(from);
-        Vector3 toPos = new Vector3(tp.x, transform.position.y, tp.z), fromPos = new Vector3(fp.x, transform.position.y, fp.z);
-        Vector3 moving = toPos - transform.position;
+        Vector3 toPos = new Vector3(tp.x, myRigidBody.position.y, tp.z), fromPos = new Vector3(fp.x, myRigidBody.position.y, fp.z);
+        Vector3 moving = toPos - myRigidBody.position;
 
         if (Vector3.Dot((moving).normalized, ((toPos - fromPos).normalized)) < PAST || (moving).magnitude < CLOSE_ENOUGH)
         {

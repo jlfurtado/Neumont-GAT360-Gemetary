@@ -20,8 +20,8 @@ public class DepthFirstExplore : Enemy {
     {
         if (explore.Count == 0)
         {
-            ForceToBeNode(next = mazeRef.SectionLocFor(transform.position));
-            from = mazeRef.SectionLocFor(transform.position);
+            ForceToBeNode(next = mazeRef.SectionLocFor(myRigidBody.position));
+            from = mazeRef.SectionLocFor(myRigidBody.position);
             ClearVisited();
             visited[IdxFromXZ(from.x, from.z)] = true;
             explore.Push(from);
