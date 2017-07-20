@@ -9,6 +9,7 @@ TagManager:
   - TitleMusic
   - SceneMover
   - Enemy
+  - PlayerNameInput
   layers:
   - Default
   - TransparentFX

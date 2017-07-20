@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneMover : MonoBehaviour {
 
@@ -32,6 +33,7 @@ public class SceneMover : MonoBehaviour {
     public void MoveToMaze()
     {
         DontKeepTitleMusic();
+        SetPlayerName();
         SceneManager.LoadScene(Strings.MAZE_SCENE_NAME);
     }
 
@@ -50,5 +52,15 @@ public class SceneMover : MonoBehaviour {
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void SetPlayerName()
+    {
+        InputField inputField = GameObject.FindGameObjectWithTag(Strings.PLAYER_NAME_INPUT_TAG).GetComponent<InputField>();
+
+        if (inputField != null)
+        {
+            ScoreManager.SetName(inputField.text);
+        }
     }
 }

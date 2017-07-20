@@ -17,6 +17,6 @@ static class Strings
     public static readonly string TITLE_MUSIC_TAG = "TitleMusic";
     public static readonly string SCENE_MOVER_TAG = "SceneMover";
     public static readonly string ENEMY_TAG = "Enemy";
-
+    public static readonly string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
 }
 

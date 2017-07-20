@@ -5,21 +5,27 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour {
     public static int StoreScore;
+    private static string PlayerName = "_____";
     public Text scoreText;
     public BonusText BonusText;
     public float DisplayTime;
     public int BonusThreshold;
     private int scoreValue = 0;
-    private int[] highScores;
+    private string[] highScores;
     //private bool didWin = false;
+
+    public static void SetName(string name)
+    {
+        PlayerName = name == "" ? "_____" : name;
+    }
 
     void Start()
     {
-        highScores = new int[Strings.HIGH_SCORE_KEYS.Length];
+        highScores = new string[Strings.HIGH_SCORE_KEYS.Length];
 
         for (int i = 0; i < highScores.Length; ++i)
         {
-            highScores[i] = PlayerPrefs.GetInt(Strings.HIGH_SCORE_KEYS[i], 0);
+            highScores[i] = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], "_____:0");
         }
 
         SetScoreText();
@@ -37,7 +43,10 @@ public class ScoreManager : MonoBehaviour {
 
     private void SetScoreText()
     {
-        scoreText.text = "Score: " + scoreValue;
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + scoreValue;
+        }
     }
 
     void OnDisable()
@@ -46,21 +55,21 @@ public class ScoreManager : MonoBehaviour {
 
         for (int i = 0; i < highScores.Length; ++i)
         {
-            if (scoreValue > highScores[i])
+            if (scoreValue > int.Parse(highScores[i].Substring(highScores[i].IndexOf(':') + 1)))
             {
                 for (int j = highScores.Length - 2; j >= i; --j)
                 {
                     highScores[j + 1] = highScores[j];
                 }
 
-                highScores[i] = scoreValue;
+                highScores[i] = PlayerName + ":" + scoreValue;
                 break;
             }
         }
 
         for (int i = 0; i < highScores.Length; ++i)
         {
-            PlayerPrefs.SetInt(Strings.HIGH_SCORE_KEYS[i], highScores[i]);
+            PlayerPrefs.SetString(Strings.HIGH_SCORE_KEYS[i], highScores[i]);
         }
 
         PlayerPrefs.Save();

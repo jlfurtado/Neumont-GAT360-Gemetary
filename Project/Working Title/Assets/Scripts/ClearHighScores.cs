@@ -8,7 +8,7 @@ public class ClearHighScores : MonoBehaviour {
     {
         for (int i = 0; i < Strings.HIGH_SCORE_KEYS.Length; ++i)
         {
-            PlayerPrefs.SetInt(Strings.HIGH_SCORE_KEYS[i], 0);
+            PlayerPrefs.SetString(Strings.HIGH_SCORE_KEYS[i], "_____:0");
         }
     }
 }
