@@ -13,7 +13,7 @@ public class DisplayHighScores : MonoBehaviour {
 
         for (int i = 0; i < Strings.HIGH_SCORE_KEYS.Length; ++i)
         {
-            string[] vals = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], "_____:0").Split(':');
+            string[] vals = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], Strings.DEFAULT_NAME + ":0").Split(':');
             scoreText += (vals[0] + " : " + vals[1] + "\n");
         }
 

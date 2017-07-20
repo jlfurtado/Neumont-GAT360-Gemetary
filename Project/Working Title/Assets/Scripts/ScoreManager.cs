@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour {
     public static int StoreScore;
-    private static string PlayerName = "_____";
+    private static string PlayerName = Strings.DEFAULT_NAME;
     public Text scoreText;
     public BonusText BonusText;
     public float DisplayTime;
@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour {
 
     public static void SetName(string name)
     {
-        PlayerName = name == "" ? "_____" : name;
+        PlayerName = name == "" ? Strings.DEFAULT_NAME : name;
     }
 
     void Start()
@@ -25,7 +25,7 @@ public class ScoreManager : MonoBehaviour {
 
         for (int i = 0; i < highScores.Length; ++i)
         {
-            highScores[i] = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], "_____:0");
+            highScores[i] = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], Strings.DEFAULT_NAME + ":0");
         }
 
         SetScoreText();

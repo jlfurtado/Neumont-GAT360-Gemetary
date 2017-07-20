@@ -18,5 +18,6 @@ static class Strings
     public static readonly string SCENE_MOVER_TAG = "SceneMover";
     public static readonly string ENEMY_TAG = "Enemy";
     public static readonly string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
+    public static readonly string DEFAULT_NAME = "NO NAME";
 }
 
