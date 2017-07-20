@@ -122,4 +122,9 @@ public class PlayerController : MonoBehaviour {
         }
 
     }
+
+    public IVec2 GetPos()
+    {
+        return mazeRef.SectionLocFor(transform.position);
+    }
 }

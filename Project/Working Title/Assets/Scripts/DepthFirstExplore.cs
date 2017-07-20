@@ -15,17 +15,12 @@ public class DepthFirstExplore : Enemy {
         explore = new Stack<IVec2>(visited.Length); // make default size greater than we ever expect it to be, avoid cost of dynamic resize copy
     }
 
-    private int IdxFromXZ(int x, int z)
-    {
-        return x * mazeRef.SectionSize + z;
-    }
-
     // Update is called once per frame
     public override void Update()
     {
         if (explore.Count == 0)
         {
-            next = mazeRef.SectionLocFor(transform.position);
+            ForceToBeNode(next = mazeRef.SectionLocFor(transform.position));
             from = mazeRef.SectionLocFor(transform.position);
             ClearVisited();
             visited[IdxFromXZ(from.x, from.z)] = true;

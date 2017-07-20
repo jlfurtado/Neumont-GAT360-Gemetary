@@ -51,6 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92071c6bb2669144da12c119d08038ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GemsInSectionText: {fileID: 0}
+  ChaseEnemyPrefab: {fileID: 1987695358888104, guid: 655c7f585b9876a47baf9baa1ca7b666,
+    type: 2}
   MazeSectorPrefab: {fileID: 1981083637158120, guid: e5d727fc450b3f0409b231d37c30d2bf,
     type: 2}
   WallPrefab: {fileID: 1270254335555134, guid: 7fe41c1b603e8574eaa34a0af469c4f5, type: 2}

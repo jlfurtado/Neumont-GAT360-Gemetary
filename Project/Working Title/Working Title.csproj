@@ -78,7 +78,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AStarPathFinder.cs" />
     <Compile Include="Assets\Scripts\BonusText.cs" />
+    <Compile Include="Assets\Scripts\ChaseEnemy.cs" />
     <Compile Include="Assets\Scripts\ClearHighScores.cs" />
     <Compile Include="Assets\Scripts\DepthFirstExplore.cs" />
     <Compile Include="Assets\Scripts\DisplayHighScores.cs" />

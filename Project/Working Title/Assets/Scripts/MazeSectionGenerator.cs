@@ -12,6 +12,13 @@ public struct IVec2
     {
         return this.x == other.x && this.z == other.z;
     }
+
+    public float DistanceTo(IVec2 other)
+    {
+        float xDiff = this.x - other.x;
+        float zDiff = this.z - other.z;
+        return Mathf.Sqrt(xDiff * xDiff + zDiff * zDiff);
+    }
 }
 
 public struct RefArray<T>
@@ -37,6 +44,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
+    public RefArray<ChaseEnemy> ChaseEnemyPool;
     public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
     public RefArray<GameObject> WallPool;
@@ -248,12 +256,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         return obj.reference[idx].gameObject;
     }
 
-    public void RedoGeometry(int x, int z)
+    public void RedoGeometry(int x, int z, bool sync)
     {
-        RedoMazeGeometry(new IVec2(x, z));
+        StartCoroutine(RedoMazeGeometry(new IVec2(x, z), sync));
     }
 
-    private void RedoMazeGeometry(IVec2 mazeLoc)
+    private IEnumerator RedoMazeGeometry(IVec2 mazeLoc, bool sync)
     {
         int halfSize = Size / 2;
 
@@ -283,6 +291,10 @@ public class MazeSectionGenerator : MonoBehaviour {
         DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
         DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.25f * diffMult;
 
+        MakeAt(ChaseEnemyPool, ChaseEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+        ChaseEnemyPool.reference[ChaseEnemyPool.start].UpdateRef(this);
+        ChaseEnemyPool.reference[ChaseEnemyPool.start].Speed = 1.1f * diffMult;
+
         int wallCount = WallPool.start, gemCount = GemPool.start, idx = 0;
         for (int x = 0; x < Size; ++x)
         {
@@ -304,6 +316,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                 }
 
                 idx++;
+                if (!sync) { yield return null; }
             }
         }
 

@@ -36,6 +36,35 @@ public class Enemy : MonoBehaviour {
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
     }
 
+    protected int IdxFromXZ(int x, int z)
+    {
+        return x * mazeRef.SectionSize + z;
+    }
+
+    protected bool IsNode(IVec2 pos)
+    {
+        return (pos.x & pos.z & 1) != 0;
+    }
+
+    protected IVec2 ForceToBeNode(IVec2 pos)
+    {
+        if ((pos.x & pos.z & 1) == 0)
+        {
+            if (pos.x + 1 < MazeSectionGenerator.Size && !mazeSection.IsWall(pos.x + 1, pos.z)) { pos.x++; }
+            else if (pos.x - 1 >= 0 && !mazeSection.IsWall(pos.x - 1, pos.z)) { pos.x--; }
+            else if (pos.z + 1 < MazeSectionGenerator.Size && !mazeSection.IsWall(pos.x, pos.z + 1)) { pos.z++; }
+            else if (pos.z - 1 >= 0 && !mazeSection.IsWall(pos.x, pos.z - 1)) { pos.z--; }
+            // TODO: ASSUMES ONE UP DOWN LEFT OR RIGHT MOVE FROM NODE!!! DIAGONAL COMPUTATIONS COMPLEX IMPLEMENT IF NEEDED
+        }
+
+        return pos;
+    }
+
+    public IVec2 GetPos()
+    {
+        return mazeRef.SectionLocFor(transform.position);
+    }
+
     // Update is called once per frame
     public virtual void Update()
     {
@@ -144,7 +173,13 @@ public class Enemy : MonoBehaviour {
 
         home = mazeSection.MazeSolution[0];
 
-        if (myRenderer != null) { myRenderer.material = NormalMat; } 
-        if (myRigidBody != null) { myRigidBody.velocity = Vector3.zero; }
+        if (myRenderer != null)
+        {
+            myRenderer.material = NormalMat;
+            if (Eaten) { Restore(); }
+            if (stopped) { UnStop(); }
+        } 
+
+        if (myRigidBody != null) { myRigidBody.velocity = Vector3.zero; myRigidBody.position = mazeSection.PositionAt(home); }
     }
 }

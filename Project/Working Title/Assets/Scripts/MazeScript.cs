@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MazeScript : MonoBehaviour {
     public Text GemsInSectionText;
+    public GameObject ChaseEnemyPrefab;
     public GameObject MazeSectorPrefab;
     public GameObject WallPrefab;
     public GameObject GemPrefab;
@@ -30,6 +31,7 @@ public class MazeScript : MonoBehaviour {
     private EatForPoints[] gemPool;
     private FollowMazeSolution[] followSolutionPool;
     private DepthFirstExplore[] depthEnemyPool;
+    private ChaseEnemy[] chaseEnemyPool;
     private Renderer[] floorPool;
     private Powerup[] powerupPool;
     private GameObject wallHolder;
@@ -37,6 +39,7 @@ public class MazeScript : MonoBehaviour {
     private GameObject floorHolder;
     private GameObject powerupHolder;
     private GameObject followHolder;
+    private GameObject chaseHolder;
     private GameObject depthHolder;
     private GameObject restorerHolder;
     private IVec2 lastSection;
@@ -70,36 +73,42 @@ public class MazeScript : MonoBehaviour {
         totalTiles = genTiles * numSections;
         mazeSize = SectionSize * SquareSize;
 
-        Parent(depthHolder = new GameObject(), this.gameObject).name = "DepthEnemyHolder";
         Parent(floorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
         Parent(powerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
         Parent(wallHolder = new GameObject(), this.gameObject).name = "WallHolder";
         Parent(gemHolder = new GameObject(), this.gameObject).name = "GemHolder";
         Parent(followHolder = new GameObject(), this.gameObject).name = "FollowEnemyHolder";
+        Parent(depthHolder = new GameObject(), this.gameObject).name = "DepthEnemyHolder";
+        Parent(chaseHolder = new GameObject(), this.gameObject).name = "ChaseHolder";
         Parent(restorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
 
         restorerPool = new GameObject[numSections];
         followSolutionPool = new FollowMazeSolution[numSections];
         depthEnemyPool = new DepthFirstExplore[numSections];
+        chaseEnemyPool = new ChaseEnemy[numSections];
         floorPool = new Renderer[numSections];
         powerupPool = new Powerup[numSections];
         for (int i = 0; i < numSections; ++i)
         {
             Parent((followSolutionPool[i] = Instantiate(FollowEnemyPrefab).GetComponent<FollowMazeSolution>()).gameObject, followHolder);
             Parent((depthEnemyPool[i] = Instantiate(DepthEnemyPrefab).GetComponent<DepthFirstExplore>()).gameObject, depthHolder);
+            Parent((chaseEnemyPool[i] = Instantiate(ChaseEnemyPrefab).GetComponent<ChaseEnemy>()).gameObject, chaseHolder);
             Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, powerupHolder);
             Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, floorHolder);
             Parent(restorerPool[i] = Instantiate(RestorerPrefab), restorerHolder);
 
             followSolutionPool[i].gameObject.SetActive(false);
-            powerupPool[i].gameObject.SetActive(false);
             depthEnemyPool[i].gameObject.SetActive(false);
+            chaseEnemyPool[i].gameObject.SetActive(false);
             floorPool[i].gameObject.SetActive(false);
+            powerupPool[i].gameObject.SetActive(false);
             restorerPool[i].SetActive(false);
         }
 
         wallPool = new GameObject[totalTiles];
         gemPool = new EatForPoints[totalTiles];
+        wallHolder.transform.position = Vector3.down * 10.0f;
+        gemHolder.transform.position = Vector3.down * 10.0f;
         for (int i = 0; i < totalTiles; ++i)
         {
             Parent(wallPool[i] = Instantiate(WallPrefab), wallHolder).name = "Wall";
@@ -114,7 +123,7 @@ public class MazeScript : MonoBehaviour {
         {
             for (int j = -halfSide; j <= halfSide; ++j)
             {
-                Enable(i, j);
+                Enable(i, j, true);
             }
         }
 
@@ -184,7 +193,7 @@ public class MazeScript : MonoBehaviour {
                 for (int i = 0; i < sideLength; ++i)
                 {
                     Disable(lastSection.x - RenderDistance, i + lastSection.z - RenderDistance);
-                    Enable(currentSection.x + RenderDistance, i + currentSection.z - RenderDistance);
+                    Enable(currentSection.x + RenderDistance, i + currentSection.z - RenderDistance, false);
                 }
             }
             else if (currentSection.x < lastSection.x)
@@ -193,7 +202,7 @@ public class MazeScript : MonoBehaviour {
                 for (int i = 0; i < sideLength; ++i)
                 {
                     Disable(lastSection.x + RenderDistance, i + lastSection.z - RenderDistance);
-                    Enable(currentSection.x - RenderDistance, i + currentSection.z - RenderDistance);
+                    Enable(currentSection.x - RenderDistance, i + currentSection.z - RenderDistance, false);
                 }
             }
 
@@ -203,7 +212,7 @@ public class MazeScript : MonoBehaviour {
                 for (int i = 0; i < sideLength; ++i)
                 {
                     Disable(lastSection.x - RenderDistance + i, lastSection.z - RenderDistance);
-                    Enable(currentSection.x - RenderDistance + i, currentSection.z + RenderDistance);
+                    Enable(currentSection.x - RenderDistance + i, currentSection.z + RenderDistance, false);
                 }
             }
             else if (currentSection.z < lastSection.z)
@@ -212,7 +221,7 @@ public class MazeScript : MonoBehaviour {
                 for (int i = 0; i < sideLength; ++i)
                 {
                     Disable(lastSection.x - RenderDistance + i, lastSection.z + RenderDistance);
-                    Enable(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance);
+                    Enable(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance, false);
                 }
             }
 
@@ -238,12 +247,12 @@ public class MazeScript : MonoBehaviour {
         for (int k = 0; k < genTiles; ++k)
         {
             int w = idx * genTiles + k;
-            Parent(wallPool[w], wallHolder).SetActive(false);
-            Parent(gemPool[w].gameObject, gemHolder).SetActive(false);
+            Parent(wallPool[w], wallHolder);
+            Parent(gemPool[w].gameObject, gemHolder);
         }
     }
 
-    private void Enable(int x, int z)
+    private void Enable(int x, int z, bool sync)
     {
         string mazeKey = ToKey(x, z);
         int idx = MagicMath(x, z);
@@ -256,7 +265,7 @@ public class MazeScript : MonoBehaviour {
         SetMazeParams(gen, idx);
 
         if (newMaze) { gen.GenerateMaze(rand.Next()); }
-        gen.RedoGeometry(x, z);
+        gen.RedoGeometry(x, z, sync);
     }
 
     private void SetMazeParams(MazeSectionGenerator gen, int idx)
@@ -281,6 +290,9 @@ public class MazeScript : MonoBehaviour {
 
         gen.DepthEnemyPool.start = idx;
         gen.DepthEnemyPool.count = 1;
+
+        gen.ChaseEnemyPool.start = idx;
+        gen.ChaseEnemyPool.count = 1;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
@@ -295,6 +307,7 @@ public class MazeScript : MonoBehaviour {
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
         gen.DepthEnemyPool = new RefArray<DepthFirstExplore>(depthEnemyPool, 0, 0);
+        gen.ChaseEnemyPool = new RefArray<ChaseEnemy>(chaseEnemyPool, 0, 0);
         gen.GemMat = GemColors[Mod(x - z, GemColors.Length)];
         gen.FloorMat = FloorColors[Mod(x - z, FloorColors.Length)];
         return gen;
