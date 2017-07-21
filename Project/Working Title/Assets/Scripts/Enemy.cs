@@ -24,10 +24,12 @@ public class Enemy : MonoBehaviour {
     protected const float CLOSE_ENOUGH = 0.1f;
     protected const float PAST = 0.01f;
     protected IVec2 home;
+    protected PlayerController playerRef = null;
 
     // Use this for initialization
     public virtual void Start () {
         Eaten = false;
+        playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRigidBody = GetComponent<Rigidbody>();
         myRigidBody.velocity = Vector3.zero;
@@ -138,14 +140,13 @@ public class Enemy : MonoBehaviour {
         if (other.tag.Equals(Strings.PLAYER_TAG) && !Eaten)
         {
             // only get comp if we hit the player
-            PlayerController pc = other.gameObject.GetComponent<PlayerController>();
-            if (pc.PoweredUp || stopped)
+            if (playerRef.PoweredUp || stopped)
             {
                 // oh no, we died!
                 scoreRef.AddScore((int)Mathf.Floor(Value * Speed));
                 EatMe();
             }
-            else
+            else if (!playerRef.Dodging)
             {
                 // only move to game over if they aren't powered up
                 sceneMoverRef.MoveToGameOver();

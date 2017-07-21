@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AStarPathFinder.cs" />
     <Compile Include="Assets\Scripts\BonusText.cs" />
+    <Compile Include="Assets\Scripts\ChargeBarController.cs" />
     <Compile Include="Assets\Scripts\ChaseEnemy.cs" />
     <Compile Include="Assets\Scripts\ClearHighScores.cs" />
     <Compile Include="Assets\Scripts\DepthFirstExplore.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\FollowMazeSolution.cs" />
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
+    <Compile Include="Assets\Scripts\LoadName.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

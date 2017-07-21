@@ -775,7 +775,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: " - Use WASD or the Arrow Keys to move\n - Consume a power-up to stun enemies
     and make them vulnerable\n - Collect gems for points\n - Clear a whole section
-    for a special bonus!"
+    for a special bonus!\n - Space to dodge!"
 --- !u!222 &1798415600
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -118,7 +118,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
   - {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
   DefaultMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
+  DodgeMat: {fileID: 2100000, guid: 7aebf1a4b69d1b742bbcf6e2eed0c6c1, type: 2}
   PowerupTime: 7
+  DodgeTime: 0.75
+  DodgeCooldown: 10
 --- !u!135 &135968766321683030
 SphereCollider:
   m_ObjectHideFlags: 1

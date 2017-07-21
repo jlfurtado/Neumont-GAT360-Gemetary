@@ -9,7 +9,6 @@ public class ChaseEnemy : Enemy
     public int FriendFollowMoves;
     private Stack<IVec2> path = null;
     private Stack<IVec2> playerPath = null, friendOnePath = null, friendTwoPath = null;
-    private PlayerController playerRef = null;
     private const float MOVE_COST = 10.0f;
     private DepthFirstExplore myFriendOne = null;
     private FollowMazeSolution myFriendTwo = null;
@@ -18,7 +17,6 @@ public class ChaseEnemy : Enemy
     public override void Start()
     {
         base.Start(); // set base refs
-        playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         path = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
         playerPath = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
         friendOnePath = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);

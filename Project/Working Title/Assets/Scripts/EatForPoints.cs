@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
 public class EatForPoints : MonoBehaviour {
+    public int EnduranceRegen;
     public int Value;
     public IVec2 mazeLoc;
     public IVec2 sectionLoc;
@@ -11,10 +12,12 @@ public class EatForPoints : MonoBehaviour {
     private MazeScript maze;
     private Renderer myRenderer;
     private Material storeMat;
+    private PlayerController playerRef;
 
     //private Collider myCollider;
 	// Use this for initialization
 	void Start () {
+        playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRenderer = GetComponent<Renderer>();
@@ -25,6 +28,7 @@ public class EatForPoints : MonoBehaviour {
     {
         if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
         {
+            playerRef.AddEndurance(EnduranceRegen);
             scoreRef.AddScore(Value);
             maze.EatAt(mazeLoc, sectionLoc);
             gameObject.SetActive(false);

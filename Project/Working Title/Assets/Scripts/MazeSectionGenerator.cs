@@ -344,12 +344,4 @@ public class MazeSectionGenerator : MonoBehaviour {
     {
         return mazeSections[IdxFromXZ(x, z)] == MazeSquare.WALL;
     }
-
-    //public IVec2 PositionAt(Vector3 position)
-    //{
-    //    int halfSize = Size / 2;
-    //    Vector3 alt = (position - gameObject.transform.position) / SquareSize;
-    //    return new IVec2(halfSize + (int)Mathf.Floor(alt.x), halfSize + (int)Mathf.Floor(alt.z));
-    //}
-
 }

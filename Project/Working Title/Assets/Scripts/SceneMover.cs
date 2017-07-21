@@ -21,12 +21,14 @@ public class SceneMover : MonoBehaviour {
     public void MoveToOptions()
     {
         KeepTitleMusic();
+        SetPlayerName();
         SceneManager.LoadScene(Strings.OPTIONS_SCENE_NAME);
     }
 
     public void MoveToHowToPlay()
     {
         KeepTitleMusic();
+        SetPlayerName();
         SceneManager.LoadScene(Strings.HOW_TO_PLAY_SCENE_NAME);
     }
 

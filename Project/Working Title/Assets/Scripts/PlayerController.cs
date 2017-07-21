@@ -7,19 +7,27 @@ public class PlayerController : MonoBehaviour {
     public float Speed;
     public Material[] Colors;
     public Material DefaultMat;
+    public Material DodgeMat;
     public float PowerupTime;
+    public float DodgeTime;
+    public float DodgeCooldown;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
     private Enemy[] enemies;
 
     public bool PoweredUp { get; private set; }
+    public bool Dodging { get; private set; }
     private float remainingPowerTime;
     private Rigidbody myRigidBody = null;
     private Renderer myRenderer = null;
     private bool moving = false;
     private Vector3 fromPos, toPos;
     private bool horizLast;
+    private float dodgeTime;
+    private int endurance;
+    private const int MAX_ENDURANCE = 100;
+    private const int ENDURANCE_COST = 50;
 
     // Use this for initialization
     void Start () {
@@ -104,18 +112,32 @@ public class PlayerController : MonoBehaviour {
 
             myRenderer.material = Colors[((int)Mathf.Floor(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length];
             remainingPowerTime -= Time.deltaTime;
-            if (remainingPowerTime <= 0.0f) { PoweredUp = false; myRenderer.material = DefaultMat; }
+            if (remainingPowerTime <= 0.0f) { Restore(); }
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (Dodging)
         {
-            PowerUp();
+            dodgeTime -= Time.deltaTime;
+            if (dodgeTime <= 0.0f) { EndDodge(); }
         }
-        mazeRef.GenerateAround(myRigidBody.position);
+        else 
+        {
+            if (endurance >= ENDURANCE_COST && Input.GetKeyDown(KeyCode.Space))
+            {
+                Dodge();
+            }
+        }
 
+        mazeRef.GenerateAround(myRigidBody.position);
+    }
+
+    public float GetEndurancePercent()
+    {
+        return endurance / (1.0f * MAX_ENDURANCE);
     }
 
     public void PowerUp()
     {
+        EndDodge();
         PoweredUp = true;
         remainingPowerTime = PowerupTime;
 
@@ -124,6 +146,31 @@ public class PlayerController : MonoBehaviour {
             enemy.StopFor(PowerupTime);
         }
 
+    }
+
+    public void AddEndurance(int amount)
+    {
+        endurance = Mathf.Clamp(endurance + amount, 0, MAX_ENDURANCE);
+    }
+
+    public void Dodge()
+    {
+        endurance -= ENDURANCE_COST;
+        Dodging = true;
+        dodgeTime = DodgeTime;
+        myRenderer.material = DodgeMat;
+    }
+
+    private void EndDodge()
+    {
+        Dodging = false;
+        myRenderer.material = DefaultMat;
+    }
+
+    private void Restore()
+    {
+        PoweredUp = false;
+        myRenderer.material = DefaultMat;
     }
 
     public IVec2 GetPos()

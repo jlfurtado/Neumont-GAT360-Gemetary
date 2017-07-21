@@ -19,6 +19,11 @@ public class ScoreManager : MonoBehaviour {
         PlayerName = name == "" ? Strings.DEFAULT_NAME : name;
     }
 
+    public static string GetName()
+    {
+        return PlayerName;
+    }
+
     void Start()
     {
         highScores = new string[Strings.HIGH_SCORE_KEYS.Length];
