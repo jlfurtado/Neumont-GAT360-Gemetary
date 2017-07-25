@@ -85,7 +85,7 @@ public class Bomb : MonoBehaviour {
             hit.transform.gameObject.SetActive(false);
         }
 
-        if ((playerRef.transform.position - (from + dir)).sqrMagnitude < 1.0f)
+        if ((playerRef.transform.position - (from + dir)).sqrMagnitude < 1.0f && !playerRef.PoweredUp)
         {
             sceneMoverRef.MoveToGameOver();
         }
