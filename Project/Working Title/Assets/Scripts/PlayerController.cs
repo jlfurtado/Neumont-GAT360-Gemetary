@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Renderer))]
 public class PlayerController : MonoBehaviour {
     public float Speed;
+    public int MaxBombs;
     public Material[] Colors;
     public Material DefaultMat;
     public Material DodgeMat;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
     private Enemy[] enemies;
+    private int numBombs = 0;
 
     public bool PoweredUp { get; private set; }
     public bool Dodging { get; private set; }
@@ -90,7 +92,6 @@ public class PlayerController : MonoBehaviour {
             moving = true;
             this.fromPos = fromPos;
             this.toPos = toPos;
-
         }
         
         if (moving && Vector3.Dot((toPos - myRigidBody.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - myRigidBody.position).magnitude < CLOSE_ENOUGH)
@@ -176,5 +177,15 @@ public class PlayerController : MonoBehaviour {
     public IVec2 GetPos()
     {
         return mazeRef.SectionLocFor(myRigidBody.position);
+    }
+
+    public bool CanPickupBomb()
+    {
+        return numBombs < MaxBombs;
+    }
+
+    public void AddBomb()
+    {
+        numBombs = Mathf.Clamp(numBombs + 1, 0, MaxBombs);
     }
 }

@@ -14,6 +14,7 @@ public class MazeScript : MonoBehaviour {
     public GameObject FollowEnemyPrefab;
     public GameObject DepthEnemyPrefab;
     public GameObject RestorerPrefab;
+    public GameObject BombPrefab;
     public Material[] GemColors;
     public Material[] FloorColors;
 
@@ -34,6 +35,7 @@ public class MazeScript : MonoBehaviour {
     private ChaseEnemy[] chaseEnemyPool;
     private Renderer[] floorPool;
     private Powerup[] powerupPool;
+    private Bomb[] bombPool;
     private GameObject wallHolder;
     private GameObject gemHolder;
     private GameObject floorHolder;
@@ -42,6 +44,7 @@ public class MazeScript : MonoBehaviour {
     private GameObject chaseHolder;
     private GameObject depthHolder;
     private GameObject restorerHolder;
+    private GameObject bombHolder;
     private IVec2 lastSection;
     private System.Random rand = new System.Random();
     private int sideLength;
@@ -81,7 +84,9 @@ public class MazeScript : MonoBehaviour {
         Parent(depthHolder = new GameObject(), this.gameObject).name = "DepthEnemyHolder";
         Parent(chaseHolder = new GameObject(), this.gameObject).name = "ChaseHolder";
         Parent(restorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
+        Parent(bombHolder = new GameObject(), this.gameObject).name = "BombHolder";
 
+        bombPool = new Bomb[numSections];
         restorerPool = new GameObject[numSections];
         followSolutionPool = new FollowMazeSolution[numSections];
         depthEnemyPool = new DepthFirstExplore[numSections];
@@ -95,6 +100,7 @@ public class MazeScript : MonoBehaviour {
             Parent((chaseEnemyPool[i] = Instantiate(ChaseEnemyPrefab).GetComponent<ChaseEnemy>()).gameObject, chaseHolder);
             Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, powerupHolder);
             Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, floorHolder);
+            Parent((bombPool[i] = Instantiate(BombPrefab).GetComponent<Bomb>()).gameObject, bombHolder);
             Parent(restorerPool[i] = Instantiate(RestorerPrefab), restorerHolder);
 
             followSolutionPool[i].gameObject.SetActive(false);
@@ -102,6 +108,7 @@ public class MazeScript : MonoBehaviour {
             chaseEnemyPool[i].gameObject.SetActive(false);
             floorPool[i].gameObject.SetActive(false);
             powerupPool[i].gameObject.SetActive(false);
+            bombPool[i].gameObject.SetActive(false);
             restorerPool[i].SetActive(false);
         }
 
@@ -293,6 +300,9 @@ public class MazeScript : MonoBehaviour {
 
         gen.ChaseEnemyPool.start = idx;
         gen.ChaseEnemyPool.count = 1;
+
+        gen.BombPool.start = idx;
+        gen.BombPool.count = 1;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
@@ -308,6 +318,7 @@ public class MazeScript : MonoBehaviour {
         gen.FollowSolutionPool = new RefArray<FollowMazeSolution>(followSolutionPool, 0, 0);
         gen.DepthEnemyPool = new RefArray<DepthFirstExplore>(depthEnemyPool, 0, 0);
         gen.ChaseEnemyPool = new RefArray<ChaseEnemy>(chaseEnemyPool, 0, 0);
+        gen.BombPool = new RefArray<Bomb>(bombPool, 0, 0);
         gen.GemMat = GemColors[Mod(x - z, GemColors.Length)];
         gen.FloorMat = FloorColors[Mod(x - z, FloorColors.Length)];
         return gen;

@@ -37,13 +37,15 @@ public class MazeSectionGenerator : MonoBehaviour {
         SOLUTION,
         START,
         END,
-        EMPTY
+        EMPTY,
+        SPECIAL
     }
 
     public int Value;
     public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
+    public RefArray<Bomb> BombPool;
     public RefArray<ChaseEnemy> ChaseEnemyPool;
     public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
@@ -61,6 +63,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     private ScoreManager scoreRef;
     private System.Random rand;
     private IVec2 powerupPos;
+    private IVec2 specialPos;
     private int numGems;
     private float diffMult;
 
@@ -233,6 +236,9 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         powerupPos = longest;
+
+        specialPos = RandMazeEdgeVal(Size);
+        mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] = MazeSquare.SPECIAL;
     }
 
     private bool WallOrEdge(int x, int z)
@@ -272,6 +278,13 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize));
 
+        if (mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] != MazeSquare.EMPTY)
+        {
+            MakeAt(BombPool, BombPool.start, new Vector3((specialPos.x - halfSize) * SquareSize, 0.8f, (specialPos.z - halfSize) * SquareSize));
+            BombPool.reference[BombPool.start].mazeLoc = mazeLoc;
+            BombPool.reference[BombPool.start].sectionLoc = specialPos;
+        }
+
         if (mazeSections[IdxFromXZ(powerupPos.x, powerupPos.z)] != MazeSquare.EMPTY)
         {
             MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
@@ -294,6 +307,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         MakeAt(ChaseEnemyPool, ChaseEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
         ChaseEnemyPool.reference[ChaseEnemyPool.start].UpdateRef(this);
         ChaseEnemyPool.reference[ChaseEnemyPool.start].Speed = 1.1f * diffMult;
+
 
         int wallCount = WallPool.start, gemCount = GemPool.start, idx = 0;
         for (int x = 0; x < Size; ++x)

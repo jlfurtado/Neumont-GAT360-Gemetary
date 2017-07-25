@@ -9,55 +9,55 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1680408948265108}
+  m_RootGameObject: {fileID: 1866188216445114}
   m_IsPrefabParent: 1
---- !u!1 &1680408948265108
+--- !u!1 &1866188216445114
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4464568243061274}
-  - component: {fileID: 33780152232261378}
-  - component: {fileID: 136569008354812782}
-  - component: {fileID: 23538764126234040}
-  - component: {fileID: 54614291348936010}
-  - component: {fileID: 114913469217125416}
+  - component: {fileID: 4388218462171390}
+  - component: {fileID: 33819878726325678}
+  - component: {fileID: 135663603121177650}
+  - component: {fileID: 23480663198561656}
+  - component: {fileID: 114592945879731030}
+  - component: {fileID: 54840177291264522}
   m_Layer: 2
-  m_Name: PowerUp
+  m_Name: Dynamite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4464568243061274
+--- !u!4 &4388218462171390
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
+  m_GameObject: {fileID: 1866188216445114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23538764126234040
+--- !u!23 &23480663198561656
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
+  m_GameObject: {fileID: 1866188216445114}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
+  - {fileID: 2100000, guid: b724f46bd25095c46bb6bacd63a525a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -76,19 +76,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33780152232261378
+--- !u!33 &33819878726325678
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54614291348936010
+  m_GameObject: {fileID: 1866188216445114}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54840177291264522
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
+  m_GameObject: {fileID: 1866188216445114}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -98,29 +98,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &114913469217125416
+--- !u!114 &114592945879731030
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
+  m_GameObject: {fileID: 1866188216445114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb9ffbda2e1832f46b94bf3daa0671c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 658ebc4b556082e489ba53be22ff42b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Value: 100
-  StopTime: 10
---- !u!136 &136569008354812782
-CapsuleCollider:
+  Value: 0
+--- !u!135 &135663603121177650
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1680408948265108}
+  m_GameObject: {fileID: 1866188216445114}
   m_Material: {fileID: 13400000, guid: cd8485b82daaf66468539fc5182762ba, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

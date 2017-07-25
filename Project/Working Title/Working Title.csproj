@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\AStarPathFinder.cs" />
+    <Compile Include="Assets\Scripts\Bomb.cs" />
     <Compile Include="Assets\Scripts\BonusText.cs" />
     <Compile Include="Assets\Scripts\ChargeBarController.cs" />
     <Compile Include="Assets\Scripts\ChaseEnemy.cs" />

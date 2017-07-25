@@ -68,6 +68,7 @@ MonoBehaviour:
     type: 2}
   RestorerPrefab: {fileID: 1215656122041782, guid: 03a39d75b2cdde1478b64f85a0d25984,
     type: 2}
+  BombPrefab: {fileID: 1866188216445114, guid: acd7deb0b324d81438257ceae51dceca, type: 2}
   GemColors:
   - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
   - {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
