@@ -42,7 +42,6 @@ public class MazeSectionGenerator : MonoBehaviour {
     }
 
     public int Value;
-    public int RemoveCount = 1;
     public static float SquareSize;
     public static int Size;
     public RefArray<Bomb> BombPool;
@@ -228,13 +227,6 @@ public class MazeSectionGenerator : MonoBehaviour {
         // mark end
         mazeSections[IdxFromXZ(longest.x, longest.z)] = MazeSquare.END;
 
-        // remove chunks
-        for (int i = 0; i < 2*RemoveCount; ++i)
-        {
-            IVec2 rmv = RandWallEdgeNode(Size, i%2);
-            mazeSections[IdxFromXZ(rmv.x, rmv.z)] = MazeSquare.VISITED;
-        }
-
         powerupPos = longest;
 
         specialPos = RandMazeEdgeVal(Size);
@@ -281,8 +273,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         if (mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] != MazeSquare.EMPTY)
         {
             MakeAt(BombPool, BombPool.start, new Vector3((specialPos.x - halfSize) * SquareSize, 0.8f, (specialPos.z - halfSize) * SquareSize));
-            BombPool.reference[BombPool.start].mazeLoc = mazeLoc;
-            BombPool.reference[BombPool.start].sectionLoc = specialPos;
+            BombPool.reference[BombPool.start].UpdateLoc(mazeLoc, specialPos);
         }
 
         if (mazeSections[IdxFromXZ(powerupPos.x, powerupPos.z)] != MazeSquare.EMPTY)

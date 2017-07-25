@@ -144,8 +144,7 @@ public class MazeScript : MonoBehaviour {
     public void EatAt(IVec2 mazeLoc, IVec2 sectionLoc)
     {
         generatedMazes[ToKey(mazeLoc)].EatAt(sectionLoc.x, sectionLoc.z);
-        SetGemsText(generatedMazes[ToKey(mazeLoc)].NumGems());
-
+        SetGemsText(generatedMazes[ToKey(mazeLoc)].NumGems()); // TODO: IF PLAYER IN SECTION HERE
     }
 
     public void EatAt(Vector3 pos)

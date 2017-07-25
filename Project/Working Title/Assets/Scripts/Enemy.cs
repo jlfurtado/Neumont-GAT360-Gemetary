@@ -135,6 +135,13 @@ public class Enemy : MonoBehaviour {
         myRenderer.material = NormalMat;
     }
 
+    public void BlowMeUp()
+    {
+        // oh no, we died!
+        scoreRef.AddScore((int)Mathf.Floor(Value * Speed));
+        EatMe();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals(Strings.PLAYER_TAG) && !Eaten)
