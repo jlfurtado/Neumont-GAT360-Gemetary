@@ -65,6 +65,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     private IVec2 specialPos;
     private int numGems;
     private float diffMult;
+    public bool Generating { get; private set; }
 
     // Use this for initialization
     void Start ()
@@ -262,9 +263,10 @@ public class MazeSectionGenerator : MonoBehaviour {
     private IEnumerator RedoMazeGeometry(IVec2 mazeLoc, bool sync)
     {
         int halfSize = Size / 2;
+        Generating = true;
 
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.zero);
+        GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.up * 0.9f);
         floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
         FloorPool.reference[FloorPool.start].material = FloorMat;
 
@@ -326,6 +328,8 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         numGems = gemCount - GemPool.start;
+        Generating = false;
+        floor.transform.localPosition = Vector3.zero;
     }
     
     public float Difficulty()
@@ -347,6 +351,6 @@ public class MazeSectionGenerator : MonoBehaviour {
 
     public bool IsWall(int x, int z)
     {
-        return mazeSections[IdxFromXZ(x, z)] == MazeSquare.WALL;
+        return Generating || mazeSections[IdxFromXZ(x, z)] == MazeSquare.WALL;
     }
 }
