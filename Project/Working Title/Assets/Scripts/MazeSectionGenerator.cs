@@ -230,7 +230,11 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         powerupPos = longest;
 
-        specialPos = RandMazeEdgeVal(Size);
+        do
+        {
+            specialPos = RandMazeEdgeVal(Size);
+        } while (specialPos.Equals(powerupPos) || specialPos.Equals(MazeSolution[0]));
+
         mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] = MazeSquare.SPECIAL;
     }
 
