@@ -83,6 +83,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b14a5c9d8af13b84db4c3b683be2f16e, type: 2}
   - {fileID: 2100000, guid: e5cd4df91f17a19438dac5f90ee1c558, type: 2}
   - {fileID: 2100000, guid: a46eb35b6afa2324d9cefeb57a2d90b5, type: 2}
+  MaxEnemiesPerSection: 5
   SectionSize: 16
   SquareSize: 1
   RenderDistance: 2

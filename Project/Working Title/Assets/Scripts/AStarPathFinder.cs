@@ -113,14 +113,6 @@ static class AStarPathFinder
                     currentNode = currentNode.ParentNode;
                 }
 
-                //Debug.Log("From: (" + startSquare.x + ", " + startSquare.z + ")");
-                //foreach (IVec2 pos in path)
-                //{
-                //    Debug.Log("Push: " + pos.x + ", " + pos.z);
-
-                //}
-                //Debug.Log("To: (" + endSquare.x + ", " + endSquare.z + ")");
-
                 return true;
             }
 

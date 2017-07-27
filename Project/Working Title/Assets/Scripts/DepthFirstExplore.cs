@@ -8,9 +8,9 @@ public class DepthFirstExplore : Enemy {
     private bool[] visited = null;
 
     // Use this for initialization
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
+        base.Awake();
         visited = new bool[mazeRef.SectionSize * mazeRef.SectionSize];
         explore = new Stack<IVec2>(visited.Length); // make default size greater than we ever expect it to be, avoid cost of dynamic resize copy
     }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DisplayHighScores : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Awake() {
         Text textComp = GetComponent<Text>();
         string scoreText = "High Scores:\n";
 

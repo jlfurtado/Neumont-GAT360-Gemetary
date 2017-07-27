@@ -6,6 +6,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
     public int Value;
     public float Speed = 1.0f;
+    public float BaseSpeed = 1.0f;
     public Material NormalMat;
     public Material StoppedMat;
     public Material EatenMat;
@@ -25,14 +26,14 @@ public class Enemy : MonoBehaviour {
     protected const float PAST = 0.01f;
     protected IVec2 home;
     protected PlayerController playerRef = null;
+    protected float SpeedMult = 1.0f;
 
     // Use this for initialization
-    public virtual void Start () {
+    public virtual void Awake() {
         Eaten = false;
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRigidBody = GetComponent<Rigidbody>();
-        myRigidBody.velocity = Vector3.zero;
         myRenderer = GetComponent<Renderer>();
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
@@ -112,13 +113,14 @@ public class Enemy : MonoBehaviour {
     private void Move(Vector3 toPos, Vector3 fromPos)
     {
         Vector3 vel = toPos - fromPos;
-        myRigidBody.velocity = vel.normalized * Speed;
+        myRigidBody.velocity = vel.normalized * (Speed * SpeedMult);
     }
 
     protected void UnStop()
     {
         stopTime = 0.0f;
         stopped = false;
+        SpeedMult = 1.0f;
         myRenderer.material = NormalMat;
     }
 
@@ -132,6 +134,7 @@ public class Enemy : MonoBehaviour {
     protected void Restore()
     {
         Eaten = false;
+        SpeedMult = 1.0f;
         myRenderer.material = NormalMat;
     }
 
@@ -167,6 +170,7 @@ public class Enemy : MonoBehaviour {
         {
             stopped = true;
             stopTime = time;
+            SpeedMult = 0.66f;
             myRenderer.material = StoppedMat;
             myRigidBody.velocity = Vector3.zero;
         }
@@ -178,6 +182,7 @@ public class Enemy : MonoBehaviour {
         stopped = false;
         stopTime = 0.0f;
         Eaten = false;
+        SpeedMult = 1.0f;
 
         home = mazeSection.MazeSolution[0];
 

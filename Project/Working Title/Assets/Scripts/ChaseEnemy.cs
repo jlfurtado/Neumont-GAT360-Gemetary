@@ -8,24 +8,30 @@ public class ChaseEnemy : Enemy
     public int PlayerFollowMoves;
     public int FriendFollowMoves;
     private Stack<IVec2> path = null;
-    private Stack<IVec2> playerPath = null, friendOnePath = null, friendTwoPath = null;
+    private Stack<IVec2> playerPath = null;
+    private Stack<IVec2>[] friendPaths = null;
     private const float MOVE_COST = 10.0f;
-    private DepthFirstExplore myFriendOne = null;
-    private FollowMazeSolution myFriendTwo = null;
+    private Enemy[] myFriends = null;
+    private int friendCount;
 
     // Use this for initialization
-    public override void Start()
+    public override void Awake()
     {
-        base.Start(); // set base refs
+        base.Awake(); // set base refs
         path = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
         playerPath = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
-        friendOnePath = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
-        friendTwoPath = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
 
         if (mazeRef != null)
         {
             next = mazeRef.SectionLocFor(myRigidBody.position);
             from = mazeRef.SectionLocFor(myRigidBody.position);
+        }
+
+        // don't instantiate stacks over and over
+        friendPaths = new Stack<IVec2>[mazeRef.MaxEnemiesPerSection];
+        for (int i = 0; i < friendPaths.Length; ++i)
+        {
+            friendPaths[i] = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
         }
     }
 
@@ -69,10 +75,22 @@ public class ChaseEnemy : Enemy
         }
 
         bool playerFound = mazeRef.SectionAt(playerRef.transform.position) ==  mazeSection && GetPath(playerRef.GetPos(), ref playerPath);
-        GetPath(myFriendOne.GetPos(), ref friendOnePath);
-        GetPath(myFriendTwo.GetPos(), ref friendTwoPath);
-        path = (playerFound && playerPath.Count <= friendTwoPath.Count) ? (playerPath.Count <= friendOnePath.Count ? playerPath : friendOnePath)
-                                                                       : (friendTwoPath.Count <= friendOnePath.Count ? friendTwoPath : friendOnePath);
+        for (int i = 0; i < friendCount; ++i)
+        {
+            GetPath(myFriends[i].GetPos(), ref friendPaths[i]);
+        }
+
+        int selected = 0, num = friendPaths[0].Count;
+        for (int i = 1; i < friendCount; ++i)
+        {
+            if (friendPaths[i].Count < num)
+            {
+                num = friendPaths[i].Count;
+                selected = i;
+            }
+        }
+
+        path = (playerFound && playerPath.Count <= num) ? playerPath : friendPaths[selected];
 
         if (path != null && path.Count > 0)
         {
@@ -91,8 +109,17 @@ public class ChaseEnemy : Enemy
             from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
-        myFriendOne = mazeSection.DepthEnemyPool.reference[mazeSection.DepthEnemyPool.start];
-        myFriendTwo = mazeSection.FollowSolutionPool.reference[mazeSection.FollowSolutionPool.start];
+        // my friends are all but me
+        myFriends = new Enemy[mazeSection.EnemyPool.count - 1];
+        friendCount = 0;
+        for (int i = 0; i < mazeSection.EnemyPool.count; ++i)
+        {
+            int w = mazeSection.EnemyPool.start + i;
+            if (!(mazeSection.EnemyPool.reference[w] is ChaseEnemy))
+            {
+                myFriends[friendCount++] = mazeSection.EnemyPool.reference[w];
+            }
+        }
     }
 
     private void FindNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] nodes)

@@ -12,7 +12,7 @@ public class ChargeBarController : MonoBehaviour {
     private Color32 dodgeColor;
 
 	// Use this for initialization
-	void Start () {
+	void Awake() {
         heightStore = frontImage.rectTransform.sizeDelta.y;
         defaultColor = frontImage.color;
         dodgeColor = new Color32(0, 255, 0, 255);

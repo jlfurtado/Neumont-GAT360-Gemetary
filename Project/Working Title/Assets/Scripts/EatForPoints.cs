@@ -16,7 +16,7 @@ public class EatForPoints : MonoBehaviour {
 
     //private Collider myCollider;
 	// Use this for initialization
-	void Start () {
+	void Awake() {
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();

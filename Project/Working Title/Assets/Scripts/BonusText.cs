@@ -13,7 +13,7 @@ public class BonusText : MonoBehaviour {
     private float moveAmount;
     private Vector3 basePosition;
     
-    void Start()
+    void Awake()
     {
         basePosition = transform.position;
         text = GetComponent<Text>();

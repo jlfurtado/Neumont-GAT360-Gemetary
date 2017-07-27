@@ -110,7 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 1500
-  Speed: 5
+  Speed: 0
+  BaseSpeed: 1.25
   NormalMat: {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
   StoppedMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
   EatenMat: {fileID: 2100000, guid: 9b8b4731c85f8884d8c66e63361d0081, type: 2}

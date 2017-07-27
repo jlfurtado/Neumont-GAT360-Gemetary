@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private const int ENDURANCE_COST = 50;
 
     // Use this for initialization
-    void Start () {
+    void Awake() {
         myRigidBody = GetComponent<Rigidbody>();
         myRenderer = GetComponent<Renderer>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();

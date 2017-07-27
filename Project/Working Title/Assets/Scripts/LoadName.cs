@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class LoadName : MonoBehaviour {
     private InputField myInput = null;
 
-	void Start () {
+	void Awake() {
         myInput = GetComponent<InputField>();
         myInput.text = ScoreManager.GetName();
 	}

@@ -45,14 +45,12 @@ public class MazeSectionGenerator : MonoBehaviour {
     public static float SquareSize;
     public static int Size;
     public RefArray<Bomb> BombPool;
-    public RefArray<ChaseEnemy> ChaseEnemyPool;
     public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
     public RefArray<GameObject> WallPool;
     public RefArray<Powerup> PowerupPool;
     public RefArray<EatForPoints> GemPool;
-    public RefArray<FollowMazeSolution> FollowSolutionPool;
-    public RefArray<DepthFirstExplore> DepthEnemyPool;
+    public RefArray<Enemy> EnemyPool;
     public IVec2[] MazeSolution;
     public Material GemMat;
     public Material FloorMat;
@@ -68,7 +66,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public bool Generating { get; private set; }
 
     // Use this for initialization
-    void Start ()
+    void Awake()
     {
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
@@ -264,6 +262,13 @@ public class MazeSectionGenerator : MonoBehaviour {
         StartCoroutine(RedoMazeGeometry(new IVec2(x, z), sync));
     }
 
+    public void CalcDiff(IVec2 mazeLoc)
+    {
+        float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
+        float distSqrd = xPos * xPos + zPos * zPos;
+        diffMult = Mathf.Log10(10.0f + distSqrd);
+    }
+
     private IEnumerator RedoMazeGeometry(IVec2 mazeLoc, bool sync)
     {
         int halfSize = Size / 2;
@@ -289,23 +294,15 @@ public class MazeSectionGenerator : MonoBehaviour {
             PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
         }
 
-        float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
-        float distSqrd = xPos * xPos + zPos * zPos;
-        diffMult = Mathf.Log10(10.0f + distSqrd);
-
-        MakeAt(FollowSolutionPool, FollowSolutionPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
-        FollowSolutionPool.reference[FollowSolutionPool.start].UpdateRef(this);
-        FollowSolutionPool.reference[FollowSolutionPool.start].Speed = 1.5f * diffMult;
-
-        MakeAt(DepthEnemyPool, DepthEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
-        DepthEnemyPool.reference[DepthEnemyPool.start].UpdateRef(this);
-        DepthEnemyPool.reference[DepthEnemyPool.start].Speed = 1.25f * diffMult;
-
-        MakeAt(ChaseEnemyPool, ChaseEnemyPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
-        ChaseEnemyPool.reference[ChaseEnemyPool.start].UpdateRef(this);
-        ChaseEnemyPool.reference[ChaseEnemyPool.start].Speed = 1.1f * diffMult;
-
-
+        for (int i = 0; i < EnemyPool.count; ++i)
+        {
+            int q = EnemyPool.start + i;
+            MakeAt(EnemyPool, q, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+            Enemy e = EnemyPool.reference[q];
+            e.UpdateRef(this);
+            e.Speed = e.BaseSpeed * diffMult * (float)(rand.NextDouble() * 0.2f + 0.9f);
+        }
+     
         int wallCount = WallPool.start, gemCount = GemPool.start, idx = 0;
         for (int x = 0; x < Size; ++x)
         {

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DisplayYourScore : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Awake() {
         Text textComp = GetComponent<Text>();
         string scoreText = "Your Score: " + ScoreManager.StoreScore;
         textComp.text = scoreText;

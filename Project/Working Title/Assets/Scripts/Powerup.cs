@@ -14,7 +14,7 @@ public class Powerup : MonoBehaviour {
 
     //private Collider myCollider;
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         //myCollider = GetComponent<Collider>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();

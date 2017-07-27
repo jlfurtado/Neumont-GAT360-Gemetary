@@ -22,7 +22,7 @@ public class Bomb : MonoBehaviour {
     private Enemy[] enemies;
 
     // Use this for initialization
-    void Start () {
+    void Awake() {
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();

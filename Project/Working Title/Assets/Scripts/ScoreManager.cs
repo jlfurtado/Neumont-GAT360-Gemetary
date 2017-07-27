@@ -24,7 +24,7 @@ public class ScoreManager : MonoBehaviour {
         return PlayerName;
     }
 
-    void Start()
+    void Awake()
     {
         highScores = new string[Strings.HIGH_SCORE_KEYS.Length];
 
