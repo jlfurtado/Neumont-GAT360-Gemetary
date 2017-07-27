@@ -35,13 +35,13 @@ public class MazeScript : MonoBehaviour {
     private Renderer[] floorPool;
     private Powerup[] powerupPool;
     private Bomb[] bombPool;
-    public GameObject wallHolder;
-    public GameObject gemHolder;
-    public GameObject floorHolder;
-    public GameObject powerupHolder;
-    public GameObject enemyHolder;
-    public GameObject restorerHolder;
-    public GameObject bombHolder;
+    public GameObject WallHolder { get; private set; }
+    public GameObject GemHolder { get; private set; }
+    public GameObject FloorHolder { get; private set; }
+    public GameObject PowerupHolder { get; private set; }
+    public GameObject EnemyHolder { get; private set; }
+    public GameObject RestorerHolder { get; private set; }
+    public GameObject BombHolder { get; private set; }
     private IVec2 lastSection;
     private System.Random rand = new System.Random();
     private int sideLength;
@@ -74,20 +74,20 @@ public class MazeScript : MonoBehaviour {
         totalTiles = genTiles * numSections;
         mazeSize = SectionSize * SquareSize;
 
-        Parent(floorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
-        Parent(powerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
-        Parent(wallHolder = new GameObject(), this.gameObject).name = "WallHolder";
-        Parent(gemHolder = new GameObject(), this.gameObject).name = "GemHolder";
-        Parent(enemyHolder = new GameObject(), this.gameObject).name = "EnemyHolder";
-        Parent(restorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
-        Parent(bombHolder = new GameObject(), this.gameObject).name = "BombHolder";
+        Parent(FloorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
+        Parent(PowerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
+        Parent(WallHolder = new GameObject(), this.gameObject).name = "WallHolder";
+        Parent(GemHolder = new GameObject(), this.gameObject).name = "GemHolder";
+        Parent(EnemyHolder = new GameObject(), this.gameObject).name = "EnemyHolder";
+        Parent(RestorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
+        Parent(BombHolder = new GameObject(), this.gameObject).name = "BombHolder";
 
         maxEnemies = numSections * MaxEnemiesPerSection;
         enemyPool = new Enemy[maxEnemies];
         for (int i = 0; i < maxEnemies; ++i)
         {
             GameObject obj = i % 3 == 0 ? FollowEnemyPrefab : i % 3 == 1 ? DepthEnemyPrefab : ChaseEnemyPrefab;
-            Parent((enemyPool[i] = Instantiate(obj).GetComponent<Enemy>()).gameObject, enemyHolder);
+            Parent((enemyPool[i] = Instantiate(obj).GetComponent<Enemy>()).gameObject, EnemyHolder);
         }
 
         bombPool = new Bomb[numSections];
@@ -96,20 +96,20 @@ public class MazeScript : MonoBehaviour {
         powerupPool = new Powerup[numSections];
         for (int i = 0; i < numSections; ++i)
         {
-            Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, powerupHolder);
-            Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, floorHolder);
-            Parent((bombPool[i] = Instantiate(BombPrefab).GetComponent<Bomb>()).gameObject, bombHolder);
-            Parent(restorerPool[i] = Instantiate(RestorerPrefab), restorerHolder);
+            Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, PowerupHolder);
+            Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, FloorHolder);
+            Parent((bombPool[i] = Instantiate(BombPrefab).GetComponent<Bomb>()).gameObject, BombHolder);
+            Parent(restorerPool[i] = Instantiate(RestorerPrefab), RestorerHolder);
         }
 
         wallPool = new GameObject[totalTiles];
         gemPool = new EatForPoints[totalTiles];
-        wallHolder.transform.position = Vector3.down * 10.0f;
-        gemHolder.transform.position = Vector3.down * 10.0f;
+        WallHolder.transform.position = Vector3.down * 10.0f;
+        GemHolder.transform.position = Vector3.down * 10.0f;
         for (int i = 0; i < totalTiles; ++i)
         {
-            Parent(wallPool[i] = Instantiate(WallPrefab), wallHolder).name = "Wall";
-            Parent((gemPool[i] = Instantiate(GemPrefab).GetComponent<EatForPoints>()).gameObject, gemHolder).name = "Gem";
+            Parent(wallPool[i] = Instantiate(WallPrefab), WallHolder).name = "Wall";
+            Parent((gemPool[i] = Instantiate(GemPrefab).GetComponent<EatForPoints>()).gameObject, GemHolder).name = "Gem";
         }
 	}
 
@@ -262,8 +262,8 @@ public class MazeScript : MonoBehaviour {
         for (int k = 0; k < genTiles; ++k)
         {
             int w = idx * genTiles + k;
-            Parent(wallPool[w], wallHolder);
-            Parent(gemPool[w].gameObject, gemHolder);
+            Parent(wallPool[w], WallHolder);
+            Parent(gemPool[w].gameObject, GemHolder);
         }
     }
 

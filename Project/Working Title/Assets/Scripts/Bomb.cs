@@ -17,7 +17,6 @@ public class Bomb : MonoBehaviour {
     private bool exploding;
     private float flashTime;
     private Renderer myRenderer = null;
-    private Rigidbody myRigidBody = null;
     private SceneMover sceneMoverRef = null;
     private Enemy[] enemies;
 
@@ -28,7 +27,6 @@ public class Bomb : MonoBehaviour {
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         myRenderer = GetComponent<Renderer>();
-        myRigidBody = GetComponent<Rigidbody>();
 
         myRenderer.material = DefaultMat;
 
