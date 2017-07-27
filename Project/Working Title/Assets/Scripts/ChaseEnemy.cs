@@ -13,6 +13,9 @@ public class ChaseEnemy : Enemy
     private const float MOVE_COST = 10.0f;
     private Enemy[] myFriends = null;
     private int friendCount;
+    private IVec2[] moves = new IVec2[4]; // Don't re-make array over and over
+    private AStarPathNode[] adjacentNodes = new AStarPathNode[4]; // don't re-make array over and over
+    private AStarPathNode[] mySectionNodes = null;
 
     // Use this for initialization
     public override void Awake()
@@ -27,20 +30,21 @@ public class ChaseEnemy : Enemy
             from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
+        // don't spam-re allocate array!
+        myFriends = new Enemy[mazeRef.MaxEnemiesPerSection];
+
         // don't instantiate stacks over and over
         friendPaths = new Stack<IVec2>[mazeRef.MaxEnemiesPerSection];
         for (int i = 0; i < friendPaths.Length; ++i)
         {
             friendPaths[i] = new Stack<IVec2>(mazeRef.SectionSize * mazeRef.SectionSize);
         }
-    }
 
-    // Update is called once per frame
-    public override void Update()
-    {
-        // updates if necessary otherwise remove override
-
-        base.Update();
+        mySectionNodes = new AStarPathNode[mazeRef.SectionSize * mazeRef.SectionSize];
+        for (int i = 0; i < mySectionNodes.Length; ++i)
+        {
+            mySectionNodes[i] = new AStarPathNode(null, null, new IVec2(i / mazeRef.SectionSize, i % mazeRef.SectionSize), 0.0f);
+        }
     }
 
     protected override void OnLandReturn(Vector3 toPos)
@@ -110,7 +114,6 @@ public class ChaseEnemy : Enemy
         }
 
         // my friends are all but me
-        myFriends = new Enemy[mazeSection.EnemyPool.count - 1];
         friendCount = 0;
         for (int i = 0; i < mazeSection.EnemyPool.count; ++i)
         {
@@ -120,13 +123,18 @@ public class ChaseEnemy : Enemy
                 myFriends[friendCount++] = mazeSection.EnemyPool.reference[w];
             }
         }
+
+        // null out the rest of the friends
+        for (int i = friendCount; i < myFriends.Length; ++i)
+        {
+            myFriends[i] = null;
+        }
     }
 
-    private void FindNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] nodes)
+    private void FindNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] nodes, out int nodeCount)
     {
         // arrived at a section
         int nextIdx = 0;
-        IVec2[] moves = new IVec2[4];
         IVec2 pos = currentNode.Location;
 
         // get moves
@@ -134,16 +142,36 @@ public class ChaseEnemy : Enemy
         if (pos.x - 1 >= 0 && !mazeSection.IsWall(pos.x - 1, pos.z)) { moves[nextIdx++] = new IVec2(pos.x - 1, pos.z); }
         if (pos.z + 1 < MazeSectionGenerator.Size && !mazeSection.IsWall(pos.x, pos.z + 1)) { moves[nextIdx++] = new IVec2(pos.x, pos.z + 1); }
         if (pos.z - 1 >= 0 && !mazeSection.IsWall(pos.x, pos.z - 1)) { moves[nextIdx++] = new IVec2(pos.x, pos.z - 1); }
-        nodes = new AStarPathNode[nextIdx];
+        nodes = adjacentNodes;
+        nodeCount = nextIdx;
 
         for (int i = 0; i < nextIdx; ++i)
         {
-            nodes[i] = new AStarPathNode(currentNode, endNode, moves[i], MOVE_COST + currentNode.TotalCost);
+            int nodeIdx = IdxFromXZ(moves[i].x, moves[i].z);
+            AStarPathNode nodeRef = mySectionNodes[nodeIdx];
+            nodeRef.ReInit(endNode, MOVE_COST + currentNode.TotalCost);
+            adjacentNodes[i] = nodeRef;
+        }
+
+        for (int i = nextIdx; i < adjacentNodes.Length; ++i)
+        {
+            adjacentNodes[i] = null;
         }
     }
 
     private bool GetPath(IVec2 destinaton, ref Stack<IVec2> cPath)
     {
-        return AStarPathFinder.FindPath(mazeRef.SectionLocFor(myRigidBody.position), destinaton, MOVE_COST, FindNodes, ref cPath);
+        bool pathFound = AStarPathFinder.FindPath(mazeRef.SectionLocFor(myRigidBody.position), destinaton, MOVE_COST, FindNodes, ref cPath);
+        ResetNodes();
+        return pathFound;
+    }
+    
+    private void ResetNodes()
+    {
+        for (int i = 0; i < mySectionNodes.Length; ++i)
+        {
+            mySectionNodes[i].ReInit(null, 0.0f);
+            mySectionNodes[i].ReParent(null);
+        }
     }
 }

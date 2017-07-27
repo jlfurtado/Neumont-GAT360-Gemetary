@@ -21,7 +21,7 @@ class AStarPathNode
     {
         ParentNode = parentNode;
         EndNode = endNode;
-        Location = new IVec2((int)location.x, (int)location.z);
+        Location = location;
         DirectCost = cost;
 
         if (endNode != null)
@@ -48,6 +48,27 @@ class AStarPathNode
         return (other.Location.Equals(Location));
     }
 
+    public void ReInit(AStarPathNode endNode, float cost)
+    {
+        EndNode = endNode;
+        DirectCost = cost;
+
+        if (endNode != null)
+        {
+            TotalCost = DirectCost + CalculateLinearCost();
+        }
+    }
+
+    public void ReLocate(IVec2 location)
+    {
+        Location = location;
+    }
+
+    public void ReParent(AStarPathNode parent)
+    {
+        ParentNode = parent;
+    }
+
     #endregion
 
 }
@@ -60,10 +81,12 @@ static class AStarPathFinder
         Closed
     }
 
-    private static List<AStarPathNode> openList = new List<AStarPathNode>();
-    private static Dictionary<IVec2, AStarPathNodeStatus> statusTracker = new Dictionary<IVec2, AStarPathNodeStatus>();
-    private static Dictionary<IVec2, float> costTracker = new Dictionary<IVec2, float>();
-
+    private static List<AStarPathNode> openList = new List<AStarPathNode>(10000);
+    private static Dictionary<IVec2, AStarPathNodeStatus> statusTracker = new Dictionary<IVec2, AStarPathNodeStatus>(10000);
+    private static Dictionary<IVec2, float> costTracker = new Dictionary<IVec2, float>(10000);
+    private static AStarPathNode startNode = new AStarPathNode(null, null, new IVec2(), 0.0f);
+    private static AStarPathNode endNode = new AStarPathNode(null, null, new IVec2(), 0.0f);
+     
     private static void AddNodeToOpenList(AStarPathNode node)
     {
         int index = 0;
@@ -81,7 +104,7 @@ static class AStarPathFinder
 
     #region Public Methods
 
-    public delegate void AdjacentNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] adjacentNodes);
+    public delegate void AdjacentNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] adjacentNodes, out int count);
 
     public static bool FindPath(IVec2 startSquare, IVec2 endSquare, float moveCost, AdjacentNodes nodeFinder, ref Stack<IVec2> path)
     {
@@ -95,18 +118,24 @@ static class AStarPathFinder
         costTracker.Clear();
         statusTracker.Clear();
 
-        AStarPathNode end = new AStarPathNode(null, null, endSquare, moveCost);
-        AStarPathNode start = new AStarPathNode(null, end, startSquare, moveCost);
+        // clear start/end
+        startNode.ReParent(null);
+        endNode.ReParent(null);
 
-        AddNodeToOpenList(start);
+        startNode.ReLocate(startSquare);
+        endNode.ReLocate(endSquare);
+
+        startNode.ReInit(endNode, moveCost);
+        endNode.ReInit(null, moveCost);
+
+        AddNodeToOpenList(startNode);
 
         while (openList.Count > 0)
         {
             AStarPathNode currentNode = openList[openList.Count - 1];
 
-            if (currentNode.IsEqualToNode(end))
+            if (currentNode.IsEqualToNode(endNode))
             {
-
                 while (currentNode.ParentNode != null)
                 {
                     path.Push(currentNode.Location);
@@ -120,20 +149,23 @@ static class AStarPathFinder
             costTracker.Remove(currentNode.Location);
 
             AStarPathNode[] nodes;
-            nodeFinder(currentNode, end, out nodes);
-            foreach (AStarPathNode node in nodes)
+            int nodeCount;
+            nodeFinder(currentNode, endNode, out nodes, out nodeCount);
+            for (int i = 0; i < nodeCount; ++i)
             {
-                if (statusTracker.ContainsKey(node.Location))
+                IVec2 location = nodes[i].Location;
+                if (statusTracker.ContainsKey(location))
                 {
-                    if (statusTracker[node.Location] == AStarPathNodeStatus.Closed) { continue; }
+                    if (statusTracker[location] == AStarPathNodeStatus.Closed) { continue; }
 
-                    if (statusTracker[node.Location] == AStarPathNodeStatus.Open)
+                    if (statusTracker[location] == AStarPathNodeStatus.Open)
                     {
-                        if (node.TotalCost >= costTracker[node.Location]) { continue; }
+                        if (nodes[i].TotalCost >= costTracker[location]) { continue; }
                     }
                 }
 
-                AddNodeToOpenList(node);
+                nodes[i].ReParent(currentNode);
+                AddNodeToOpenList(nodes[i]);
             }
 
             statusTracker[currentNode.Location] = AStarPathNodeStatus.Closed;
