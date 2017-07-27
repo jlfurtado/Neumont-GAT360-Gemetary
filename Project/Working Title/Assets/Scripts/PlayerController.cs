@@ -46,18 +46,12 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        bool down = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
-        bool up = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-        bool left = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-        bool right = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+        float horiz = Input.GetAxis("Horizontal");
+        float vert = Input.GetAxis("Vertical");
+        int h = Mathf.RoundToInt(horiz);
+        int v = Mathf.RoundToInt(vert);
 
-        int horiz = 0;
-        int vert = 0;
-
-        if (down) { --vert; } if (up) { ++vert; }
-        if (left) { --horiz; } if (right) { ++horiz; }
-
-        IVec2 dir = new IVec2(horiz, vert);
+        IVec2 dir = new IVec2(h, v);
 
         if (!moving && (dir.x != 0 || dir.z != 0))
         {
@@ -120,7 +114,7 @@ public class PlayerController : MonoBehaviour {
         }
         else 
         {
-            if (endurance >= ENDURANCE_COST && Input.GetKeyDown(KeyCode.Space))
+            if (endurance >= ENDURANCE_COST && Mathf.RoundToInt(Input.GetAxis("Jump")) > 0)
             {
                 Dodge();
             }
