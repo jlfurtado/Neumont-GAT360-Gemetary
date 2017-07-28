@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Renderer))]
 public class PlayerController : MonoBehaviour {
     public float Speed;
+    public GameObject PowerupParticlePrefab;
     public Material[] Colors;
     public Material DefaultMat;
     public Material DodgeMat;
@@ -28,12 +29,17 @@ public class PlayerController : MonoBehaviour {
     private int endurance;
     private const int MAX_ENDURANCE = 100;
     private const int ENDURANCE_COST = 50;
+    private GameObject myParticles;
 
     // Use this for initialization
     void Awake() {
         myRigidBody = GetComponent<Rigidbody>();
         myRenderer = GetComponent<Renderer>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
+        myParticles = Instantiate(PowerupParticlePrefab);
+        myParticles.SetActive(false);
+        myParticles.transform.parent = gameObject.transform;
+        myParticles.transform.localPosition = Vector3.zero;
 
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag(Strings.ENEMY_TAG);
 
@@ -120,11 +126,6 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if(Input.GetKey(KeyCode.Space))
-        {
-            PowerUp();
-        }
-
         mazeRef.GenerateAround(myRigidBody.position);
     }
 
@@ -138,6 +139,7 @@ public class PlayerController : MonoBehaviour {
         EndDodge();
         PoweredUp = true;
         remainingPowerTime = PowerupTime;
+        myParticles.SetActive(true);
 
         foreach (Enemy enemy in enemies)
         {
@@ -169,6 +171,7 @@ public class PlayerController : MonoBehaviour {
     {
         PoweredUp = false;
         myRenderer.material = DefaultMat;
+        myParticles.SetActive(false);
     }
 
     public IVec2 GetPos()
