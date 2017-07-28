@@ -126,10 +126,10 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (Input.GetKey(KeyCode.Space))
-        {
-            PowerUp();
-        }
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    PowerUp();
+        //}
 
         mazeRef.GenerateAround(myRigidBody.position);
     }
