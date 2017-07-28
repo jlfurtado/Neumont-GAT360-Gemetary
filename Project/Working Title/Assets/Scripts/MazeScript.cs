@@ -35,6 +35,7 @@ public class MazeScript : MonoBehaviour {
     private Renderer[] floorPool;
     private Powerup[] powerupPool;
     private Bomb[] bombPool;
+
     public GameObject WallHolder { get; private set; }
     public GameObject GemHolder { get; private set; }
     public GameObject FloorHolder { get; private set; }

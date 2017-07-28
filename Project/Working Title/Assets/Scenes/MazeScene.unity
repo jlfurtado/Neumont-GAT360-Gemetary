@@ -330,6 +330,12 @@ Prefab:
       propertyPath: GemsInSectionText
       value: 
       objectReference: {fileID: 105836118}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: ExplosionPrefab
+      value: 
+      objectReference: {fileID: 1497213171538296, guid: e0f17609517eaa2449fbca68b70a3e17,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96bbb4f1673d99c4fa19685653775157, type: 2}
   m_IsPrefabParent: 0

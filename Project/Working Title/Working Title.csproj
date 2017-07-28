@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\DisplayYourScore.cs" />
     <Compile Include="Assets\Scripts\EatForPoints.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Explosion.cs" />
     <Compile Include="Assets\Scripts\FollowMazeSolution.cs" />
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
     <Compile Include="Assets\Scripts\LoadName.cs" />

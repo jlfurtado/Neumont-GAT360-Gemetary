@@ -10,6 +10,7 @@ public class Bomb : MonoBehaviour {
     public float ExplodeTime;
     public Material DefaultMat;
     public Material FlashMat;
+    public GameObject ExplosionPrefab;
 
     private ScoreManager scoreRef;
     private MazeScript maze;
@@ -19,9 +20,14 @@ public class Bomb : MonoBehaviour {
     private Renderer myRenderer = null;
     private SceneMover sceneMoverRef = null;
     private Enemy[] enemies;
+    private Explosion explosion = null;
 
     // Use this for initialization
     void Awake() {
+        explosion = Instantiate(ExplosionPrefab).GetComponent<Explosion>();
+        explosion.transform.position = transform.position;
+        explosion.gameObject.SetActive(false);
+
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
@@ -72,6 +78,8 @@ public class Bomb : MonoBehaviour {
         //BlowUp(transform.position, 2.0f * Vector3.left);
         //BlowUp(transform.position, 2.0f * Vector3.forward);
         //BlowUp(transform.position, 2.0f * Vector3.back);
+
+        explosion.Explode();
     }
 
     private void BlowUp(Vector3 from, Vector3 dir)
@@ -113,6 +121,12 @@ public class Bomb : MonoBehaviour {
         if (myRenderer != null) { myRenderer.material = DefaultMat; }
         exploding = false;
         flashTime = 0.0f;
+
+        if (explosion != null)
+        {
+            explosion.transform.position = transform.position;
+            explosion.gameObject.SetActive(false);
+        }
     }
 
 }

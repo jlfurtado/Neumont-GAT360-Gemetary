@@ -113,6 +113,8 @@ MonoBehaviour:
   ExplodeTime: 3
   DefaultMat: {fileID: 2100000, guid: b724f46bd25095c46bb6bacd63a525a0, type: 2}
   FlashMat: {fileID: 2100000, guid: ded2b7c237d67dd42bae7411e353e76e, type: 2}
+  ExplosionPrefab: {fileID: 1497213171538296, guid: e0f17609517eaa2449fbca68b70a3e17,
+    type: 2}
 --- !u!135 &135663603121177650
 SphereCollider:
   m_ObjectHideFlags: 1
