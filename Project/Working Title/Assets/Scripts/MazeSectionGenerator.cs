@@ -61,6 +61,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     private System.Random rand;
     private IVec2 powerupPos;
     private IVec2 specialPos;
+    private int startGems = -1;
     private int numGems;
     private float diffMult;
     public bool Generating { get; private set; }
@@ -329,8 +330,15 @@ public class MazeSectionGenerator : MonoBehaviour {
         }
 
         numGems = gemCount - GemPool.start;
+        if (startGems == -1) { startGems = numGems; } // hack!
+
         Generating = false;
         floor.transform.localPosition = Vector3.zero;
+    }
+
+    public float GemPercent()
+    {
+        return (float)numGems / startGems;
     }
     
     public float Difficulty()

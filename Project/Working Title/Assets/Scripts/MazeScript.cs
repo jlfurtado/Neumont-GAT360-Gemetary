@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MazeScript : MonoBehaviour {
-    public Text GemsInSectionText;
     public GameObject ChaseEnemyPrefab;
     public GameObject MazeSectorPrefab;
     public GameObject WallPrefab;
@@ -144,8 +143,6 @@ public class MazeScript : MonoBehaviour {
             }
         }
 
-        SetGemsText(generatedMazes[ToKey(0, 0)].NumGems());
-
         lastSection = new IVec2(0, 0);
 
         GenerateAround(Vector3.zero);
@@ -154,7 +151,6 @@ public class MazeScript : MonoBehaviour {
     public void EatAt(IVec2 mazeLoc, IVec2 sectionLoc)
     {
         generatedMazes[ToKey(mazeLoc)].EatAt(sectionLoc.x, sectionLoc.z);
-        SetGemsText(generatedMazes[ToKey(mazeLoc)].NumGems()); // TODO: IF PLAYER IN SECTION HERE
     }
 
     public void EatAt(Vector3 pos)
@@ -240,16 +236,9 @@ public class MazeScript : MonoBehaviour {
                     Enable(currentSection.x - RenderDistance + i, currentSection.z - RenderDistance, false);
                 }
             }
-
-            SetGemsText(generatedMazes[ToKey(currentSection.x, currentSection.z)].NumGems());
         }
 
         lastSection = currentSection;
-    }
-
-    private void SetGemsText(int numGems)
-    {
-        GemsInSectionText.text = "Gems In Section: " + numGems;
     }
 
     private void Disable(int x, int z)

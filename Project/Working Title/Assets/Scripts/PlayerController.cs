@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour {
     private const int MAX_ENDURANCE = 100;
     private const int ENDURANCE_COST = 50;
     private GameObject myParticles;
+    private float maxGemsThisSection;
 
     // Use this for initialization
     void Awake() {
@@ -182,5 +183,25 @@ public class PlayerController : MonoBehaviour {
     public IVec2 GetPos()
     {
         return mazeRef.SectionLocFor(myRigidBody.position);
+    }
+
+    public float GetGemPercent()
+    {
+        return 1.0f - mazeRef.SectionAt(myRigidBody.position).GemPercent();
+    }
+
+    public bool EmptySection()
+    {
+        return mazeRef.SectionAt(myRigidBody.position).GemPercent() <= 0.0f;
+    }
+
+    public float GetPowerupPercent()
+    {
+        return remainingPowerTime / PowerupTime;
+    }
+
+    public Material GetCurrentMat()
+    {
+        return mazeRef.SectionAt(myRigidBody.position).GemMat;
     }
 }
