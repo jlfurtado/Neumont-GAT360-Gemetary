@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Enemy : MonoBehaviour {
     public int Value;
+    public float SlerpRate = 10.0f;
     public float Speed = 1.0f;
     public float BaseSpeed = 1.0f;
     public Material NormalMat;
@@ -17,7 +18,7 @@ public class Enemy : MonoBehaviour {
     protected MazeScript mazeRef;
     protected MazeSectionGenerator mazeSection;
     protected Rigidbody myRigidBody;
-    protected Renderer myRenderer;
+    protected Renderer[] myRenderers;
     protected SceneMover sceneMoverRef;
     protected ScoreManager scoreRef;
     protected static System.Random rand = new System.Random();
@@ -34,7 +35,7 @@ public class Enemy : MonoBehaviour {
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRigidBody = GetComponent<Rigidbody>();
-        myRenderer = GetComponent<Renderer>();
+        myRenderers = GetComponentsInChildren<Renderer>();
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
     }
@@ -74,7 +75,7 @@ public class Enemy : MonoBehaviour {
         if (stopped)
         {
             stopTime -= Time.deltaTime;
-            myRenderer.material = Mathf.Sqrt(stopTime) * 100 % 7 < 2 ? NormalMat : StoppedMat;
+            SetMat(Mathf.Sqrt(stopTime) * 100 % 7 < 2 ? NormalMat : StoppedMat);
             if (stopTime < 0.0f)
             {
                 UnStop();
@@ -114,6 +115,8 @@ public class Enemy : MonoBehaviour {
     {
         Vector3 vel = toPos - fromPos;
         myRigidBody.velocity = vel.normalized * (Speed * SpeedMult);
+        myRigidBody.rotation = Quaternion.Slerp(myRigidBody.rotation, Quaternion.LookRotation(vel.normalized), Time.deltaTime * SlerpRate);
+
     }
 
     protected void UnStop()
@@ -121,21 +124,21 @@ public class Enemy : MonoBehaviour {
         stopTime = 0.0f;
         stopped = false;
         SpeedMult = 1.0f;
-        myRenderer.material = NormalMat;
+        SetMat(NormalMat);
     }
 
     protected void EatMe()
     {
         Eaten = true;
         UnStop();
-        myRenderer.material = EatenMat;
+        SetMat(EatenMat);
     }
 
     protected void Restore()
     {
         Eaten = false;
         SpeedMult = 1.0f;
-        myRenderer.material = NormalMat;
+        SetMat(NormalMat);
     }
 
     public void BlowMeUp()
@@ -171,7 +174,7 @@ public class Enemy : MonoBehaviour {
             stopped = true;
             stopTime = time;
             SpeedMult = 0.66f;
-            myRenderer.material = StoppedMat;
+            SetMat(StoppedMat);
             myRigidBody.velocity = Vector3.zero;
         }
     }
@@ -186,13 +189,21 @@ public class Enemy : MonoBehaviour {
 
         home = mazeSection.MazeSolution[0];
 
-        if (myRenderer != null)
+        if (myRenderers != null)
         {
-            myRenderer.material = NormalMat;
+            SetMat(NormalMat);
             if (Eaten) { Restore(); }
             if (stopped) { UnStop(); }
         } 
 
         if (myRigidBody != null) { myRigidBody.velocity = Vector3.zero; myRigidBody.position = mazeSection.PositionAt(home); }
+    }
+
+    protected void SetMat(Material mat)
+    {
+        foreach (Renderer renderer in myRenderers)
+        {
+            renderer.material = mat;
+        }
     }
 }

@@ -16,6 +16,8 @@ static class Strings
     public const string TITLE_MUSIC_TAG = "TitleMusic";
     public const string SCENE_MOVER_TAG = "SceneMover";
     public const string ENEMY_TAG = "Enemy";
+    public const string FLASHER_TAG = "Flasher";
+
     public const string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
     public const string DEFAULT_NAME = "NO NAME";
 

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class ChaseEnemy : Enemy
 {
-    public int PlayerFollowMoves;
-    public int FriendFollowMoves;
     private Stack<IVec2> path = null;
     private Stack<IVec2> playerPath = null;
     private Stack<IVec2>[] friendPaths = null;
@@ -79,6 +77,7 @@ public class ChaseEnemy : Enemy
         }
 
         bool playerFound = mazeRef.SectionAt(playerRef.transform.position) ==  mazeSection && GetPath(playerRef.GetPos(), ref playerPath);
+
         for (int i = 0; i < friendCount; ++i)
         {
             GetPath(myFriends[i].GetPos(), ref friendPaths[i]);
@@ -94,6 +93,8 @@ public class ChaseEnemy : Enemy
             }
         }
 
+
+
         path = (playerFound && playerPath.Count <= num) ? playerPath : friendPaths[selected];
 
         if (path != null && path.Count > 0)
@@ -101,6 +102,7 @@ public class ChaseEnemy : Enemy
             from = mazeRef.SectionLocFor(myRigidBody.position);
             next = path.Pop();
         }
+
     }
 
     public override void UpdateRef(MazeSectionGenerator mazeSection)
@@ -129,10 +131,12 @@ public class ChaseEnemy : Enemy
         {
             myFriends[i] = null;
         }
+
     }
 
     private void FindNodes(AStarPathNode currentNode, AStarPathNode endNode, out AStarPathNode[] nodes, out int nodeCount)
     {
+
         // arrived at a section
         int nextIdx = 0;
         IVec2 pos = currentNode.Location;
@@ -157,6 +161,8 @@ public class ChaseEnemy : Enemy
         {
             adjacentNodes[i] = null;
         }
+
+
     }
 
     private bool GetPath(IVec2 destinaton, ref Stack<IVec2> cPath)

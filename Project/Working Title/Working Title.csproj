@@ -90,8 +90,10 @@
     <Compile Include="Assets\Scripts\EatForPoints.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\Explosion.cs" />
+    <Compile Include="Assets\Scripts\Flasher.cs" />
     <Compile Include="Assets\Scripts\FollowMazeSolution.cs" />
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
+    <Compile Include="Assets\Scripts\GarbageHelper.cs" />
     <Compile Include="Assets\Scripts\LoadName.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />

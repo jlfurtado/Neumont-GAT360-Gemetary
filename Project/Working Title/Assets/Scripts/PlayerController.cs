@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour {
         if (PoweredUp)
         {
             RaycastHit hit;
-            if (Physics.Raycast(myRigidBody.position, new Vector3(dir.x, 0.0f, dir.z), out hit, 0.5f))
+            if (Physics.Raycast(myRigidBody.position, new Vector3(dir.x, 0.0f, dir.z), out hit, 1.0f))
             {
                 mazeRef.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);

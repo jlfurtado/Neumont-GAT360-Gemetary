@@ -41,13 +41,16 @@ public class MazeSectionGenerator : MonoBehaviour {
         SPECIAL
     }
 
+    public float FloorScale;
+    public Vector3 FloorOffset;
     public int Value;
     public static float SquareSize;
     public static int Size;
     public RefArray<Bomb> BombPool;
     public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
-    public RefArray<GameObject> WallPool;
+    public RefArray<GameObject> PillarPool;
+    public RefArray<GameObject> FencePool;
     public RefArray<Powerup> PowerupPool;
     public RefArray<EatForPoints> GemPool;
     public RefArray<Enemy> EnemyPool;
@@ -276,11 +279,12 @@ public class MazeSectionGenerator : MonoBehaviour {
         Generating = true;
 
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPool, FloorPool.start, Vector3.up * 0.9f);
-        floor.transform.localScale = new Vector3(Size * SquareSize, floor.transform.localScale.y, Size * SquareSize);
+        GameObject floor = MakeAt(FloorPool, FloorPool.start, FloorOffset);
+        floor.transform.localScale = new Vector3(Size * SquareSize * FloorScale, floor.transform.localScale.y, Size * SquareSize * FloorScale);
         FloorPool.reference[FloorPool.start].material = FloorMat;
 
-        MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize));
+        Vector3 dir = new Vector3(MazeSolution[1].x - MazeSolution[0].x, 0.0f, MazeSolution[1].z - MazeSolution[0].z);
+        MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize)).transform.rotation = Quaternion.LookRotation(dir);
 
         if (mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] != MazeSquare.EMPTY)
         {
@@ -298,13 +302,13 @@ public class MazeSectionGenerator : MonoBehaviour {
         for (int i = 0; i < EnemyPool.count; ++i)
         {
             int q = EnemyPool.start + i;
-            MakeAt(EnemyPool, q, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.8f, (MazeSolution[0].z - halfSize) * SquareSize));
+            MakeAt(EnemyPool, q, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.0f, (MazeSolution[0].z - halfSize) * SquareSize));
             Enemy e = EnemyPool.reference[q];
             e.UpdateRef(this);
             e.Speed = e.BaseSpeed * diffMult * (float)(rand.NextDouble() * 0.2f + 0.9f);
         }
      
-        int wallCount = WallPool.start, gemCount = GemPool.start, idx = 0;
+        int pillarCount = PillarPool.start, gemCount = GemPool.start, fenceCount = FencePool.start, idx = 0;
         for (int x = 0; x < Size; ++x)
         {
             for (int z = 0; z < Size; ++z)
@@ -313,7 +317,12 @@ public class MazeSectionGenerator : MonoBehaviour {
 
                 if (mazeSections[idx] == MazeSquare.WALL)
                 {
-                    MakeAt(WallPool, wallCount++, location);
+                    // depending on even even or even odd or odd odd make fence, vert fence, or pillar
+                    if (((x | z) & 1) == 0) { MakeAt(PillarPool, pillarCount++, location + (Vector3.down * 0.5f)); }
+                    else
+                    {
+                        MakeAt(FencePool, fenceCount++, location + (Vector3.up * 0.5f)).transform.localRotation = Quaternion.Euler(0.0f, (z & 1) == 0 ? 90.0f : 0.0f, 0.0f);
+                    }
                 }
                 else if (mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION)
                 {
@@ -333,7 +342,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         if (startGems == -1) { startGems = numGems; } // hack!
 
         Generating = false;
-        floor.transform.localPosition = Vector3.zero;
+        floor.transform.localPosition = FloorOffset;
     }
 
     public float GemPercent()

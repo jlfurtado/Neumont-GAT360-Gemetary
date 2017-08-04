@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class FollowTarget : MonoBehaviour {
     public GameObject TargetToFollow;
-    public Vector3 Offset;
+    public Vector3 MinOffset;
+    public Vector3 MaxOffset;
+    public float ScrollSpeed;
     public float Speed;
+    public float RotateSpeed;
     public float SlowdownRadius;
+    private float zoom = 0.5f;
 
     private Vector3 vel;
     void LateUpdate()
     {
-        Vector3 toPos = TargetToFollow.transform.position + Offset;
+        zoom = Mathf.Clamp(zoom - ScrollSpeed * Time.deltaTime * Input.GetAxis("Mouse ScrollWheel"), 0.0f, 1.0f);
+        Vector3 offset = Vector3.Lerp(MinOffset, MaxOffset, zoom);
+
+        Vector3 toPos = TargetToFollow.transform.position + offset;
         Vector3 move = (toPos - transform.position);
         float dist = move.magnitude;
         if (dist > 0.0f)
@@ -21,5 +28,6 @@ public class FollowTarget : MonoBehaviour {
             vel = (clipSpeed / dist) * move;
             transform.position += vel * Time.deltaTime;
         }
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((TargetToFollow.transform.position - transform.position).normalized), RotateSpeed * Time.deltaTime);
     }
 }

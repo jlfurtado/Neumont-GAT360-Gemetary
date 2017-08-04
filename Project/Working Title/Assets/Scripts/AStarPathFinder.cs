@@ -136,6 +136,7 @@ static class AStarPathFinder
 
             if (currentNode.IsEqualToNode(endNode))
             {
+
                 while (currentNode.ParentNode != null)
                 {
                     path.Push(currentNode.Location);

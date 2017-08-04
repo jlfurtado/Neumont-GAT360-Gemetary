@@ -10,6 +10,7 @@ TagManager:
   - SceneMover
   - Enemy
   - PlayerNameInput
+  - Flasher
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class MazeScript : MonoBehaviour {
     public GameObject ChaseEnemyPrefab;
     public GameObject MazeSectorPrefab;
-    public GameObject WallPrefab;
+    public GameObject PillarPrefab;
+    public GameObject FencePrefab;
     public GameObject GemPrefab;
     public GameObject FloorPrefab;
     public GameObject PowerupPrefab;
@@ -27,7 +28,8 @@ public class MazeScript : MonoBehaviour {
     private int totalTiles;
     private float mazeSize;
     private Dictionary<string, MazeSectionGenerator> generatedMazes = new Dictionary<string, MazeSectionGenerator>(10000);
-    private GameObject[] wallPool;
+    private GameObject[] pillarPool;
+    private GameObject[] fencePool;
     private GameObject[] restorerPool;
     private EatForPoints[] gemPool;
     private Enemy[] enemyPool;
@@ -35,7 +37,8 @@ public class MazeScript : MonoBehaviour {
     private Powerup[] powerupPool;
     private Bomb[] bombPool;
 
-    public GameObject WallHolder { get; private set; }
+    public GameObject PillarHolder { get; private set; }
+    public GameObject FenceHolder { get; private set; }
     public GameObject GemHolder { get; private set; }
     public GameObject FloorHolder { get; private set; }
     public GameObject PowerupHolder { get; private set; }
@@ -76,7 +79,8 @@ public class MazeScript : MonoBehaviour {
 
         Parent(FloorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
         Parent(PowerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
-        Parent(WallHolder = new GameObject(), this.gameObject).name = "WallHolder";
+        Parent(FenceHolder = new GameObject(), this.gameObject).name = "FenceHolder";
+        Parent(PillarHolder = new GameObject(), this.gameObject).name = "PillarHolder";
         Parent(GemHolder = new GameObject(), this.gameObject).name = "GemHolder";
         Parent(EnemyHolder = new GameObject(), this.gameObject).name = "EnemyHolder";
         Parent(RestorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
@@ -102,13 +106,16 @@ public class MazeScript : MonoBehaviour {
             Parent(restorerPool[i] = Instantiate(RestorerPrefab), RestorerHolder);
         }
 
-        wallPool = new GameObject[totalTiles];
+        fencePool = new GameObject[totalTiles];
+        pillarPool = new GameObject[totalTiles];
         gemPool = new EatForPoints[totalTiles];
-        WallHolder.transform.position = Vector3.down * 10.0f;
+        FenceHolder.transform.position = Vector3.down * 10.0f;
+        PillarHolder.transform.position = Vector3.down * 10.0f;
         GemHolder.transform.position = Vector3.down * 10.0f;
         for (int i = 0; i < totalTiles; ++i)
         {
-            Parent(wallPool[i] = Instantiate(WallPrefab), WallHolder).name = "Wall";
+            Parent(fencePool[i] = Instantiate(FencePrefab), FenceHolder).name = "Fence";
+            Parent(pillarPool[i] = Instantiate(PillarPrefab), PillarHolder).name = "Pillar";
             Parent((gemPool[i] = Instantiate(GemPrefab).GetComponent<EatForPoints>()).gameObject, GemHolder).name = "Gem";
         }
 	}
@@ -130,7 +137,8 @@ public class MazeScript : MonoBehaviour {
 
         for (int i = 0; i < totalTiles; ++i)
         {
-            wallPool[i].SetActive(false);
+            fencePool[i].SetActive(false);
+            pillarPool[i].SetActive(false);
             gemPool[i].gameObject.SetActive(false);
         }
 
@@ -252,7 +260,8 @@ public class MazeScript : MonoBehaviour {
         for (int k = 0; k < genTiles; ++k)
         {
             int w = idx * genTiles + k;
-            Parent(wallPool[w], WallHolder);
+            Parent(fencePool[w], PillarHolder);
+            Parent(pillarPool[w], FenceHolder);
             Parent(gemPool[w].gameObject, GemHolder);
         }
     }
@@ -285,8 +294,11 @@ public class MazeScript : MonoBehaviour {
         gen.PowerupPool.start = idx;
         gen.PowerupPool.count = 1;
 
-        gen.WallPool.start = idx * genTiles;
-        gen.WallPool.count = genTiles;
+        gen.PillarPool.start = idx * genTiles;
+        gen.PillarPool.count = genTiles;
+
+        gen.FencePool.start = idx * genTiles;
+        gen.FencePool.count = genTiles;
 
         gen.GemPool.start = idx * genTiles;
         gen.GemPool.count = genTiles;
@@ -306,7 +318,8 @@ public class MazeScript : MonoBehaviour {
         gen.RestorerPool = new RefArray<GameObject>(restorerPool, 0, 0);
         gen.FloorPool = new RefArray<Renderer>(floorPool, 0, 0);
         gen.PowerupPool = new RefArray<Powerup>(powerupPool, 0, 0);
-        gen.WallPool = new RefArray<GameObject>(wallPool, 0, 0);
+        gen.PillarPool = new RefArray<GameObject>(pillarPool, 0, 0);
+        gen.FencePool = new RefArray<GameObject>(fencePool, 0, 0);
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.EnemyPool = new RefArray<Enemy>(enemyPool, 0, 0);
         gen.BombPool = new RefArray<Bomb>(bombPool, 0, 0);

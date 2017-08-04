@@ -51,5 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 658a8d9e0f6005d4899e48dfeaa3d06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FloorScale: 4.5
+  FloorOffset: {x: -1, y: 0, z: -2}
   Value: 5000
-  RemoveCount: 1
+  GemMat: {fileID: 0}
+  FloorMat: {fileID: 0}

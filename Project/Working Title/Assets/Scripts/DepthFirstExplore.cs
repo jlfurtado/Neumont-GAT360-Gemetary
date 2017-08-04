@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Renderer), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class DepthFirstExplore : Enemy {
     private Stack<IVec2> explore = null;
     private bool[] visited = null;
