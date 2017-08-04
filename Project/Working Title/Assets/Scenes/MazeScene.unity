@@ -410,6 +410,42 @@ Prefab:
       value: 
       objectReference: {fileID: 1948297863956072, guid: 76e1cea7176e73a4f8a9b6608d8c17ba,
         type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemPrefab
+      value: 
+      objectReference: {fileID: 1254880983954834, guid: 07803455a6cd9ee4c9d34e29518ca18b,
+        type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9c5cb4f8b9902e84da6cf8f9081a436d, type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5bb1a2dff9f34ef4aaf00e1aa6772eaa, type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: f38efb855265cab419e50ce9c720c11f, type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 466fa892a71778d4f9dfc0037424cb23, type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: b35cc0730e1298746beaea0802867447, type: 2}
+    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
+        type: 2}
+      propertyPath: GemColors.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: 266f91e7bfd29ef40845a3a66fd9c36b, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96bbb4f1673d99c4fa19685653775157, type: 2}
   m_IsPrefabParent: 0

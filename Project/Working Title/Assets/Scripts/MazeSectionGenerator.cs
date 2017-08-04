@@ -313,15 +313,15 @@ public class MazeSectionGenerator : MonoBehaviour {
         {
             for (int z = 0; z < Size; ++z)
             {
-                Vector3 location = new Vector3((x - halfSize) * SquareSize, 0.5f, (z - halfSize) * SquareSize);
+                Vector3 location = new Vector3((x - halfSize) * SquareSize, 1.0f, (z - halfSize) * SquareSize);
 
                 if (mazeSections[idx] == MazeSquare.WALL)
                 {
                     // depending on even even or even odd or odd odd make fence, vert fence, or pillar
-                    if (((x | z) & 1) == 0) { MakeAt(PillarPool, pillarCount++, location + (Vector3.down * 0.5f)); }
+                    if (((x | z) & 1) == 0) { MakeAt(PillarPool, pillarCount++, location + (Vector3.down * 1.0f)); }
                     else
                     {
-                        MakeAt(FencePool, fenceCount++, location + (Vector3.up * 0.5f)).transform.localRotation = Quaternion.Euler(0.0f, (z & 1) == 0 ? 90.0f : 0.0f, 0.0f);
+                        MakeAt(FencePool, fenceCount++, location).transform.localRotation = Quaternion.Euler(0.0f, (z & 1) == 0 ? 90.0f : 0.0f, 0.0f);
                     }
                 }
                 else if (mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION)
