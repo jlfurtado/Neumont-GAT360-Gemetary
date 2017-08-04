@@ -20,10 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4388218462171390}
   - component: {fileID: 33819878726325678}
-  - component: {fileID: 135663603121177650}
   - component: {fileID: 23480663198561656}
   - component: {fileID: 114592945879731030}
   - component: {fileID: 54840177291264522}
+  - component: {fileID: 65388498499605586}
   m_Layer: 2
   m_Name: Dynamite
   m_TagString: Untagged
@@ -37,13 +37,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1866188216445114}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 12.5, y: 12.5, z: 12.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!23 &23480663198561656
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b724f46bd25095c46bb6bacd63a525a0, type: 2}
+  - {fileID: 2100000, guid: 1ea4c726901de5b47a9464616b6e4f05, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,7 +82,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1866188216445114}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: 0dc973173d053d84fa0f2882791bec0b, type: 3}
 --- !u!54 &54840177291264522
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -98,6 +98,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!65 &65388498499605586
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866188216445114}
+  m_Material: {fileID: 13400000, guid: cd8485b82daaf66468539fc5182762ba, type: 2}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.024657689, y: 0.09176437, z: 0.082599916}
+  m_Center: {x: 0.0014942265, y: 0.045881156, z: -0.0014024116}
 --- !u!114 &114592945879731030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -115,15 +127,3 @@ MonoBehaviour:
   FlashMat: {fileID: 2100000, guid: ded2b7c237d67dd42bae7411e353e76e, type: 2}
   ExplosionPrefab: {fileID: 1497213171538296, guid: e0f17609517eaa2449fbca68b70a3e17,
     type: 2}
---- !u!135 &135663603121177650
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1866188216445114}
-  m_Material: {fileID: 13400000, guid: cd8485b82daaf66468539fc5182762ba, type: 2}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

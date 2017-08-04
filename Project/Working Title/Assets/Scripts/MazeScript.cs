@@ -18,6 +18,7 @@ public class MazeScript : MonoBehaviour {
     public Material[] GemColors;
     public Material[] FloorColors;
     public int MaxEnemiesPerSection;
+    public int TombstonesPerSection;
 
     public int SectionSize;
     public float SquareSize;
@@ -49,6 +50,7 @@ public class MazeScript : MonoBehaviour {
     private System.Random rand = new System.Random();
     private int sideLength;
     private int maxEnemies;
+    private int numBombs;
 
     private string ToKey(int x, int z)
     {
@@ -70,6 +72,7 @@ public class MazeScript : MonoBehaviour {
     void Awake () {
         MazeSectionGenerator.Size = SectionSize;
         MazeSectionGenerator.SquareSize = SquareSize;
+        MazeSectionGenerator.BombsPerSection = TombstonesPerSection;
 
         sideLength = 1 + 2 * RenderDistance;
         numSections = sideLength * sideLength;
@@ -94,7 +97,13 @@ public class MazeScript : MonoBehaviour {
             Parent((enemyPool[i] = Instantiate(obj).GetComponent<Enemy>()).gameObject, EnemyHolder);
         }
 
-        bombPool = new Bomb[numSections];
+        numBombs = numSections * TombstonesPerSection;
+        bombPool = new Bomb[numBombs];
+        for (int i = 0; i < numBombs; ++i)
+        {
+            Parent((bombPool[i] = Instantiate(BombPrefab).GetComponent<Bomb>()).gameObject, BombHolder);
+        }
+
         restorerPool = new GameObject[numSections];
         floorPool = new Renderer[numSections];
         powerupPool = new Powerup[numSections];
@@ -102,7 +111,6 @@ public class MazeScript : MonoBehaviour {
         {
             Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, PowerupHolder);
             Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, FloorHolder);
-            Parent((bombPool[i] = Instantiate(BombPrefab).GetComponent<Bomb>()).gameObject, BombHolder);
             Parent(restorerPool[i] = Instantiate(RestorerPrefab), RestorerHolder);
         }
 
@@ -127,11 +135,15 @@ public class MazeScript : MonoBehaviour {
             enemyPool[i].gameObject.SetActive(false);
         }
 
+        for (int i = 0; i < numBombs; ++i)
+        {
+            bombPool[i].gameObject.SetActive(false);
+        }
+
         for (int i = 0; i < numSections; ++i)
         {
             floorPool[i].gameObject.SetActive(false);
             powerupPool[i].gameObject.SetActive(false);
-            bombPool[i].gameObject.SetActive(false);
             restorerPool[i].SetActive(false);
         }
 
@@ -306,8 +318,8 @@ public class MazeScript : MonoBehaviour {
         gen.EnemyPool.start = idx * MaxEnemiesPerSection;
         gen.EnemyPool.count = Mathf.Clamp(Mathf.FloorToInt(Mathf.Pow(gen.Difficulty(), 1.2f)), 1, MaxEnemiesPerSection); // TODO TWEAK SCALING
 
-        gen.BombPool.start = idx;
-        gen.BombPool.count = 1;
+        gen.BombPool.start = idx * TombstonesPerSection;
+        gen.BombPool.count = TombstonesPerSection;
     }
 
     private MazeSectionGenerator GenerateMazeSection(int x, int z)

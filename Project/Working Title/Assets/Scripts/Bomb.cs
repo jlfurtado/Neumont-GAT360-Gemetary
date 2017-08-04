@@ -65,19 +65,20 @@ public class Bomb : MonoBehaviour {
         scoreRef.AddScore(Value);
         maze.EatAt(mazeLoc, sectionLoc);
         gameObject.SetActive(false);
-        BlowUp(transform.position, Vector3.zero);
-        BlowUp(transform.position, Vector3.right);
-        BlowUp(transform.position, Vector3.left);
-        BlowUp(transform.position, Vector3.forward);
-        BlowUp(transform.position, Vector3.back);
-        BlowUp(transform.position, Vector3.right + Vector3.forward);
-        BlowUp(transform.position, Vector3.left + Vector3.back);
-        BlowUp(transform.position, Vector3.forward + Vector3.left);
-        BlowUp(transform.position, Vector3.back + Vector3.right);
-        //BlowUp(transform.position, 2.0f * Vector3.right);
-        //BlowUp(transform.position, 2.0f * Vector3.left);
-        //BlowUp(transform.position, 2.0f * Vector3.forward);
-        //BlowUp(transform.position, 2.0f * Vector3.back);
+        Vector3 checkFrom = transform.position + (0.5f * Vector3.up);
+        BlowUp(checkFrom, Vector3.zero);
+        BlowUp(checkFrom, Vector3.right);
+        BlowUp(checkFrom, Vector3.left);
+        BlowUp(checkFrom, Vector3.forward);
+        BlowUp(checkFrom, Vector3.back);
+        BlowUp(checkFrom, Vector3.right + Vector3.forward);
+        BlowUp(checkFrom, Vector3.left + Vector3.back);
+        BlowUp(checkFrom, Vector3.forward + Vector3.left);
+        BlowUp(checkFrom, Vector3.back + Vector3.right);
+        //BlowUp(checkFrom, 2.0f * Vector3.right);
+        //BlowUp(checkFrom, 2.0f * Vector3.left);
+        //BlowUp(checkFrom, 2.0f * Vector3.forward);
+        //BlowUp(checkFrom, 2.0f * Vector3.back);
 
         explosion.Explode();
     }

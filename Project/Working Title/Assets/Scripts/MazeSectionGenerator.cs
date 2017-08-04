@@ -46,6 +46,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public int Value;
     public static float SquareSize;
     public static int Size;
+    public static int BombsPerSection;
     public RefArray<Bomb> BombPool;
     public RefArray<GameObject> RestorerPool;
     public RefArray<Renderer> FloorPool;
@@ -63,7 +64,6 @@ public class MazeSectionGenerator : MonoBehaviour {
     private ScoreManager scoreRef;
     private System.Random rand;
     private IVec2 powerupPos;
-    private IVec2 specialPos;
     private int startGems = -1;
     private int numGems;
     private float diffMult;
@@ -86,22 +86,14 @@ public class MazeSectionGenerator : MonoBehaviour {
     private IVec2 RandMazeEdgeVal(int size)
     {
         // pick a random wall
-        int wallIdx = rand.Next(0, 4);
-
-        // helper booleans for identifying which wall
-        bool vert = (wallIdx & 1) != 0, begin = wallIdx < 2;
-        int edge1 = 1, edge2 = size - 1, max = (size - 1) / 2;
-
-        // pick x and y - one on the edge, other random node
-        return new IVec2((vert ? (begin ? (edge1) : (edge2)) : (rand.Next(0, max) * 2 + 1)),
-                        (vert ? (rand.Next(0, max) * 2 + 1) : (begin ? (edge1) : (edge2))));
+        return RandMazeEdgeVal(size, rand.Next(0, 4));
     }
 
-    private IVec2 RandWallEdgeNode(int size, int wallIdx)
+    private IVec2 RandMazeEdgeVal(int size, int wallIdx)
     {
         // helper booleans for identifying which wall
         bool vert = (wallIdx & 1) != 0, begin = wallIdx < 2;
-        int edge1 = 0, edge2 = size - 1, max = (size - 1) / 2;
+        int edge1 = 1, edge2 = size - 1, max = (size - 1) / 2;
 
         // pick x and y - one on the edge, other random node
         return new IVec2((vert ? (begin ? (edge1) : (edge2)) : (rand.Next(0, max) * 2 + 1)),
@@ -232,12 +224,17 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         powerupPos = longest;
 
-        do
+        for (int i = 0; i < BombsPerSection; ++i)
         {
-            specialPos = RandMazeEdgeVal(Size);
-        } while (specialPos.Equals(powerupPos) || specialPos.Equals(MazeSolution[0]));
+            IVec2 specialPos;
 
-        mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] = MazeSquare.SPECIAL;
+            do
+            {
+                specialPos = RandMazeEdgeVal(Size, (i + IdxFromXZ(longest.x, longest.z)) % 4);
+            } while (specialPos.Equals(powerupPos) || specialPos.Equals(MazeSolution[0]));
+
+            mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] = MazeSquare.SPECIAL;
+        }
     }
 
     private bool WallOrEdge(int x, int z)
@@ -286,12 +283,6 @@ public class MazeSectionGenerator : MonoBehaviour {
         Vector3 dir = new Vector3(MazeSolution[1].x - MazeSolution[0].x, 0.0f, MazeSolution[1].z - MazeSolution[0].z);
         MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize)).transform.rotation = Quaternion.LookRotation(dir);
 
-        if (mazeSections[IdxFromXZ(specialPos.x, specialPos.z)] != MazeSquare.EMPTY)
-        {
-            MakeAt(BombPool, BombPool.start, new Vector3((specialPos.x - halfSize) * SquareSize, 0.8f, (specialPos.z - halfSize) * SquareSize));
-            BombPool.reference[BombPool.start].UpdateLoc(mazeLoc, specialPos);
-        }
-
         if (mazeSections[IdxFromXZ(powerupPos.x, powerupPos.z)] != MazeSquare.EMPTY)
         {
             MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
@@ -308,7 +299,7 @@ public class MazeSectionGenerator : MonoBehaviour {
             e.Speed = e.BaseSpeed * diffMult * (float)(rand.NextDouble() * 0.2f + 0.9f);
         }
      
-        int pillarCount = PillarPool.start, gemCount = GemPool.start, fenceCount = FencePool.start, idx = 0;
+        int pillarCount = PillarPool.start, gemCount = GemPool.start, fenceCount = FencePool.start, bombCount = BombPool.start, idx = 0;
         for (int x = 0; x < Size; ++x)
         {
             for (int z = 0; z < Size; ++z)
@@ -331,6 +322,11 @@ public class MazeSectionGenerator : MonoBehaviour {
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
                     gemCount++;
+                }
+                else if (mazeSections[idx] == MazeSquare.SPECIAL)
+                {
+                    MakeAt(BombPool, bombCount, location + (Vector3.down * 1.0f));
+                    BombPool.reference[bombCount++].UpdateLoc(mazeLoc, new IVec2(x, z));
                 }
 
                 idx++;
