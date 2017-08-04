@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Renderer))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
     public float Speed;
+    public float SlerpRate = 10.0f;
     public GameObject PowerupParticlePrefab;
     public Material[] Colors;
-    public Material DefaultMat;
     public Material DodgeMat;
     public float PowerupTime;
     public float DodgeTime;
-    public float DodgeCooldown;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
@@ -21,7 +20,7 @@ public class PlayerController : MonoBehaviour {
     public bool Dodging { get; private set; }
     private float remainingPowerTime;
     private Rigidbody myRigidBody = null;
-    private Renderer myRenderer = null;
+    private Renderer[] myRenderers = null;
     private bool moving = false;
     private Vector3 fromPos, toPos;
     private bool horizLast;
@@ -31,16 +30,20 @@ public class PlayerController : MonoBehaviour {
     private const int ENDURANCE_COST = 50;
     private GameObject myParticles;
     private float maxGemsThisSection;
+    private Animator myAnimator;
+    private Material[][] baseMaterials;
+    private Material[] tempMats;
 
     // Use this for initialization
     void Awake() {
+        myAnimator = GetComponentInChildren<Animator>();
         myRigidBody = GetComponent<Rigidbody>();
-        myRenderer = GetComponent<Renderer>();
+        myRenderers = GetComponentsInChildren<Renderer>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myParticles = Instantiate(PowerupParticlePrefab);
         myParticles.SetActive(false);
         myParticles.transform.parent = gameObject.transform;
-        myParticles.transform.localPosition = Vector3.zero;
+        myParticles.transform.localPosition = Vector3.up * 1.5f;
 
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag(Strings.ENEMY_TAG);
 
@@ -49,8 +52,47 @@ public class PlayerController : MonoBehaviour {
         {
             enemies[i] = enemyObjects[i].GetComponent<Enemy>();
         }
+
+        baseMaterials = new Material[myRenderers.Length][];
+        int max = 0;
+        for (int i = 0; i < myRenderers.Length; ++i)
+        {
+            baseMaterials[i] = new Material[myRenderers[i].materials.Length];
+
+            for (int j = 0; j < baseMaterials[i].Length; ++j)
+            {
+                baseMaterials[i][j] = myRenderers[i].materials[j];
+                if (j > max) { max = j; }
+            }
+        }
+
+        tempMats = new Material[max];
     }
 	
+    private void RestoreMaterials()
+    {
+        for (int i = 0; i < myRenderers.Length; ++i)
+        {
+            for (int j = 0; j < baseMaterials[i].Length; ++j)
+            {
+                myRenderers[i].materials = baseMaterials[i];
+            }
+        }
+    }
+
+    private void SetMaterials(Material mat)
+    {
+        for (int i = 0; i < tempMats.Length; ++i)
+        {
+            tempMats[i] = mat;
+        }
+
+        for (int j = 0; j < myRenderers.Length; ++j)
+        {
+            myRenderers[j].materials = tempMats;
+        }
+    }
+
 	// Update is called once per frame
 	void Update () {
         float horiz = Input.GetAxis("Horizontal");
@@ -87,30 +129,37 @@ public class PlayerController : MonoBehaviour {
 
             Vector3 vel = toPos - fromPos;
             myRigidBody.velocity = vel.normalized * Speed;
+            if (vel.sqrMagnitude > 0.0f)
+            {
+                myRigidBody.rotation = Quaternion.Slerp(myRigidBody.rotation, Quaternion.LookRotation(vel.normalized), Time.deltaTime * SlerpRate);
+            }
 
             moving = true;
             this.fromPos = fromPos;
             this.toPos = toPos;
+            myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM);
+
         }
-        
+
         if (moving && Vector3.Dot((toPos - myRigidBody.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - myRigidBody.position).magnitude < CLOSE_ENOUGH)
         {
             // do something on land!?!?!
             myRigidBody.velocity = Vector3.zero;
             myRigidBody.position = toPos;
             moving = false;
+            myAnimator.SetTrigger(Strings.END_MOVE_ANIM);
         }
 
         if (PoweredUp)
         {
             RaycastHit hit;
-            if (Physics.Raycast(myRigidBody.position, new Vector3(dir.x, 0.0f, dir.z), out hit, 1.0f))
+            if (Physics.Raycast(myRigidBody.position + (Vector3.up * 0.5f), new Vector3(dir.x, 0.0f, dir.z), out hit, 1.0f))
             {
                 mazeRef.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);
             }
 
-            myRenderer.material = Colors[((int)Mathf.Floor(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length];
+            SetMaterials(Colors[((int)Mathf.Floor(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length]);
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { Restore(); }
         }
@@ -164,19 +213,19 @@ public class PlayerController : MonoBehaviour {
         endurance -= ENDURANCE_COST;
         Dodging = true;
         dodgeTime = DodgeTime;
-        myRenderer.material = DodgeMat;
+        SetMaterials(DodgeMat);
     }
 
     private void EndDodge()
     {
         Dodging = false;
-        myRenderer.material = DefaultMat;
+        RestoreMaterials();
     }
 
     private void Restore()
     {
         PoweredUp = false;
-        myRenderer.material = DefaultMat;
+        RestoreMaterials();
         myParticles.SetActive(false);
     }
 

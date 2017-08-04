@@ -51,39 +51,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92071c6bb2669144da12c119d08038ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GemsInSectionText: {fileID: 0}
-  ChaseEnemyPrefab: {fileID: 1987695358888104, guid: 655c7f585b9876a47baf9baa1ca7b666,
+  ChaseEnemyPrefab: {fileID: 1140823550431974, guid: 178c8189aeb2c9f48b5882452c51b1ad,
     type: 2}
   MazeSectorPrefab: {fileID: 1981083637158120, guid: e5d727fc450b3f0409b231d37c30d2bf,
     type: 2}
-  WallPrefab: {fileID: 1270254335555134, guid: 7fe41c1b603e8574eaa34a0af469c4f5, type: 2}
+  PillarPrefab: {fileID: 104448, guid: 7617cf3261020e143b25e48ecb8c5ac6, type: 2}
+  FencePrefab: {fileID: 103032, guid: 9cd69f976eeeb8849975bba487d6d4fc, type: 2}
   GemPrefab: {fileID: 1254880983954834, guid: 07803455a6cd9ee4c9d34e29518ca18b, type: 2}
-  FloorPrefab: {fileID: 1568364569993144, guid: 95e79ff3a9b031a4f93014b2f8d2c61b,
+  FloorPrefab: {fileID: 193794, guid: b1f3b805b17bf7d459a91b53c5b289bf, type: 2}
+  PowerupPrefab: {fileID: 1948297863956072, guid: 76e1cea7176e73a4f8a9b6608d8c17ba,
     type: 2}
-  PowerupPrefab: {fileID: 1680408948265108, guid: 7ec24664edf11174e96d44256d4de70c,
+  FollowEnemyPrefab: {fileID: 1685629953754154, guid: 3afaa61832d24704fa87952e74314f06,
     type: 2}
-  FollowEnemyPrefab: {fileID: 1456538493995154, guid: 716ca3e734955594bba32c5d981ecf92,
+  DepthEnemyPrefab: {fileID: 1685629953754154, guid: 99729e993ad1f3846973c3ee75b50f96,
     type: 2}
-  DepthEnemyPrefab: {fileID: 1097862188447872, guid: 5a05f21c19f6c82479b308a251bacaf6,
-    type: 2}
-  RestorerPrefab: {fileID: 1215656122041782, guid: 03a39d75b2cdde1478b64f85a0d25984,
+  RestorerPrefab: {fileID: 1111487011850982, guid: e4000bf1f0f27de47ab87f13bdf73f68,
     type: 2}
   BombPrefab: {fileID: 1866188216445114, guid: acd7deb0b324d81438257ceae51dceca, type: 2}
   GemColors:
-  - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
-  - {fileID: 2100000, guid: 43c167cf4f706194bbdaba79da105d4e, type: 2}
-  - {fileID: 2100000, guid: 1f2381d7c29ba2440a69f1f455420da5, type: 2}
-  - {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
-  - {fileID: 2100000, guid: ee217d5ae51e66a4aaee38d3247ac102, type: 2}
-  - {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
+  - {fileID: 2100000, guid: 9c5cb4f8b9902e84da6cf8f9081a436d, type: 2}
+  - {fileID: 2100000, guid: 5bb1a2dff9f34ef4aaf00e1aa6772eaa, type: 2}
+  - {fileID: 2100000, guid: f38efb855265cab419e50ce9c720c11f, type: 2}
+  - {fileID: 2100000, guid: 466fa892a71778d4f9dfc0037424cb23, type: 2}
+  - {fileID: 2100000, guid: b35cc0730e1298746beaea0802867447, type: 2}
+  - {fileID: 2100000, guid: 266f91e7bfd29ef40845a3a66fd9c36b, type: 2}
   FloorColors:
-  - {fileID: 2100000, guid: 0d00dbc6c435090498c0f686e347b24d, type: 2}
-  - {fileID: 2100000, guid: b1ac16fb7c3722047ab96d1867ca4f13, type: 2}
-  - {fileID: 2100000, guid: ded2b7c237d67dd42bae7411e353e76e, type: 2}
-  - {fileID: 2100000, guid: b14a5c9d8af13b84db4c3b683be2f16e, type: 2}
-  - {fileID: 2100000, guid: e5cd4df91f17a19438dac5f90ee1c558, type: 2}
-  - {fileID: 2100000, guid: a46eb35b6afa2324d9cefeb57a2d90b5, type: 2}
+  - {fileID: 2100000, guid: a0b59351c8004044f8fa4c66b1104b1d, type: 2}
+  - {fileID: 2100000, guid: 4828f3868d1bb0b42bb211c651b93347, type: 2}
+  - {fileID: 2100000, guid: afd5b4b0435d2d340a4336e74f90ed5c, type: 2}
+  - {fileID: 2100000, guid: c24b47e2179efd84c920112cefbd1b5e, type: 2}
+  - {fileID: 2100000, guid: 7c3d556b775b2d841b36471c48017ad7, type: 2}
+  - {fileID: 2100000, guid: 50601a332faca0d4a821f283ce612265, type: 2}
   MaxEnemiesPerSection: 5
+  TombstonesPerSection: 3
   SectionSize: 16
   SquareSize: 1
   RenderDistance: 2

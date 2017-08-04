@@ -276,7 +276,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         Generating = true;
 
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPool, FloorPool.start, FloorOffset);
+        GameObject floor = MakeAt(FloorPool, FloorPool.start, FloorOffset );
         floor.transform.localScale = new Vector3(Size * SquareSize * FloorScale, floor.transform.localScale.y, Size * SquareSize * FloorScale);
         FloorPool.reference[FloorPool.start].material = FloorMat;
 

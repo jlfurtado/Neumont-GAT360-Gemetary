@@ -116,7 +116,6 @@ public class Enemy : MonoBehaviour {
         Vector3 vel = toPos - fromPos;
         myRigidBody.velocity = vel.normalized * (Speed * SpeedMult);
         myRigidBody.rotation = Quaternion.Slerp(myRigidBody.rotation, Quaternion.LookRotation(vel.normalized), Time.deltaTime * SlerpRate);
-
     }
 
     protected void UnStop()

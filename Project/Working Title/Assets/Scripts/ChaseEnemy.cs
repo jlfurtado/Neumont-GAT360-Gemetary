@@ -93,8 +93,6 @@ public class ChaseEnemy : Enemy
             }
         }
 
-
-
         path = (playerFound && playerPath.Count <= num) ? playerPath : friendPaths[selected];
 
         if (path != null && path.Count > 0)

@@ -21,6 +21,9 @@ static class Strings
     public const string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
     public const string DEFAULT_NAME = "NO NAME";
 
+    public const string BEGIN_MOVE_ANIM = "BeginMove";
+    public const string END_MOVE_ANIM = "EndMove";
+
     public static readonly string[] HIGH_SCORE_KEYS = { "1st", "2nd", "3rd", "4th", "5th" };
 }
 
