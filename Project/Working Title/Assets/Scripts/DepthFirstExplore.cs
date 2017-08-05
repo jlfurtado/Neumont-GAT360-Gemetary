@@ -18,6 +18,8 @@ public class DepthFirstExplore : Enemy {
     // Update is called once per frame
     public override void Update()
     {
+        if (PauseManager.Paused) { CeaseMovement(); return; }
+
         if (explore.Count == 0)
         {
             ForceToBeNode(next = mazeRef.SectionLocFor(myRigidBody.position));

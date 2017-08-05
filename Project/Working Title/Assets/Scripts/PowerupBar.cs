@@ -19,6 +19,8 @@ public class PowerupBar : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        //if (PauseManager.Paused) { return; }
+
         float perc = playerRef.PoweredUp ? perc = playerRef.GetPowerupPercent()
                                          : playerRef.EmptySection() ? 0.0f : playerRef.GetGemPercent();
 

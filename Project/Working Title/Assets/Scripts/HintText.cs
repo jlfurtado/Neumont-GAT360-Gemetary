@@ -46,6 +46,7 @@ public class HintText : MonoBehaviour {
         gameObject.SetActive(false);
         displaying = false;
         myText.text = "";
+        PauseManager.Paused = false;
     }
 
 	public void BeginHint(string hint)
@@ -62,6 +63,7 @@ public class HintText : MonoBehaviour {
             displaying = true;
             myText.text = hint;
             currentOut = additionalInputOut;
+            PauseManager.Paused = true;
         }
     }
 }

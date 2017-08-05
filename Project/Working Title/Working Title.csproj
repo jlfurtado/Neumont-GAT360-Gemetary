@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\LoadName.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />
+    <Compile Include="Assets\Scripts\PauseManager.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Powerup.cs" />
     <Compile Include="Assets\Scripts\PowerupBar.cs" />

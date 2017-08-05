@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour {
     private HintText hinter;
     private bool dodgeHinted = false;
     private bool powerupHinted = false;
+    private bool pausedLastFrame = false;
+    private Vector3 lastVelocity = Vector3.zero;
 
     // Use this for initialization
     void Awake() {
@@ -96,8 +98,25 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    //private void OnPause()
+    //{
+    //    lastVelocity = myRigidBody.velocity;
+    //    myRigidBody.velocity = Vector3.zero;
+    //}
+
+    //private void OnUnPause()
+    //{
+    //    lastVelocity = Vector3.zero;
+    //    myRigidBody.velocity = lastVelocity;
+    //}
+
 	// Update is called once per frame
 	void Update () {
+        //if (PauseManager.Paused && !pausedLastFrame) { OnPause(); }
+        //if (!PauseManager.Paused && pausedLastFrame) { OnUnPause(); }
+        //pausedLastFrame = PauseManager.Paused;
+        if (PauseManager.Paused) { myRigidBody.velocity = Vector3.zero; return; }
+
         float horiz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         int h = Mathf.RoundToInt(horiz);
@@ -130,18 +149,21 @@ public class PlayerController : MonoBehaviour {
                 if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
             }            
 
+            moving = true;
+            this.fromPos = fromPos;
+            this.toPos = toPos;
+            myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM);
+
+        }
+
+        if (moving)
+        {
             Vector3 vel = toPos - fromPos;
             myRigidBody.velocity = vel.normalized * Speed;
             if (vel.sqrMagnitude > 0.0f)
             {
                 myRigidBody.rotation = Quaternion.Slerp(myRigidBody.rotation, Quaternion.LookRotation(vel.normalized), Time.deltaTime * SlerpRate);
             }
-
-            moving = true;
-            this.fromPos = fromPos;
-            this.toPos = toPos;
-            myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM);
-
         }
 
         if (moving && Vector3.Dot((toPos - myRigidBody.position).normalized, ((toPos - fromPos).normalized)) < PAST || (toPos - myRigidBody.position).magnitude < CLOSE_ENOUGH)

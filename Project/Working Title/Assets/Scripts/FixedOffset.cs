@@ -8,6 +8,7 @@ public class FixedOffset : MonoBehaviour {
 
 	void LateUpdate()
     {
+        //if (PauseManager.Paused) { return; }
         transform.position = FixTo.transform.position + offset;
     }
 }

@@ -72,6 +72,12 @@ public class Enemy : MonoBehaviour {
     // Update is called once per frame
     public virtual void Update()
     {
+        if (PauseManager.Paused)
+        {
+            CeaseMovement();
+            return;
+        }
+
         if (stopped)
         {
             stopTime -= Time.deltaTime;
@@ -108,6 +114,11 @@ public class Enemy : MonoBehaviour {
     protected virtual void OnLandReturn(Vector3 toPos)
     {
         myRigidBody.position = toPos;
+        myRigidBody.velocity = Vector3.zero;
+    }
+
+    protected void CeaseMovement()
+    {
         myRigidBody.velocity = Vector3.zero;
     }
 
