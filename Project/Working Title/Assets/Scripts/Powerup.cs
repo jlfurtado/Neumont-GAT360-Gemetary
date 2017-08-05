@@ -13,7 +13,7 @@ public class Powerup : MonoBehaviour {
     private Flasher flasherRef;
     private MazeScript maze;
     private Enemy[] enemies;
-    private static bool hinted = false;
+    public static bool hinted = false;
     private HintText hinter;
 
     //private Collider myCollider;

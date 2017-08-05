@@ -22,7 +22,7 @@ public class Bomb : MonoBehaviour {
     private Enemy[] enemies;
     private Explosion explosion = null;
     private HintText hinter;
-    private static bool hinted = false;
+    public static bool hinted = false;
 
     // Use this for initialization
     void Awake() {

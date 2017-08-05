@@ -36,6 +36,7 @@ public class SceneMover : MonoBehaviour {
     {
         DontKeepTitleMusic();
         SetPlayerName();
+        ResetHints();
         SceneManager.LoadScene(Strings.MAZE_SCENE_NAME);
     }
 
@@ -54,6 +55,12 @@ public class SceneMover : MonoBehaviour {
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void ResetHints()
+    {
+        Bomb.hinted = false;
+        Powerup.hinted = false;
     }
 
     private void SetPlayerName()
