@@ -15,6 +15,7 @@ public class MazeScript : MonoBehaviour {
     public GameObject DepthEnemyPrefab;
     public GameObject RestorerPrefab;
     public GameObject BombPrefab;
+    public GameObject LoadingFogPrefab;
     public Material[] GemColors;
     public Material[] FloorColors;
     public int MaxEnemiesPerSection;
@@ -31,6 +32,7 @@ public class MazeScript : MonoBehaviour {
     private Dictionary<string, MazeSectionGenerator> generatedMazes = new Dictionary<string, MazeSectionGenerator>(10000);
     private GameObject[] pillarPool;
     private GameObject[] fencePool;
+    private GameObject[] fogPool;
     private GameObject[] restorerPool;
     private EatForPoints[] gemPool;
     private Enemy[] enemyPool;
@@ -38,6 +40,7 @@ public class MazeScript : MonoBehaviour {
     private Powerup[] powerupPool;
     private Bomb[] bombPool;
 
+    public GameObject FogHolder { get; private set; }
     public GameObject PillarHolder { get; private set; }
     public GameObject FenceHolder { get; private set; }
     public GameObject GemHolder { get; private set; }
@@ -88,6 +91,7 @@ public class MazeScript : MonoBehaviour {
         Parent(EnemyHolder = new GameObject(), this.gameObject).name = "EnemyHolder";
         Parent(RestorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
         Parent(BombHolder = new GameObject(), this.gameObject).name = "BombHolder";
+        Parent(FogHolder = new GameObject(), this.gameObject).name = "FogHolder";
 
         maxEnemies = numSections * MaxEnemiesPerSection;
         enemyPool = new Enemy[maxEnemies];
@@ -107,10 +111,12 @@ public class MazeScript : MonoBehaviour {
         restorerPool = new GameObject[numSections];
         floorPool = new Renderer[numSections];
         powerupPool = new Powerup[numSections];
+        fogPool = new GameObject[numSections];
         for (int i = 0; i < numSections; ++i)
         {
             Parent((powerupPool[i] = Instantiate(PowerupPrefab).GetComponent<Powerup>()).gameObject, PowerupHolder);
             Parent((floorPool[i] = Instantiate(FloorPrefab).GetComponent<Renderer>()).gameObject, FloorHolder);
+            Parent(fogPool[i] = Instantiate(LoadingFogPrefab), FogHolder);
             Parent(restorerPool[i] = Instantiate(RestorerPrefab), RestorerHolder);
         }
 
@@ -145,6 +151,7 @@ public class MazeScript : MonoBehaviour {
             floorPool[i].gameObject.SetActive(false);
             powerupPool[i].gameObject.SetActive(false);
             restorerPool[i].SetActive(false);
+            fogPool[i].SetActive(false);
         }
 
         for (int i = 0; i < totalTiles; ++i)
@@ -303,6 +310,9 @@ public class MazeScript : MonoBehaviour {
         gen.RestorerPool.start = idx;
         gen.RestorerPool.count = 1;
 
+        gen.FogPool.start = idx;
+        gen.FogPool.count = 1;
+
         gen.PowerupPool.start = idx;
         gen.PowerupPool.count = 1;
 
@@ -335,6 +345,7 @@ public class MazeScript : MonoBehaviour {
         gen.GemPool = new RefArray<EatForPoints>(gemPool, 0, 0);
         gen.EnemyPool = new RefArray<Enemy>(enemyPool, 0, 0);
         gen.BombPool = new RefArray<Bomb>(bombPool, 0, 0);
+        gen.FogPool = new RefArray<GameObject>(fogPool, 0, 0);
         gen.GemMat = GemColors[Mod(x - z, GemColors.Length)];
         gen.FloorMat = FloorColors[Mod(x - z, FloorColors.Length)];
         return gen;

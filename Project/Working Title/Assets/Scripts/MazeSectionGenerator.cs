@@ -55,6 +55,7 @@ public class MazeSectionGenerator : MonoBehaviour {
     public RefArray<Powerup> PowerupPool;
     public RefArray<EatForPoints> GemPool;
     public RefArray<Enemy> EnemyPool;
+    public RefArray<GameObject> FogPool;
     public IVec2[] MazeSolution;
     public Material GemMat;
     public Material FloorMat;
@@ -276,9 +277,11 @@ public class MazeSectionGenerator : MonoBehaviour {
         Generating = true;
 
         // one giant floor object rather than tons of tiny ones - FPS++
-        GameObject floor = MakeAt(FloorPool, FloorPool.start, FloorOffset );
+        GameObject floor = MakeAt(FloorPool, FloorPool.start, FloorOffset);
         floor.transform.localScale = new Vector3(Size * SquareSize * FloorScale, floor.transform.localScale.y, Size * SquareSize * FloorScale);
         FloorPool.reference[FloorPool.start].material = FloorMat;
+
+        GameObject fog = MakeAt(FogPool, FogPool.start, FloorOffset);
 
         Vector3 dir = new Vector3(MazeSolution[1].x - MazeSolution[0].x, 0.0f, MazeSolution[1].z - MazeSolution[0].z);
         MakeAt(RestorerPool, RestorerPool.start, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.5f, (MazeSolution[0].z - halfSize) * SquareSize)).transform.rotation = Quaternion.LookRotation(dir);
@@ -338,7 +341,7 @@ public class MazeSectionGenerator : MonoBehaviour {
         if (startGems == -1) { startGems = numGems; } // hack!
 
         Generating = false;
-        floor.transform.localPosition = FloorOffset;
+        fog.SetActive(false);
     }
 
     public float GemPercent()
