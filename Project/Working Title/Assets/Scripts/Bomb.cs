@@ -21,9 +21,12 @@ public class Bomb : MonoBehaviour {
     private SceneMover sceneMoverRef = null;
     private Enemy[] enemies;
     private Explosion explosion = null;
+    private HintText hinter;
+    private static bool hinted = false;
 
     // Use this for initialization
     void Awake() {
+        hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         explosion = Instantiate(ExplosionPrefab).GetComponent<Explosion>();
         explosion.transform.position = transform.position;
         explosion.gameObject.SetActive(false);
@@ -112,6 +115,12 @@ public class Bomb : MonoBehaviour {
         {
             exploding = true;
             flashTime = ExplodeTime;
+
+            if (!hinted)
+            {
+                hinted = true;
+                hinter.BeginHint(Strings.TOMBSTONE_HINT);
+            }
         }
     }
 

@@ -13,13 +13,14 @@ public class Powerup : MonoBehaviour {
     private Flasher flasherRef;
     private MazeScript maze;
     private Enemy[] enemies;
-    private float flashTime;
+    private static bool hinted = false;
+    private HintText hinter;
 
     //private Collider myCollider;
     // Use this for initialization
     void Awake()
     {
-        //myCollider = GetComponent<Collider>();
+        hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         flasherRef = GameObject.FindGameObjectWithTag(Strings.FLASHER_TAG).GetComponent<Flasher>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
@@ -45,6 +46,13 @@ public class Powerup : MonoBehaviour {
             }
 
             flasherRef.Flash();
+
+            if (!hinted)
+            {
+                hinted = true;
+                hinter.BeginHint(Strings.LANTERN_HINT);
+            }
+
             gameObject.SetActive(false);
         }
     }

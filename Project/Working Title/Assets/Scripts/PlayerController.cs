@@ -29,13 +29,16 @@ public class PlayerController : MonoBehaviour {
     private const int MAX_ENDURANCE = 100;
     private const int ENDURANCE_COST = 50;
     private GameObject myParticles;
-    private float maxGemsThisSection;
     private Animator myAnimator;
     private Material[][] baseMaterials;
     private Material[] tempMats;
+    private HintText hinter;
+    private bool dodgeHinted = false;
+    private bool powerupHinted = false;
 
     // Use this for initialization
     void Awake() {
+        hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         myAnimator = GetComponentInChildren<Animator>();
         myRigidBody = GetComponent<Rigidbody>();
         myRenderers = GetComponentsInChildren<Renderer>();
@@ -170,7 +173,7 @@ public class PlayerController : MonoBehaviour {
         }
         else 
         {
-            if (endurance >= ENDURANCE_COST && Mathf.RoundToInt(Input.GetAxis("Jump")) > 0)
+            if (endurance >= ENDURANCE_COST && Mathf.RoundToInt(Input.GetAxis(Strings.DODGE_BUTTON)) > 0)
             {
                 Dodge();
             }
@@ -201,11 +204,22 @@ public class PlayerController : MonoBehaviour {
             enemy.StopFor(PowerupTime);
         }
 
+        if (!powerupHinted)
+        {
+            powerupHinted = true;
+            hinter.BeginHint("Run " + ScoreManager.GetName() + "!\nYou've gained temporary\nsuper-gem-powers!\nYou can destroy stuff!");
+        }
+
     }
 
     public void AddEndurance(int amount)
     {
         endurance = Mathf.Clamp(endurance + amount, 0, MAX_ENDURANCE);
+        if (!dodgeHinted && endurance >= ENDURANCE_COST)
+        {
+            dodgeHinted = true;
+            hinter.BeginHint(Strings.DODGE_HINT, Strings.DODGE_BUTTON);
+        }
     }
 
     public void Dodge()
