@@ -111,7 +111,7 @@ public class Bomb : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
+        if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null && !exploding)
         {
             exploding = true;
             flashTime = ExplodeTime;

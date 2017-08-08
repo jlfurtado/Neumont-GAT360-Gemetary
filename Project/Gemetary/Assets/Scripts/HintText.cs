@@ -25,7 +25,7 @@ public class HintText : MonoBehaviour {
         }
         else
         {
-            BeginHint("Hi!\nI'm an annoying hint!\nI'll go away eventually.\nOr you can make me\nby pressing 'escape'!");
+            BeginHint("Hi!\nI'm an annoying hint!\nI'll go away eventually.\nOr you can make me\nby pressing 'escape'!\nAnnoying hints can be disabled\nin the game options.");
         }
     }
 

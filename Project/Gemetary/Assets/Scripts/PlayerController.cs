@@ -35,8 +35,6 @@ public class PlayerController : MonoBehaviour {
     private HintText hinter;
     private bool dodgeHinted = false;
     private bool powerupHinted = false;
-    private bool pausedLastFrame = false;
-    private Vector3 lastVelocity = Vector3.zero;
 
     // Use this for initialization
     void Awake() {
