@@ -197,6 +197,7 @@ RectTransform:
   - {fileID: 739052509}
   - {fileID: 1798415598}
   - {fileID: 2125937055}
+  - {fileID: 1480828327}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -237,7 +238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -150}
+  m_AnchoredPosition: {x: 0, y: -160}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &739052510
@@ -536,6 +537,111 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1178007858}
   m_Script: {fileID: 11500000, guid: 18a35ddd2f2f43f42a532b85254c32ca, type: 3}
+--- !u!1001 &1480828326
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 440349173}
+    m_Modifications:
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 3a750500ee4d42449b4d3dc4a1630ea0, type: 2}
+  m_IsPrefabParent: 0
+--- !u!224 &1480828327 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224356059100561254, guid: 3a750500ee4d42449b4d3dc4a1630ea0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1480828326}
 --- !u!1001 &1729242352
 Prefab:
   m_ObjectHideFlags: 0
@@ -710,7 +816,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: " - Use WASD or the Arrow Keys to move\n - Collect lanterns to stun creatures
     of the night\n - Collect gems for points\n     - Clear a whole section for a special
-    bonus!\n - Space to dodge through creatures\n - Touch bombs to activate them!
+    bonus!\n - Space to dodge through creatures\n - Touch tombstones to activate them!
     Beware of explosions!\n - Mouse wheel to zoom in/out"
 --- !u!222 &1798415600
 CanvasRenderer:

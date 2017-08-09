@@ -19,10 +19,11 @@ static class Strings
     public const string FLASHER_TAG = "Flasher";
 
     public const string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
-    public const string DEFAULT_NAME = "Brave Hero";
+    public const string DEFAULT_NAME = "Your Name";
 
     public const string BEGIN_MOVE_ANIM = "BeginMove";
     public const string END_MOVE_ANIM = "EndMove";
+    public const string JUMP_ANIM = "ToJump";
 
     public const string CANCEL_BUTTON = "Cancel";
     public const string DODGE_BUTTON = "Jump";

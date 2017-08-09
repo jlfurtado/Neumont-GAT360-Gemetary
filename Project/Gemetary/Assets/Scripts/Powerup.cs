@@ -33,7 +33,7 @@ public class Powerup : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
         {

@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour {
     public float SlerpRate = 10.0f;
     public GameObject PowerupParticlePrefab;
     public Material[] Colors;
-    public Material DodgeMat;
     public float PowerupTime;
     public float DodgeTime;
+    public float JumpHeight;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour {
     private Vector3 fromPos, toPos;
     private bool horizLast;
     private float dodgeTime;
-    private int endurance;
+    private int endurance = 0;
     private const int MAX_ENDURANCE = 100;
     private const int ENDURANCE_COST = 50;
     private GameObject myParticles;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour {
             moving = true;
             this.fromPos = fromPos;
             this.toPos = toPos;
-            myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM);
+            if (!Dodging) { myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM); }
 
         }
 
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour {
             myRigidBody.velocity = Vector3.zero;
             myRigidBody.position = toPos;
             moving = false;
-            myAnimator.SetTrigger(Strings.END_MOVE_ANIM);
+            if (!Dodging) { myAnimator.SetTrigger(Strings.END_MOVE_ANIM); }
         }
 
         if (PoweredUp)
@@ -189,6 +189,9 @@ public class PlayerController : MonoBehaviour {
         else if (Dodging)
         {
             dodgeTime -= Time.deltaTime;
+            float dtOverTwo = DodgeTime / 2.0f;
+            float hPerc = (dodgeTime > dtOverTwo ? (-(dodgeTime / dtOverTwo) + 2.0f) : (dodgeTime / dtOverTwo));
+            myRigidBody.position = new Vector3(myRigidBody.position.x, JumpHeight * hPerc, myRigidBody.position.z);
             if (dodgeTime <= 0.0f) { EndDodge(); }
         }
         else 
@@ -247,13 +250,15 @@ public class PlayerController : MonoBehaviour {
         endurance -= ENDURANCE_COST;
         Dodging = true;
         dodgeTime = DodgeTime;
-        SetMaterials(DodgeMat);
+        myAnimator.SetTrigger(Strings.JUMP_ANIM);
     }
 
     private void EndDodge()
     {
         Dodging = false;
-        RestoreMaterials();
+        myAnimator.SetTrigger(moving ? Strings.BEGIN_MOVE_ANIM : Strings.END_MOVE_ANIM);
+        myRigidBody.position = new Vector3(myRigidBody.position.x, 0.0f, myRigidBody.position.z);
+        toPos = new Vector3(toPos.x, 0.0f, toPos.z);
     }
 
     private void Restore()

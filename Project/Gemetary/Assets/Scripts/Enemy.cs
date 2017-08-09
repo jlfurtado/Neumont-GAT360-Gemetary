@@ -158,7 +158,7 @@ public class Enemy : MonoBehaviour {
         EatMe();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag.Equals(Strings.PLAYER_TAG) && !Eaten)
         {

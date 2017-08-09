@@ -41,7 +41,7 @@ public class HintText : MonoBehaviour {
         }
     }
 
-    private void Hide()
+    public void Hide()
     {
         gameObject.SetActive(false);
         displaying = false;
