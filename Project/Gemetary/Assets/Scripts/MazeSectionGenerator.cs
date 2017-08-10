@@ -370,4 +370,14 @@ public class MazeSectionGenerator : MonoBehaviour {
     {
         return Generating || mazeSections[IdxFromXZ(x, z)] == MazeSquare.WALL;
     }
+
+    public bool IsWalkable(IVec2 loc)
+    {
+        return IsWalkable(loc.x, loc.z);
+    }
+
+    public bool IsWalkable(int x, int z)
+    {
+        return !IsWall(x, z) && (MazeSolution[0].x != x || MazeSolution[0].z != z);
+    }
 }

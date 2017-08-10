@@ -140,13 +140,13 @@ public class PlayerController : MonoBehaviour {
             Vector3 toPos = fromPos;
             if (horizLast)
             {
-                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
-                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
+                if (toSectionH.IsWalkable(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
+                if (toSectionV.IsWalkable(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
             }
             else
             {
-                if (!toSectionV.IsWall(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
-                if (!toSectionH.IsWall(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
+                if (toSectionV.IsWalkable(toLocV) && dir.z != 0) { toPos = new Vector3(tpv.x, myRigidBody.position.y, tpv.z); horizLast = false; }
+                if (toSectionH.IsWalkable(toLocH) && dir.x != 0) { toPos = new Vector3(tph.x, myRigidBody.position.y, tph.z); horizLast = true; }
             }            
 
             moving = true;
