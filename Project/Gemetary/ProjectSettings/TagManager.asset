@@ -12,6 +12,8 @@ TagManager:
   - PlayerNameInput
   - Flasher
   - Hinter
+  - PauseMenu
+  - AxisInputHelper
   layers:
   - Default
   - TransparentFX

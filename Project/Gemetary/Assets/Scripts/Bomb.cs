@@ -50,7 +50,7 @@ public class Bomb : MonoBehaviour {
 
     void Update()
     {
-        if (exploding && !PauseManager.Paused)
+        if (exploding && !PauseManager.OnlyOne.Paused())
         {
             flashTime -= Time.deltaTime;
             myRenderer.material = Mathf.Sqrt(flashTime) * 100 % 7 < 2 ? DefaultMat : FlashMat;

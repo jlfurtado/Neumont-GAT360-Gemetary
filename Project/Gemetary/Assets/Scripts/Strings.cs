@@ -17,6 +17,8 @@ static class Strings
     public const string SCENE_MOVER_TAG = "SceneMover";
     public const string ENEMY_TAG = "Enemy";
     public const string FLASHER_TAG = "Flasher";
+    public const string PAUSE_MENU_TAG = "PauseMenu";
+    public const string AXIS_INPUT_HELPER_TAG = "AxisInputHelper";
 
     public const string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
     public const string DEFAULT_NAME = "Your Name";
@@ -27,11 +29,13 @@ static class Strings
 
     public const string CANCEL_BUTTON = "Cancel";
     public const string DODGE_BUTTON = "Jump";
-
+    
     public const string HINTER_TAG = "Hinter";
     public const string DODGE_HINT = "Impressive!\nYou've collected enough\n gems to dodge!\n Try pressing 'Space'!";
     public const string TOMBSTONE_HINT = "Watch out!\nTombstones here seem\nrigged to explode!";
     public const string LANTERN_HINT = "My eyes!\nOh wait, I'm a hint.\nThe bright light scares\nthe enemies!\nGet them!";
     public static readonly string[] HIGH_SCORE_KEYS = { "1st", "2nd", "3rd", "4th", "5th" };
+    public static readonly string[] AXIS_KEYS = { CANCEL_BUTTON, DODGE_BUTTON };
+    public const int CANCEL_INDEX = 0, DODGE_INDEX = 1;
 }
 

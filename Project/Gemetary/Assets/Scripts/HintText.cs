@@ -7,13 +7,15 @@ public class HintText : MonoBehaviour {
     public float Duration;
     public static bool AllHintsDisabled = false;
     private float remainingTime = 0.0f;
-    private bool displaying = false;
+    public bool Displaying { get; private set; }
     private Text myText;
-    private string currentOut = "";
-    private const float DEAD_ZONE = 0.0f;
+    private int currentOutIdx = -1;
+    private AxisInputHelper axisInput = null;
 
     void Awake()
     {
+        axisInput = GameObject.FindGameObjectWithTag(Strings.AXIS_INPUT_HELPER_TAG).GetComponent<AxisInputHelper>();
+        Displaying = false;
         myText = GetComponentInChildren<Text>();
     }
 
@@ -31,10 +33,10 @@ public class HintText : MonoBehaviour {
 
     void Update()
     {
-        if (displaying)
+        if (Displaying)
         {
             remainingTime -= Time.deltaTime;
-            if ((remainingTime <= 0.0f) || (Mathf.Abs(Input.GetAxis(Strings.CANCEL_BUTTON)) > DEAD_ZONE) || (currentOut != "" && Mathf.Abs(Input.GetAxis(currentOut)) > DEAD_ZONE))
+            if ((remainingTime <= 0.0f) || (axisInput.AxisPressed(Strings.CANCEL_INDEX)) || (currentOutIdx >= 0 && axisInput.AxisPressed(currentOutIdx)))
             {
                 Hide();
             }
@@ -44,26 +46,26 @@ public class HintText : MonoBehaviour {
     public void Hide()
     {
         gameObject.SetActive(false);
-        displaying = false;
+        Displaying = false;
         myText.text = "";
-        PauseManager.Paused = false;
+        PauseManager.OnlyOne.UnPause();
     }
 
 	public void BeginHint(string hint)
     {
-        BeginHint(hint, "");
+        BeginHint(hint, -1);
     }
 
-    public void BeginHint(string hint, string additionalInputOut)
+    public void BeginHint(string hint, int extraOutIdx)
     {
         if (!AllHintsDisabled)
         {
             gameObject.SetActive(true);
             remainingTime = Duration;
-            displaying = true;
+            Displaying = true;
             myText.text = hint;
-            currentOut = additionalInputOut;
-            PauseManager.Paused = true;
+            currentOutIdx = extraOutIdx;
+            PauseManager.OnlyOne.Pause();
         }
     }
 }

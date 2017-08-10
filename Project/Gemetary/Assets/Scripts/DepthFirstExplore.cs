@@ -18,7 +18,7 @@ public class DepthFirstExplore : Enemy {
     // Update is called once per frame
     public override void Update()
     {
-        if (PauseManager.Paused) { CeaseMovement(); return; }
+        if (PauseManager.OnlyOne.Paused()) { CeaseMovement(); return; }
 
         if (explore.Count == 0)
         {

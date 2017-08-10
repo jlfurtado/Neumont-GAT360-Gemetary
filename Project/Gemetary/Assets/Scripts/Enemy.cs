@@ -72,7 +72,7 @@ public class Enemy : MonoBehaviour {
     // Update is called once per frame
     public virtual void Update()
     {
-        if (PauseManager.Paused)
+        if (PauseManager.OnlyOne.Paused())
         {
             CeaseMovement();
             return;

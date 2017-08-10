@@ -9,7 +9,7 @@ public class FollowMazeSolution : Enemy {
 
     // Update is called once per frame
     public override void Update() {
-        if (PauseManager.Paused) { CeaseMovement(); return; }
+        if (PauseManager.OnlyOne.Paused()) { CeaseMovement(); return; }
         next = mazeSection.MazeSolution[goingTo];
         from = mazeSection.MazeSolution[goingFrom];
 

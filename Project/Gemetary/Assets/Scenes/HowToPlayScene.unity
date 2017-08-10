@@ -814,7 +814,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: " - Use WASD or the Arrow Keys to move\n - Collect lanterns to stun creatures
+  m_Text: " - Use WASD or the Arrow Keys to move\n - Collect lanterns to scare creatures
     of the night\n - Collect gems for points\n     - Clear a whole section for a special
     bonus!\n - Space to dodge through creatures\n - Touch tombstones to activate them!
     Beware of explosions!\n - Mouse wheel to zoom in/out"

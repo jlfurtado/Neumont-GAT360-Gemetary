@@ -35,9 +35,13 @@ public class PlayerController : MonoBehaviour {
     private HintText hinter;
     private bool dodgeHinted = false;
     private bool powerupHinted = false;
+    private PauseMenu pauseMenuRef = null;
+    private AxisInputHelper axisInput = null;
 
     // Use this for initialization
     void Awake() {
+        axisInput = GameObject.FindGameObjectWithTag(Strings.AXIS_INPUT_HELPER_TAG).GetComponent<AxisInputHelper>();
+        pauseMenuRef = GameObject.FindGameObjectWithTag(Strings.PAUSE_MENU_TAG).GetComponent<PauseMenu>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         myAnimator = GetComponentInChildren<Animator>();
         myRigidBody = GetComponent<Rigidbody>();
@@ -96,24 +100,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    //private void OnPause()
-    //{
-    //    lastVelocity = myRigidBody.velocity;
-    //    myRigidBody.velocity = Vector3.zero;
-    //}
-
-    //private void OnUnPause()
-    //{
-    //    lastVelocity = Vector3.zero;
-    //    myRigidBody.velocity = lastVelocity;
-    //}
-
 	// Update is called once per frame
 	void Update () {
-        //if (PauseManager.Paused && !pausedLastFrame) { OnPause(); }
-        //if (!PauseManager.Paused && pausedLastFrame) { OnUnPause(); }
-        //pausedLastFrame = PauseManager.Paused;
-        if (PauseManager.Paused) { myRigidBody.velocity = Vector3.zero; return; }
+        if (PauseManager.OnlyOne.Paused()) { myRigidBody.velocity = Vector3.zero; return; }
 
         float horiz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
@@ -182,7 +171,7 @@ public class PlayerController : MonoBehaviour {
                 hit.transform.gameObject.SetActive(false);
             }
 
-            SetMaterials(Colors[((int)Mathf.Floor(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length]);
+            SetMaterials(Colors[(Mathf.FloorToInt(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length]);
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { Restore(); }
         }
@@ -196,10 +185,15 @@ public class PlayerController : MonoBehaviour {
         }
         else 
         {
-            if (endurance >= ENDURANCE_COST && Mathf.RoundToInt(Input.GetAxis(Strings.DODGE_BUTTON)) > 0)
+            if (endurance >= ENDURANCE_COST && axisInput.AxisPressed(Strings.DODGE_INDEX))
             {
                 Dodge();
             }
+        }
+
+        if (axisInput.AxisPressed(Strings.CANCEL_INDEX) && !pauseMenuRef.Showing && !hinter.Displaying)
+        {
+            pauseMenuRef.Show();
         }
 
         //if (Input.GetKey(KeyCode.Space))
@@ -241,7 +235,7 @@ public class PlayerController : MonoBehaviour {
         if (!dodgeHinted && endurance >= ENDURANCE_COST)
         {
             dodgeHinted = true;
-            hinter.BeginHint(Strings.DODGE_HINT, Strings.DODGE_BUTTON);
+            hinter.BeginHint(Strings.DODGE_HINT, Strings.DODGE_INDEX);
         }
     }
 
