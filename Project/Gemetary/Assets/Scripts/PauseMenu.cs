@@ -27,15 +27,27 @@ public class PauseMenu : MonoBehaviour {
 
     public void Hide()
     {
-        Showing = false;
-        PauseManager.OnlyOne.UnPause();
-        gameObject.SetActive(false);
+        StartCoroutine(HideAtEndOfFrame());
     }
 
+    private IEnumerator HideAtEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (Showing)
+        {
+            Showing = false;
+            PauseManager.OnlyOne.UnPause();
+            gameObject.SetActive(false);
+        }
+    }
     public void Show()
     {
-        Showing = true;
-        PauseManager.OnlyOne.Pause();
-        gameObject.SetActive(true);
+        if (!Showing)
+        {
+            Showing = true;
+            PauseManager.OnlyOne.Pause();
+            gameObject.SetActive(true);
+        }
     }
 }

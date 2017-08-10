@@ -45,12 +45,21 @@ public class HintText : MonoBehaviour {
 
     public void Hide()
     {
-        gameObject.SetActive(false);
-        Displaying = false;
-        myText.text = "";
-        PauseManager.OnlyOne.UnPause();
+        StartCoroutine(HideAtEndOfFrame());
     }
 
+    private IEnumerator HideAtEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (Displaying)
+        {
+            gameObject.SetActive(false);
+            Displaying = false;
+            myText.text = "";
+            PauseManager.OnlyOne.UnPause();
+        }
+    }
 	public void BeginHint(string hint)
     {
         BeginHint(hint, -1);

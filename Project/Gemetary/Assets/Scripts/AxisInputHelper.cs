@@ -18,7 +18,6 @@ public class AxisInputHelper : MonoBehaviour {
         {
             lastAxisStates[i] = currentAxisStates[i];
             currentAxisStates[i] = (Mathf.RoundToInt(Input.GetAxis(Strings.AXIS_KEYS[i])) != 0);
-            //Debug.Log(Strings.AXIS_KEYS[i] + ": " + (lastAxisStates[i] ? "1" : "0") + ":" + (currentAxisStates[i] ? "1" : "0"));
         }
     }
 

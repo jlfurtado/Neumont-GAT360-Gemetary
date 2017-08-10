@@ -20,12 +20,18 @@ public class PauseManager : MonoBehaviour {
 
     public void Pause()
     {
-        paused = true;
+        StartCoroutine(DoPauseAtEndOfFrame());
     }
 
     public void UnPause()
     {
         StartCoroutine(DoUnPauseAtEndOfFrame());
+    }
+
+    private IEnumerator DoPauseAtEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        paused = true;
     }
 
     private IEnumerator DoUnPauseAtEndOfFrame()
