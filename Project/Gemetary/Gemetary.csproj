@@ -100,6 +100,7 @@
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
     <Compile Include="Assets\Scripts\GarbageHelper.cs" />
     <Compile Include="Assets\Scripts\HintText.cs" />
+    <Compile Include="Assets\Scripts\KeepMe.cs" />
     <Compile Include="Assets\Scripts\LoadName.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />
     <Compile Include="Assets\Scripts\MazeSectionGenerator.cs" />

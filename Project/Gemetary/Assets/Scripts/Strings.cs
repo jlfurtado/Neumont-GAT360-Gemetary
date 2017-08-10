@@ -29,7 +29,9 @@ static class Strings
 
     public const string CANCEL_BUTTON = "Cancel";
     public const string DODGE_BUTTON = "Jump";
-    
+
+    public const string CHEAT_NAME = "IThinkICheated";
+
     public const string HINTER_TAG = "Hinter";
     public const string DODGE_HINT = "Impressive!\nYou've collected enough\n gems to dodge!\n Try pressing 'Space'!";
     public const string TOMBSTONE_HINT = "Watch out!\nTombstones here seem\nrigged to explode!";

@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     public float PowerupTime;
     public float DodgeTime;
     public float JumpHeight;
+    public AudioSource GameBackgroundMusic;
+    public AudioSource PowerupBackgroundMusic;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
@@ -74,6 +76,15 @@ public class PlayerController : MonoBehaviour {
         }
 
         tempMats = new Material[max];
+    }
+
+    void Start()
+    {
+        if (ScoreManager.IsCheating())
+        {
+            PowerupTime = int.MaxValue / 2.0f;
+            PowerUp();
+        }
     }
 	
     private void RestoreMaterials()
@@ -171,7 +182,7 @@ public class PlayerController : MonoBehaviour {
                 hit.transform.gameObject.SetActive(false);
             }
 
-            SetMaterials(Colors[(Mathf.FloorToInt(Mathf.Sqrt(remainingPowerTime) * 250)) % Colors.Length]);
+            SetMaterials(Colors[(Mathf.FloorToInt(Mathf.Sqrt(remainingPowerTime) * 250.0f)) % Colors.Length]);
             remainingPowerTime -= Time.deltaTime;
             if (remainingPowerTime <= 0.0f) { Restore(); }
         }
@@ -211,6 +222,7 @@ public class PlayerController : MonoBehaviour {
 
     public void PowerUp()
     {
+        PlayPowerMusic();
         EndDodge();
         PoweredUp = true;
         remainingPowerTime = PowerupTime;
@@ -257,9 +269,23 @@ public class PlayerController : MonoBehaviour {
 
     private void Restore()
     {
+        PlayGameMusic();
         PoweredUp = false;
         RestoreMaterials();
         myParticles.SetActive(false);
+    }
+
+    private void PlayGameMusic()
+    {
+        if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Pause(); }
+        if (!GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Play(); }
+    }
+
+
+    private void PlayPowerMusic()
+    {
+        if (GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Pause(); }
+        if (!PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Play(); }
     }
 
     public IVec2 GetPos()

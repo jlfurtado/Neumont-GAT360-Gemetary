@@ -9,7 +9,7 @@ public class DisplayYourScore : MonoBehaviour {
 	// Use this for initialization
 	void Awake() {
         Text textComp = GetComponent<Text>();
-        string scoreText = "Your Score: " + ScoreManager.StoreScore;
+        string scoreText = "Your Score: " + ScoreManager.StoreScore + (ScoreManager.IsCheating() ? ", cheater!" : "");
         textComp.text = scoreText;
     }
 }

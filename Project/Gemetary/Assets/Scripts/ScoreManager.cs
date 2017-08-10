@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour {
     public static int StoreScore;
     private static string PlayerName = Strings.DEFAULT_NAME;
+    private static bool cheating = false;
     public Text scoreText;
     public BonusText BonusText;
     public float DisplayTime;
@@ -17,11 +18,17 @@ public class ScoreManager : MonoBehaviour {
     public static void SetName(string name)
     {
         PlayerName = name == "" ? Strings.DEFAULT_NAME : name;
+        cheating = ScoreManager.GetName().Equals(Strings.CHEAT_NAME);
     }
 
     public static string GetName()
     {
         return PlayerName;
+    }
+
+    public static bool IsCheating()
+    {
+        return cheating;
     }
 
     void Awake()
@@ -56,6 +63,7 @@ public class ScoreManager : MonoBehaviour {
 
     void OnDisable()
     {
+        if (cheating) { StoreScore = 0; return; }
         StoreScore = scoreValue;
 
         for (int i = 0; i < highScores.Length; ++i)

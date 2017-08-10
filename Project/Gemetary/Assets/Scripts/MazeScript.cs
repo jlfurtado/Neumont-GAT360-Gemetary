@@ -55,6 +55,7 @@ public class MazeScript : MonoBehaviour {
     private int maxEnemies;
     private int numBombs;
 
+
     private string ToKey(int x, int z)
     {
         return "X:" + x + "-Z:" + z;
