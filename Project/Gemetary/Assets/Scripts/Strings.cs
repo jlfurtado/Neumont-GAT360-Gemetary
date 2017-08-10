@@ -26,6 +26,7 @@ static class Strings
     public const string BEGIN_MOVE_ANIM = "BeginMove";
     public const string END_MOVE_ANIM = "EndMove";
     public const string JUMP_ANIM = "ToJump";
+    public const string DEATH_ANIM = "Die";
 
     public const string CANCEL_BUTTON = "Cancel";
     public const string DODGE_BUTTON = "Jump";

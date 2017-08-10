@@ -18,7 +18,6 @@ public class Bomb : MonoBehaviour {
     private bool exploding;
     private float flashTime;
     private Renderer myRenderer = null;
-    private SceneMover sceneMoverRef = null;
     private Enemy[] enemies;
     private Explosion explosion = null;
     private HintText hinter;
@@ -34,7 +33,6 @@ public class Bomb : MonoBehaviour {
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
-        sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         myRenderer = GetComponent<Renderer>();
 
         myRenderer.material = DefaultMat;
@@ -97,7 +95,7 @@ public class Bomb : MonoBehaviour {
 
         if ((playerRef.transform.position - (from + dir)).sqrMagnitude < 1.0f && !playerRef.PoweredUp && !playerRef.Dodging)
         {
-            sceneMoverRef.MoveToGameOver();
+            playerRef.Die();
         }
 
         foreach (Enemy e in enemies)

@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour {
     protected MazeSectionGenerator mazeSection;
     protected Rigidbody myRigidBody;
     protected Renderer[] myRenderers;
-    protected SceneMover sceneMoverRef;
     protected ScoreManager scoreRef;
     protected static System.Random rand = new System.Random();
     protected IVec2 next, from;
@@ -36,7 +35,6 @@ public class Enemy : MonoBehaviour {
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRigidBody = GetComponent<Rigidbody>();
         myRenderers = GetComponentsInChildren<Renderer>();
-        sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
     }
 
@@ -172,7 +170,7 @@ public class Enemy : MonoBehaviour {
             else if (!playerRef.Dodging)
             {
                 // only move to game over if they aren't powered up
-                sceneMoverRef.MoveToGameOver();
+                playerRef.Die();
             }
         }
     }

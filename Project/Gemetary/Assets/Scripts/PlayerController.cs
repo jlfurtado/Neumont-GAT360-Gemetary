@@ -39,9 +39,11 @@ public class PlayerController : MonoBehaviour {
     private bool powerupHinted = false;
     private PauseMenu pauseMenuRef = null;
     private AxisInputHelper axisInput = null;
+    private SceneMover sceneMoverRef = null;
 
     // Use this for initialization
     void Awake() {
+        sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         axisInput = GameObject.FindGameObjectWithTag(Strings.AXIS_INPUT_HELPER_TAG).GetComponent<AxisInputHelper>();
         pauseMenuRef = GameObject.FindGameObjectWithTag(Strings.PAUSE_MENU_TAG).GetComponent<PauseMenu>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
@@ -239,6 +241,20 @@ public class PlayerController : MonoBehaviour {
             hinter.BeginHint("Run " + ScoreManager.GetName() + "!\nYou've gained temporary\nsuper-gem-powers!\nYou can destroy stuff!");
         }
 
+    }
+
+    public void Die()
+    {
+        myAnimator.SetTrigger(Strings.DEATH_ANIM);
+        myRigidBody.velocity = Vector3.zero;
+        PauseManager.OnlyOne.Pause();
+        StartCoroutine(GoToGameOver(3.0f));
+    }
+
+    private IEnumerator GoToGameOver(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        sceneMoverRef.MoveToGameOver();
     }
 
     public void AddEndurance(int amount)
