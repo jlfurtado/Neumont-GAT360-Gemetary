@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class HintText : MonoBehaviour {
     public float Duration;
     public static bool AllHintsDisabled = false;
+    public GameObject ToSelect;
     private float remainingTime = 0.0f;
     public bool Displaying { get; private set; }
     private Text myText;
@@ -58,6 +60,7 @@ public class HintText : MonoBehaviour {
             Displaying = false;
             myText.text = "";
             PauseManager.OnlyOne.UnPause();
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 	public void BeginHint(string hint)
@@ -75,6 +78,7 @@ public class HintText : MonoBehaviour {
             myText.text = hint;
             currentOutIdx = extraOutIdx;
             PauseManager.OnlyOne.Pause();
+            EventSystem.current.SetSelectedGameObject(ToSelect);
         }
     }
 }

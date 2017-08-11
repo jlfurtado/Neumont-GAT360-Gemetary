@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\RotateMe.cs" />
     <Compile Include="Assets\Scripts\SceneMover.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
+    <Compile Include="Assets\Scripts\SelectionIndicator.cs" />
     <Compile Include="Assets\Scripts\Strings.cs" />
   </ItemGroup>
   <ItemGroup>

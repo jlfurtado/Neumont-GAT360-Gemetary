@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PauseMenu : MonoBehaviour {
     public bool Showing { get; private set; }
+    public GameObject ToSelect;
     private AxisInputHelper axisInput = null;
 
 	void Awake ()
@@ -38,6 +40,7 @@ public class PauseMenu : MonoBehaviour {
         {
             Showing = false;
             PauseManager.OnlyOne.UnPause();
+            EventSystem.current.SetSelectedGameObject(null);
             gameObject.SetActive(false);
         }
     }
@@ -48,6 +51,7 @@ public class PauseMenu : MonoBehaviour {
             Showing = true;
             PauseManager.OnlyOne.Pause();
             gameObject.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(ToSelect); // NEEDS TO BE AFTER SET ACTIVE FOR HIGHLIGHT!!!
         }
     }
 }
