@@ -41,6 +41,11 @@ public class PlayerController : MonoBehaviour {
     private AxisInputHelper axisInput = null;
     private SceneMover sceneMoverRef = null;
 
+    private void Triggered(string trigger)
+    {
+        myAnimator.SetTrigger(trigger);
+    }
+
     // Use this for initialization
     void Awake() {
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
@@ -55,7 +60,6 @@ public class PlayerController : MonoBehaviour {
         myParticles.SetActive(false);
         myParticles.transform.parent = gameObject.transform;
         myParticles.transform.localPosition = Vector3.up * 1.5f;
-
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag(Strings.ENEMY_TAG);
 
         enemies = new Enemy[enemyObjects.Length];
@@ -88,7 +92,7 @@ public class PlayerController : MonoBehaviour {
             PowerUp();
         }
     }
-	
+
     private void RestoreMaterials()
     {
         for (int i = 0; i < myRenderers.Length; ++i)
@@ -152,7 +156,7 @@ public class PlayerController : MonoBehaviour {
             moving = true;
             this.fromPos = fromPos;
             this.toPos = toPos;
-            if (!Dodging) { myAnimator.SetTrigger(Strings.BEGIN_MOVE_ANIM); }
+            if (!Dodging) { Triggered(Strings.BEGIN_MOVE_ANIM); }
 
         }
 
@@ -172,7 +176,7 @@ public class PlayerController : MonoBehaviour {
             myRigidBody.velocity = Vector3.zero;
             myRigidBody.position = toPos;
             moving = false;
-            if (!Dodging) { myAnimator.SetTrigger(Strings.END_MOVE_ANIM); }
+            if (!Dodging && (dir.x == 0 && dir.z == 0)) { Triggered(Strings.END_MOVE_ANIM); }
         }
 
         if (PoweredUp)
@@ -245,7 +249,7 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
-        myAnimator.SetTrigger(Strings.DEATH_ANIM);
+        Triggered(Strings.DEATH_ANIM);
         myRigidBody.velocity = Vector3.zero;
         PauseManager.OnlyOne.Pause();
         StartCoroutine(GoToGameOver(3.0f));
@@ -272,13 +276,13 @@ public class PlayerController : MonoBehaviour {
         endurance -= ENDURANCE_COST;
         Dodging = true;
         dodgeTime = DodgeTime;
-        myAnimator.SetTrigger(Strings.JUMP_ANIM);
+        Triggered(Strings.JUMP_ANIM);
     }
 
     private void EndDodge()
     {
         Dodging = false;
-        myAnimator.SetTrigger(moving ? Strings.BEGIN_MOVE_ANIM : Strings.END_MOVE_ANIM);
+        Triggered(moving ? Strings.BEGIN_MOVE_ANIM : Strings.END_MOVE_ANIM);
         myRigidBody.position = new Vector3(myRigidBody.position.x, 0.0f, myRigidBody.position.z);
         toPos = new Vector3(toPos.x, 0.0f, toPos.z);
     }

@@ -119,7 +119,6 @@
     <None Include="Assets\Gem\Shaders\Gem.shader" />
     <None Include="Assets\Necromancer GUI\Kingthings.txt" />
     <None Include="Assets\Necromancer GUI\Readme.txt" />
-    <None Include="Assets\Prefabs\Game\Player\Priest\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
