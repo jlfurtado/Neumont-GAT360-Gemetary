@@ -27,10 +27,14 @@ public class Enemy : MonoBehaviour {
     protected IVec2 home;
     protected PlayerController playerRef = null;
     protected float SpeedMult = 1.0f;
+    protected Animator myAnimator;
+    protected Animation myAnim;
 
     // Use this for initialization
     public virtual void Awake() {
         Eaten = false;
+        myAnimator = GetComponent<Animator>();
+        myAnim = GetComponent<Animation>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         mazeRef = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
         myRigidBody = GetComponent<Rigidbody>();
@@ -118,6 +122,7 @@ public class Enemy : MonoBehaviour {
     protected void CeaseMovement()
     {
         myRigidBody.velocity = Vector3.zero;
+        Animate(false);
     }
 
     private void Move(Vector3 toPos, Vector3 fromPos)
@@ -125,6 +130,13 @@ public class Enemy : MonoBehaviour {
         Vector3 vel = toPos - fromPos;
         myRigidBody.velocity = vel.normalized * (Speed * SpeedMult);
         myRigidBody.rotation = Quaternion.Slerp(myRigidBody.rotation, Quaternion.LookRotation(vel.normalized), Time.deltaTime * SlerpRate);
+        Animate(true);
+    }
+
+    private void Animate(bool doIt)
+    {
+        if (myAnim != null) { myAnim.enabled = doIt; }
+        if (myAnimator != null) { myAnimator.enabled = doIt; }
     }
 
     protected void UnStop()
