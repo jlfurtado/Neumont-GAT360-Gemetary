@@ -2085,8 +2085,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1580360952306486}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1.1250002, z: 0.991}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4417197252227464}
   - {fileID: 4556872581982434}
@@ -3129,8 +3129,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4bfa741822f4d0c438903ee31aab540d, type: 2}
   - {fileID: 2100000, guid: 3a93b304de3259241ad5d5d09f5635d1, type: 2}
   PowerupTime: 10
-  DodgeTime: 0.75
-  JumpHeight: 3
+  DodgeTime: 1.25
+  JumpHeight: 0
   GameBackgroundMusic: {fileID: 0}
   PowerupBackgroundMusic: {fileID: 0}
 --- !u!136 &136474645358611394
@@ -3142,8 +3142,8 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: cd8485b82daaf66468539fc5182762ba, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 1.5
+  m_Radius: 0.2
+  m_Height: 1.3
   m_Direction: 1
   m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!137 &137090105228777354

@@ -7,6 +7,7 @@ public class ScoreManager : MonoBehaviour {
     public static int StoreScore;
     private static string PlayerName = Strings.DEFAULT_NAME;
     private static bool cheating = false;
+    private static bool hardMode = false;
     public Text scoreText;
     public BonusText BonusText;
     public float DisplayTime;
@@ -19,6 +20,7 @@ public class ScoreManager : MonoBehaviour {
     {
         PlayerName = name == "" ? Strings.DEFAULT_NAME : name;
         cheating = ScoreManager.GetName().Equals(Strings.CHEAT_NAME);
+        hardMode = ScoreManager.GetName().Equals(Strings.HARD_NAME);
     }
 
     public static string GetName()
@@ -29,6 +31,11 @@ public class ScoreManager : MonoBehaviour {
     public static bool IsCheating()
     {
         return cheating;
+    }
+
+    public static bool IsHardcore()
+    {
+        return hardMode;
     }
 
     void Awake()

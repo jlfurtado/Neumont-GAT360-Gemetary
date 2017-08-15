@@ -73,7 +73,10 @@ public class MazeScript : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Awake () {
+    void Awake ()
+    {
+        if (ScoreManager.IsHardcore()) { MaxEnemiesPerSection *= 2; }
+
         MazeSectionGenerator.Size = SectionSize;
         MazeSectionGenerator.SquareSize = SquareSize;
         MazeSectionGenerator.BombsPerSection = TombstonesPerSection;

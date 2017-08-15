@@ -135,8 +135,8 @@ public class Enemy : MonoBehaviour {
 
     private void Animate(bool doIt)
     {
-        if (myAnim != null) { myAnim.enabled = doIt; }
-        if (myAnimator != null) { myAnimator.enabled = doIt; }
+        if (myAnim != null) { myAnim.enabled = doIt; myAnim["walk"].speed = (Speed * SpeedMult * 0.6f); }
+        if (myAnimator != null) { myAnimator.enabled = doIt; myAnimator.speed = (Speed * SpeedMult * 0.5f); }
     }
 
     protected void UnStop()

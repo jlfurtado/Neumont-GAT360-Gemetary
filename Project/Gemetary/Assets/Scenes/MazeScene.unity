@@ -601,6 +601,11 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224160980440487396, guid: e340184c8fa49ad4cbd3d92fd784352d,
     type: 2}
   m_PrefabInternal: {fileID: 1205542139}
+--- !u!82 &1209150333 stripped
+AudioSource:
+  m_PrefabParentObject: {fileID: 82406986644510978, guid: 7dd5dce8c7ae90348b4f8f04344230f5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1326727692}
 --- !u!82 &1219919430 stripped
 AudioSource:
   m_PrefabParentObject: {fileID: 82291519389811162, guid: 8625db669d0195041b816dfc4b39e1c0,
@@ -611,6 +616,53 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224132949383628358, guid: 45873ee2a52e6b54f959569c451d0914,
     type: 2}
   m_PrefabInternal: {fileID: 2044639477}
+--- !u!1001 &1326727692
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4041490545687800, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 82406986644510978, guid: 7dd5dce8c7ae90348b4f8f04344230f5,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7dd5dce8c7ae90348b4f8f04344230f5, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1362596946
 Prefab:
   m_ObjectHideFlags: 0
@@ -648,33 +700,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4293914067175122, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1580360952306486, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4293914067175122, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4293914067175122, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4293914067175122, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114508786276077330, guid: 7d531b61e712ca3409c67ea43e9a6646,
-        type: 2}
-      propertyPath: JumpHeight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114508786276077330, guid: 7d531b61e712ca3409c67ea43e9a6646,
-        type: 2}
-      propertyPath: DodgeTime
-      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 114508786276077330, guid: 7d531b61e712ca3409c67ea43e9a6646,
         type: 2}
@@ -686,6 +716,11 @@ Prefab:
       propertyPath: PowerupBackgroundMusic
       value: 
       objectReference: {fileID: 1000596187}
+    - target: {fileID: 114508786276077330, guid: 7d531b61e712ca3409c67ea43e9a6646,
+        type: 2}
+      propertyPath: PlayerDeadSFX
+      value: 
+      objectReference: {fileID: 1209150333}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7d531b61e712ca3409c67ea43e9a6646, type: 2}
   m_IsPrefabParent: 0

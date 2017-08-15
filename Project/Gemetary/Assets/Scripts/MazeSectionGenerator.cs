@@ -268,7 +268,21 @@ public class MazeSectionGenerator : MonoBehaviour {
     {
         float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
         float distSqrd = xPos * xPos + zPos * zPos;
-        diffMult = Mathf.Log10(10.0f + distSqrd);
+        float m = ScoreManager.IsHardcore() ? 1.5f : 1.0f;
+        diffMult = m * Mathf.Log10(10.0f + m*distSqrd);
+    }
+
+    private IEnumerator SpawnEnemy(int index, float delay)
+    {
+        int halfSize = Size / 2;
+        int q = EnemyPool.start + index;
+
+        yield return new WaitForSeconds(delay);
+
+        MakeAt(EnemyPool, q, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.0f, (MazeSolution[0].z - halfSize) * SquareSize));
+        Enemy e = EnemyPool.reference[q];
+        e.UpdateRef(this);
+        e.Speed = e.BaseSpeed * diffMult * (float)(rand.NextDouble() * 0.2f + 0.9f);
     }
 
     private IEnumerator RedoMazeGeometry(IVec2 mazeLoc, bool sync)
@@ -291,15 +305,6 @@ public class MazeSectionGenerator : MonoBehaviour {
             MakeAt(PowerupPool, PowerupPool.start, new Vector3((powerupPos.x - halfSize) * SquareSize, 1.0f, (powerupPos.z - halfSize) * SquareSize));
             PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
             PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
-        }
-
-        for (int i = 0; i < EnemyPool.count; ++i)
-        {
-            int q = EnemyPool.start + i;
-            MakeAt(EnemyPool, q, new Vector3((MazeSolution[0].x - halfSize) * SquareSize, 0.0f, (MazeSolution[0].z - halfSize) * SquareSize));
-            Enemy e = EnemyPool.reference[q];
-            e.UpdateRef(this);
-            e.Speed = e.BaseSpeed * diffMult * (float)(rand.NextDouble() * 0.2f + 0.9f);
         }
      
         int pillarCount = PillarPool.start, gemCount = GemPool.start, fenceCount = FencePool.start, bombCount = BombPool.start, idx = 0;
@@ -339,6 +344,11 @@ public class MazeSectionGenerator : MonoBehaviour {
 
         numGems = gemCount - GemPool.start;
         if (startGems == -1) { startGems = numGems; } // hack!
+
+        for (int i = 0; i < EnemyPool.count; ++i)
+        {
+            StartCoroutine(SpawnEnemy(i, 1.0f * i));
+        }
 
         Generating = false;
         fog.SetActive(false);

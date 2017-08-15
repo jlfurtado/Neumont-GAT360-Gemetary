@@ -32,6 +32,7 @@ static class Strings
     public const string DODGE_BUTTON = "Jump";
 
     public const string CHEAT_NAME = "IThinkICheated";
+    public const string HARD_NAME = "2Ez4Me";
 
     public const string HINTER_TAG = "Hinter";
     public const string DODGE_HINT = "Impressive!\nYou've collected enough\n gems to dodge!\n Try pressing 'Space'!";

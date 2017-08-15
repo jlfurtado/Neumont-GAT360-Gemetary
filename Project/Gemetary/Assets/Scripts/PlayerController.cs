@@ -13,10 +13,12 @@ public class PlayerController : MonoBehaviour {
     public float JumpHeight;
     public AudioSource GameBackgroundMusic;
     public AudioSource PowerupBackgroundMusic;
+    public AudioSource PlayerDeadSFX;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
     private Enemy[] enemies;
+    private bool playerDead;
 
     public bool PoweredUp { get; private set; }
     public bool Dodging { get; private set; }
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
+        playerDead = false;
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         axisInput = GameObject.FindGameObjectWithTag(Strings.AXIS_INPUT_HELPER_TAG).GetComponent<AxisInputHelper>();
         pauseMenuRef = GameObject.FindGameObjectWithTag(Strings.PAUSE_MENU_TAG).GetComponent<PauseMenu>();
@@ -119,7 +122,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (PauseManager.OnlyOne.Paused()) { myRigidBody.velocity = Vector3.zero; return; }
+        if (PauseManager.OnlyOne.Paused() || playerDead) { myRigidBody.velocity = Vector3.zero; return; }
 
         float horiz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
@@ -249,10 +252,17 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
-        Triggered(Strings.DEATH_ANIM);
-        myRigidBody.velocity = Vector3.zero;
-        PauseManager.OnlyOne.Pause();
-        StartCoroutine(GoToGameOver(3.0f));
+        if (!playerDead)
+        {
+            Triggered(Strings.DEATH_ANIM);
+            myRigidBody.velocity = Vector3.zero;
+            //PauseManager.OnlyOne.Pause();
+            if (GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Stop(); }
+            if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Stop(); }
+            PlayerDeadSFX.Play();
+            StartCoroutine(GoToGameOver(3.0f));
+            playerDead = true;
+        }
     }
 
     private IEnumerator GoToGameOver(float delay)
