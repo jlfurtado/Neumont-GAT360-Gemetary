@@ -14,6 +14,7 @@ TagManager:
   - Hinter
   - PauseMenu
   - AxisInputHelper
+  - ExplosionAudio
   layers:
   - Default
   - TransparentFX

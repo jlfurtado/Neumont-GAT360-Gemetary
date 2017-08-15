@@ -382,6 +382,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deaa1acce34313d46b9c520858084fce, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &814963623
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 304.09854
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 265.47903
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 96.51923
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949261523025694, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d2861aafa34cff2409f9dd9d210fbea7, type: 2}
+  m_IsPrefabParent: 0
 --- !u!82 &1000596187 stripped
 AudioSource:
   m_PrefabParentObject: {fileID: 82987473484007196, guid: f9f3eef5f36175a4fad861d65bfe546c,

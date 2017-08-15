@@ -35,7 +35,7 @@ public class Powerup : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null)
         {
             scoreRef.AddScore(Value);
             maze.EatAt(mazeLoc, sectionLoc);

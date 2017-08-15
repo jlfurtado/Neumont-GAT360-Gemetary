@@ -124,8 +124,8 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         if (PauseManager.OnlyOne.Paused() || playerDead) { myRigidBody.velocity = Vector3.zero; return; }
 
-        float horiz = Input.GetAxis("Horizontal");
-        float vert = Input.GetAxis("Vertical");
+        float horiz = Input.GetAxis(Strings.HORIZ_AXIS_NAME);
+        float vert = Input.GetAxis(Strings.VERT_AXIS_NAME);
         int h = Mathf.RoundToInt(horiz);
         int v = Mathf.RoundToInt(vert);
 
@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour {
         if (!powerupHinted)
         {
             powerupHinted = true;
-            hinter.BeginHint("Run " + ScoreManager.GetName() + "!\nYou've gained temporary\nsuper-gem-powers!\nYou can destroy stuff!");
+            hinter.BeginHint(string.Concat(Strings.SECTION_CLEAR_HINT_PREFIX, ScoreManager.GetName(), Strings.SECTION_CLEAR_HINT_POSTFIX));
         }
 
     }

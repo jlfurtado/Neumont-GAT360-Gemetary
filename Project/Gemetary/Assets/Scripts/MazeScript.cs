@@ -58,7 +58,7 @@ public class MazeScript : MonoBehaviour {
 
     private string ToKey(int x, int z)
     {
-        return "X:" + x + "-Z:" + z;
+        return string.Concat(Strings.KEY_PREFIX, x, Strings.KEY_MIDDLE, z);
     }
 
     private string ToKey(IVec2 pos)
@@ -87,15 +87,15 @@ public class MazeScript : MonoBehaviour {
         totalTiles = genTiles * numSections;
         mazeSize = SectionSize * SquareSize;
 
-        Parent(FloorHolder = new GameObject(), this.gameObject).name = "FloorHolder";
-        Parent(PowerupHolder = new GameObject(), this.gameObject).name = "PowerupHolder";
-        Parent(FenceHolder = new GameObject(), this.gameObject).name = "FenceHolder";
-        Parent(PillarHolder = new GameObject(), this.gameObject).name = "PillarHolder";
-        Parent(GemHolder = new GameObject(), this.gameObject).name = "GemHolder";
-        Parent(EnemyHolder = new GameObject(), this.gameObject).name = "EnemyHolder";
-        Parent(RestorerHolder = new GameObject(), this.gameObject).name = "RestorerHolder";
-        Parent(BombHolder = new GameObject(), this.gameObject).name = "BombHolder";
-        Parent(FogHolder = new GameObject(), this.gameObject).name = "FogHolder";
+        Parent(FloorHolder = new GameObject(), this.gameObject).name = Strings.FLOOR_HOLDER_NAME;
+        Parent(PowerupHolder = new GameObject(), this.gameObject).name = Strings.POWERUP_HOLDER_NAME;
+        Parent(FenceHolder = new GameObject(), this.gameObject).name = Strings.FENCE_HOLDER_NAME;
+        Parent(PillarHolder = new GameObject(), this.gameObject).name = Strings.PILLAR_HOLDER_NAME;
+        Parent(GemHolder = new GameObject(), this.gameObject).name = Strings.GEM_HOLDER_NAME;
+        Parent(EnemyHolder = new GameObject(), this.gameObject).name = Strings.ENEMY_HOLDER_NAME;
+        Parent(RestorerHolder = new GameObject(), this.gameObject).name = Strings.RESTORE_HOLDER_NAME;
+        Parent(BombHolder = new GameObject(), this.gameObject).name = Strings.BOMB_HOLDER_NAME;
+        Parent(FogHolder = new GameObject(), this.gameObject).name = Strings.FOG_HOLDER_NAME;
 
         maxEnemies = numSections * MaxEnemiesPerSection;
         enemyPool = new Enemy[maxEnemies];
@@ -132,9 +132,9 @@ public class MazeScript : MonoBehaviour {
         GemHolder.transform.position = Vector3.down * 10.0f;
         for (int i = 0; i < totalTiles; ++i)
         {
-            Parent(fencePool[i] = Instantiate(FencePrefab), FenceHolder).name = "Fence";
-            Parent(pillarPool[i] = Instantiate(PillarPrefab), PillarHolder).name = "Pillar";
-            Parent((gemPool[i] = Instantiate(GemPrefab).GetComponent<EatForPoints>()).gameObject, GemHolder).name = "Gem";
+            Parent(fencePool[i] = Instantiate(FencePrefab), FenceHolder).name = Strings.FENCE_NAME;
+            Parent(pillarPool[i] = Instantiate(PillarPrefab), PillarHolder).name = Strings.PILLAR_NAME;
+            Parent((gemPool[i] = Instantiate(GemPrefab).GetComponent<EatForPoints>()).gameObject, GemHolder).name = Strings.GEM_NAME;
         }
 	}
 
@@ -339,7 +339,7 @@ public class MazeScript : MonoBehaviour {
     private MazeSectionGenerator GenerateMazeSection(int x, int z)
     {    
         GameObject obj = Parent(Instantiate(MazeSectorPrefab), this.gameObject);
-        obj.name = ("MazeSection[" + x + "," + z + "]");
+        obj.name = string.Concat(Strings.MAZE_SECTION_NAME_PREFIX, x, Strings.COMMA, z, Strings.MAZE_SECTION_NAME_POSTFIX);
         MazeSectionGenerator gen = obj.GetComponent<MazeSectionGenerator>();
         gen.RestorerPool = new RefArray<GameObject>(restorerPool, 0, 0);
         gen.FloorPool = new RefArray<Renderer>(floorPool, 0, 0);

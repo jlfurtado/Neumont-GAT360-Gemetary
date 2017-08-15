@@ -26,7 +26,7 @@ public class EatForPoints : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null)
         {
             playerRef.AddEndurance(EnduranceRegen);
             scoreRef.AddScore(Value);

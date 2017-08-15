@@ -12,6 +12,7 @@ public class Bomb : MonoBehaviour {
     public Material FlashMat;
     public GameObject ExplosionPrefab;
 
+    private AudioSource explosionSource;
     private ScoreManager scoreRef;
     private MazeScript maze;
     private PlayerController playerRef;
@@ -25,6 +26,7 @@ public class Bomb : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
+        explosionSource = GameObject.FindGameObjectWithTag(Strings.EXPLOSION_AUDIO_TAG).GetComponent<AudioSource>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         explosion = Instantiate(ExplosionPrefab).GetComponent<Explosion>();
         explosion.transform.position = transform.position;
@@ -63,6 +65,7 @@ public class Bomb : MonoBehaviour {
     
     private void Explode()
     {
+        explosionSource.Play();
         scoreRef.AddScore(Value);
         maze.EatAt(mazeLoc, sectionLoc);
         gameObject.SetActive(false);
@@ -109,7 +112,7 @@ public class Bomb : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals(Strings.PLAYER_TAG) && scoreRef != null && !exploding)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !exploding)
         {
             exploding = true;
             flashTime = ExplodeTime;

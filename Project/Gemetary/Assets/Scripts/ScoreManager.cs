@@ -44,7 +44,7 @@ public class ScoreManager : MonoBehaviour {
 
         for (int i = 0; i < highScores.Length; ++i)
         {
-            highScores[i] = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], Strings.DEFAULT_NAME + ":0");
+            highScores[i] = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], Strings.DEFAULT_SCORE_TEXT);
         }
 
         SetScoreText();
@@ -64,7 +64,7 @@ public class ScoreManager : MonoBehaviour {
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + scoreValue;
+            scoreText.text = string.Concat(Strings.SCORE_PREFIX, scoreValue);
         }
     }
 
@@ -82,7 +82,7 @@ public class ScoreManager : MonoBehaviour {
                     highScores[j + 1] = highScores[j];
                 }
 
-                highScores[i] = PlayerName + ":" + scoreValue;
+                highScores[i] = string.Concat(PlayerName, Strings.COLON, scoreValue);
                 break;
             }
         }

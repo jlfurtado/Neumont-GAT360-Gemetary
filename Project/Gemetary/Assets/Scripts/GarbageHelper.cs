@@ -6,7 +6,7 @@ public static class GarbageHelper
 {
     private static long lastMem;
     private static string beginName;
-
+    private const string USED = " used ";
     public static void Begin(string name)
     {
         lastMem = System.GC.GetTotalMemory(false);
@@ -19,7 +19,7 @@ public static class GarbageHelper
         long diff = mem - lastMem;
         if (diff != 0)
         {
-            Debug.Log(beginName + " used " + diff);
+            Debug.Log(string.Concat(beginName, USED, diff));
         }
     }
 }

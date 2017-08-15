@@ -21,7 +21,7 @@ public class BonusText : MonoBehaviour {
         basePosition = transform.position;
         text = GetComponent<Text>();
         text.enabled = false;
-        text.text = "";
+        text.text = string.Empty;
         myRect = GetComponent<RectTransform>();
         maxLines = Mathf.FloorToInt(myRect.rect.height / text.preferredHeight);
     }
@@ -33,7 +33,7 @@ public class BonusText : MonoBehaviour {
         totalTime = time;
         string colorHex = ColorUtility.ToHtmlStringRGB(((score < 0) ? badColor : goodColor));
         string baseText = text.text.Count(c => c == '\n') >= maxLines ? text.text.Substring(text.text.IndexOf('\n') + 1) : text.text;
-        text.text = baseText + ("<color=" + "\"#" + colorHex + "\"" + ">")+ (score > 0 ? "+" : "") + score + "</color>\n";
+        text.text = string.Concat(baseText, Strings.OPEN_COLOR_PREFIX, colorHex, Strings.OPEN_COLOR_POSTFIX, (score > 0 ? Strings.PLUS_SYMBOL : string.Empty), score, Strings.CLOSE_COLOR);
         text.enabled = true;
     }
 
@@ -56,7 +56,7 @@ public class BonusText : MonoBehaviour {
     {
         timer = 0.0f;
         text.enabled = false;
-        text.text = "";
+        text.text = string.Empty;
         transform.position = basePosition;
     }
 }

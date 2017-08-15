@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour {
 
     private void Animate(bool doIt)
     {
-        if (myAnim != null) { myAnim.enabled = doIt; myAnim["walk"].speed = (Speed * SpeedMult * 0.6f); }
+        if (myAnim != null) { myAnim.enabled = doIt; myAnim[Strings.ENEMY_WALK_ANIM_NAME].speed = (Speed * SpeedMult * 0.6f); }
         if (myAnimator != null) { myAnimator.enabled = doIt; myAnimator.speed = (Speed * SpeedMult * 0.5f); }
     }
 
@@ -170,7 +170,7 @@ public class Enemy : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag.Equals(Strings.PLAYER_TAG) && !Eaten)
+        if (other.CompareTag(Strings.PLAYER_TAG) && !Eaten)
         {
             // only get comp if we hit the player
             if (playerRef.PoweredUp || stopped)

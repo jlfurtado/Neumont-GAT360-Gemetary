@@ -92,10 +92,7 @@ static class AStarPathFinder
         int index = 0;
         float cost = node.TotalCost;
 
-        while (openList.Count > index && cost < openList[index].TotalCost)
-        {
-            index += 1;
-        }
+        while (openList.Count > index && cost < openList[index].TotalCost) { ++index; }
 
         openList.Insert(index, node);
         costTracker[node.Location] = node.TotalCost;

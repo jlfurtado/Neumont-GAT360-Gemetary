@@ -15,7 +15,7 @@ public class FollowTarget : MonoBehaviour {
     private Vector3 vel;
     void LateUpdate()
     {
-        zoom = Mathf.Clamp(zoom - ScrollSpeed * Time.deltaTime * Input.GetAxis("Mouse ScrollWheel"), 0.0f, 1.0f);
+        zoom = Mathf.Clamp(zoom - ScrollSpeed * Time.deltaTime * Input.GetAxis(Strings.MOUSE_SCROLL_AXIS_NAME), 0.0f, 1.0f);
         Vector3 offset = Vector3.Lerp(MinOffset, MaxOffset, zoom);
 
         Vector3 toPos = TargetToFollow.transform.position + offset;
