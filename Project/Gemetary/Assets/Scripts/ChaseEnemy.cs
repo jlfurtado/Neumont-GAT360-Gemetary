@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class ChaseEnemy : Enemy
 {
     private Stack<IVec2> path = null;

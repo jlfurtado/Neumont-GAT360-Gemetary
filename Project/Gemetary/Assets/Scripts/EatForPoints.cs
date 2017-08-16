@@ -13,10 +13,12 @@ public class EatForPoints : MonoBehaviour {
     private Renderer myRenderer;
     private Material storeMat;
     private PlayerController playerRef;
+    private AudioSource gemSFX;
 
     //private Collider myCollider;
 	// Use this for initialization
 	void Awake() {
+        gemSFX = GameObject.FindGameObjectWithTag(Strings.GEM_SFX_TAG).GetComponent<AudioSource>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
         maze = GameObject.FindGameObjectWithTag(Strings.MAZE_TAG).GetComponent<MazeScript>();
@@ -28,6 +30,7 @@ public class EatForPoints : MonoBehaviour {
     {
         if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null)
         {
+            AudioHelper.PlaySFX(gemSFX);
             playerRef.AddEndurance(EnduranceRegen);
             scoreRef.AddScore(Value);
             maze.EatAt(mazeLoc, sectionLoc);

@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour {
     public AudioSource GameBackgroundMusic;
     public AudioSource PowerupBackgroundMusic;
     public AudioSource PlayerDeadSFX;
+    public AudioSource PlayerJumpSFX;
+    public AudioSource WallDestructSFX;
     private MazeScript mazeRef;
     private const float CLOSE_ENOUGH = 0.1f;
     private const float PAST = 0.01f;
@@ -85,6 +87,12 @@ public class PlayerController : MonoBehaviour {
         }
 
         tempMats = new Material[max];
+
+        AudioHelper.InitBGM(GameBackgroundMusic);
+        AudioHelper.InitBGM(PowerupBackgroundMusic);
+        AudioHelper.InitSFX(PlayerDeadSFX);
+        AudioHelper.InitSFX(PlayerJumpSFX);
+        AudioHelper.InitSFX(WallDestructSFX);
     }
 
     void Start()
@@ -189,6 +197,7 @@ public class PlayerController : MonoBehaviour {
             {
                 mazeRef.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);
+                AudioHelper.PlaySFX(WallDestructSFX);
             }
 
             SetMaterials(Colors[(Mathf.FloorToInt(Mathf.Sqrt(remainingPowerTime) * 250.0f)) % Colors.Length]);
@@ -259,7 +268,7 @@ public class PlayerController : MonoBehaviour {
             //PauseManager.OnlyOne.Pause();
             if (GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Stop(); }
             if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Stop(); }
-            PlayerDeadSFX.Play();
+            AudioHelper.PlaySFX(PlayerDeadSFX);
             StartCoroutine(GoToGameOver(3.0f));
             playerDead = true;
         }
@@ -283,6 +292,7 @@ public class PlayerController : MonoBehaviour {
 
     public void Dodge()
     {
+        AudioHelper.PlaySFX(PlayerJumpSFX);
         endurance -= ENDURANCE_COST;
         Dodging = true;
         dodgeTime = DodgeTime;
@@ -308,14 +318,14 @@ public class PlayerController : MonoBehaviour {
     private void PlayGameMusic()
     {
         if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Pause(); }
-        if (!GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Play(); }
+        if (!GameBackgroundMusic.isPlaying) { AudioHelper.PlayBGM(GameBackgroundMusic); }
     }
 
 
     private void PlayPowerMusic()
     {
         if (GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Pause(); }
-        if (!PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Play(); }
+        if (!PowerupBackgroundMusic.isPlaying) { AudioHelper.PlayBGM(PowerupBackgroundMusic); }
     }
 
     public IVec2 GetPos()

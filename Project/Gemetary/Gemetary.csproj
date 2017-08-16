@@ -81,6 +81,7 @@
     <Compile Include="Assets\GemExample\Scripts\DemoTimeOfDay.cs" />
     <Compile Include="Assets\GemExample\Scripts\Orbit.cs" />
     <Compile Include="Assets\Scripts\AStarPathFinder.cs" />
+    <Compile Include="Assets\Scripts\AudioHelper.cs" />
     <Compile Include="Assets\Scripts\AxisInputHelper.cs" />
     <Compile Include="Assets\Scripts\Bomb.cs" />
     <Compile Include="Assets\Scripts\BonusText.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="Assets\Scripts\ClearHighScores.cs" />
     <Compile Include="Assets\Scripts\DepthFirstExplore.cs" />
     <Compile Include="Assets\Scripts\DisableHints.cs" />
+    <Compile Include="Assets\Scripts\DisableMusic.cs" />
+    <Compile Include="Assets\Scripts\DisableSFX.cs" />
     <Compile Include="Assets\Scripts\DisplayHighScores.cs" />
     <Compile Include="Assets\Scripts\DisplayYourScore.cs" />
     <Compile Include="Assets\Scripts\EatForPoints.cs" />
@@ -100,6 +103,7 @@
     <Compile Include="Assets\Scripts\FollowTarget.cs" />
     <Compile Include="Assets\Scripts\GarbageHelper.cs" />
     <Compile Include="Assets\Scripts\HintText.cs" />
+    <Compile Include="Assets\Scripts\InitSFX.cs" />
     <Compile Include="Assets\Scripts\KeepMe.cs" />
     <Compile Include="Assets\Scripts\LoadName.cs" />
     <Compile Include="Assets\Scripts\MazeScript.cs" />

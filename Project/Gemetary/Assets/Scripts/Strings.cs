@@ -31,8 +31,8 @@ static class Strings
     public const string PLAYER_NAME_INPUT_TAG = "PlayerNameInput";
     public const string HINTER_TAG = "Hinter";
     public const string EXPLOSION_AUDIO_TAG = "ExplosionAudio";
-
-
+    public const string THUNDER_SFX_TAG = "Thunder";
+    public const string GEM_SFX_TAG = "GemSFX";
     #endregion
 
     #region Defaults

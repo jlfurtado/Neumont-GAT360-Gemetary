@@ -15,11 +15,14 @@ public class Powerup : MonoBehaviour {
     private Enemy[] enemies;
     public static bool hinted = false;
     private HintText hinter;
+    private AudioSource myAudioSFX;
+    private bool flashing = false;
 
     //private Collider myCollider;
     // Use this for initialization
     void Awake()
     {
+        myAudioSFX = GameObject.FindGameObjectWithTag(Strings.THUNDER_SFX_TAG).GetComponent<AudioSource>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         flasherRef = GameObject.FindGameObjectWithTag(Strings.FLASHER_TAG).GetComponent<Flasher>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
@@ -35,25 +38,35 @@ public class Powerup : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !flashing)
         {
-            scoreRef.AddScore(Value);
-            maze.EatAt(mazeLoc, sectionLoc);
-            
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.StopFor(StopTime);
-            }
-
-            flasherRef.Flash();
-
-            if (!hinted)
-            {
-                hinted = true;
-                hinter.BeginHint(Strings.LANTERN_HINT);
-            }
-
-            gameObject.SetActive(false);
+            StartCoroutine(DelayedFlash(0.25f));
         }
+    }
+
+    private IEnumerator DelayedFlash(float delay)
+    {
+        flashing = true;
+        scoreRef.AddScore(Value);
+        maze.EatAt(mazeLoc, sectionLoc);
+        AudioHelper.PlaySFX(myAudioSFX);
+
+        yield return new WaitForSeconds(delay);
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.StopFor(StopTime);
+        }
+
+        flasherRef.Flash();
+
+        if (!hinted)
+        {
+            hinted = true;
+            hinter.BeginHint(Strings.LANTERN_HINT);
+        }
+
+        gameObject.SetActive(false);
+        flashing = false;
     }
 }

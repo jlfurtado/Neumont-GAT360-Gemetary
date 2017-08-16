@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class FollowMazeSolution : Enemy {
     private int goingTo, goingFrom;
     private bool forward = true;

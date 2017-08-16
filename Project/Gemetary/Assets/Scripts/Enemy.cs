@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class Enemy : MonoBehaviour {
     public int Value;
     public float SlerpRate = 10.0f;
@@ -29,10 +29,14 @@ public class Enemy : MonoBehaviour {
     protected float SpeedMult = 1.0f;
     protected Animator myAnimator;
     protected Animation myAnim;
+    protected AudioSource myAudioSFX;
 
     // Use this for initialization
     public virtual void Awake() {
         Eaten = false;
+        myAudioSFX = GetComponent<AudioSource>();
+        AudioHelper.InitSFX(myAudioSFX);
+
         myAnimator = GetComponent<Animator>();
         myAnim = GetComponent<Animation>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
@@ -149,6 +153,7 @@ public class Enemy : MonoBehaviour {
 
     protected void EatMe()
     {
+        AudioHelper.PlaySFX(myAudioSFX);
         Eaten = true;
         UnStop();
         SetMat(EatenMat);

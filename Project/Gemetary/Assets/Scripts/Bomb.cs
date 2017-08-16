@@ -12,6 +12,7 @@ public class Bomb : MonoBehaviour {
     public Material FlashMat;
     public GameObject ExplosionPrefab;
 
+    private AudioSource tombstoneTick;
     private AudioSource explosionSource;
     private ScoreManager scoreRef;
     private MazeScript maze;
@@ -26,6 +27,9 @@ public class Bomb : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
+        tombstoneTick = GetComponent<AudioSource>();
+        AudioHelper.InitSFX(tombstoneTick);
+
         explosionSource = GameObject.FindGameObjectWithTag(Strings.EXPLOSION_AUDIO_TAG).GetComponent<AudioSource>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         explosion = Instantiate(ExplosionPrefab).GetComponent<Explosion>();
@@ -65,7 +69,7 @@ public class Bomb : MonoBehaviour {
     
     private void Explode()
     {
-        explosionSource.Play();
+        AudioHelper.PlaySFX(explosionSource);
         scoreRef.AddScore(Value);
         maze.EatAt(mazeLoc, sectionLoc);
         gameObject.SetActive(false);
@@ -116,6 +120,7 @@ public class Bomb : MonoBehaviour {
         {
             exploding = true;
             flashTime = ExplodeTime;
+            AudioHelper.PlaySFX(tombstoneTick);
 
             if (!hinted)
             {

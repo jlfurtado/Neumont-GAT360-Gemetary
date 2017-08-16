@@ -9,7 +9,7 @@ public class KeepMe : MonoBehaviour {
     {
         if (GameObject.FindGameObjectWithTag(Strings.TITLE_MUSIC_TAG) == null)
         {
-            Instantiate(backgroundMusicPrefab);
+            Instantiate(backgroundMusicPrefab).GetComponent<AudioSource>().enabled = AudioHelper.BGMEnabled;
         }
     }
 }
