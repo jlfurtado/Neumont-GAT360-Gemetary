@@ -17,6 +17,8 @@ TagManager:
   - ExplosionAudio
   - Thunder
   - GemSFX
+  - ButtonClickSFX
+  - ButtonHoverSFX
   layers:
   - Default
   - TransparentFX

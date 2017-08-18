@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class HintText : MonoBehaviour {
+    private WaitForSeconds wait = new WaitForSeconds(0.25f);
     public float Duration;
     public static bool AllHintsDisabled = false;
     public GameObject ToSelect;
@@ -47,12 +48,12 @@ public class HintText : MonoBehaviour {
 
     public void Hide()
     {
-        StartCoroutine(HideAtEndOfFrame());
+        StartCoroutine(HideDelayed());
     }
 
-    private IEnumerator HideAtEndOfFrame()
+    private IEnumerator HideDelayed()
     {
-        yield return new WaitForEndOfFrame();
+        yield return wait;
 
         if (Displaying)
         {

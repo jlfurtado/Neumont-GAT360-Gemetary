@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour {
     public bool Showing { get; private set; }
     public GameObject ToSelect;
     private AxisInputHelper axisInput = null;
+    private WaitForSeconds wait = new WaitForSeconds(0.25f);
 
 	void Awake ()
     {
@@ -29,12 +30,12 @@ public class PauseMenu : MonoBehaviour {
 
     public void Hide()
     {
-        StartCoroutine(HideAtEndOfFrame());
+        StartCoroutine(HideDelayed());
     }
 
-    private IEnumerator HideAtEndOfFrame()
+    private IEnumerator HideDelayed()
     {
-        yield return new WaitForEndOfFrame();
+        yield return wait;
 
         if (Showing)
         {

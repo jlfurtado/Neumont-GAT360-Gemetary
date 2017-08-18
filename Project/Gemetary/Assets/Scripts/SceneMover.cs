@@ -5,31 +5,38 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneMover : MonoBehaviour {
+    private WaitForSeconds wait = new WaitForSeconds(0.25f);
+
+    private IEnumerator LoadDelayed(string name)
+    {
+        yield return wait;
+        SceneManager.LoadScene(name);
+    }
 
     public void MoveToTitle()
     {
         KeepTitleMusic();
-        SceneManager.LoadScene(Strings.TITLE_SCENE_NAME);
+        StartCoroutine(LoadDelayed(Strings.TITLE_SCENE_NAME));
     }
 
     public void MoveToGameOver()
     {
         DontKeepTitleMusic();
-        SceneManager.LoadScene(Strings.GAME_OVER_SCENE_NAME);
+        StartCoroutine(LoadDelayed(Strings.GAME_OVER_SCENE_NAME));
     }
 
     public void MoveToOptions()
     {
         KeepTitleMusic();
         SetPlayerName();
-        SceneManager.LoadScene(Strings.OPTIONS_SCENE_NAME);
+        StartCoroutine(LoadDelayed(Strings.OPTIONS_SCENE_NAME));
     }
 
     public void MoveToHowToPlay()
     {
         KeepTitleMusic();
         SetPlayerName();
-        SceneManager.LoadScene(Strings.HOW_TO_PLAY_SCENE_NAME);
+        StartCoroutine(LoadDelayed(Strings.HOW_TO_PLAY_SCENE_NAME));
     }
 
     public void MoveToMaze()
@@ -37,7 +44,7 @@ public class SceneMover : MonoBehaviour {
         DontKeepTitleMusic();
         SetPlayerName();
         ResetHints();
-        SceneManager.LoadScene(Strings.MAZE_SCENE_NAME);
+        StartCoroutine(LoadDelayed(Strings.MAZE_SCENE_NAME));
     }
 
     private void KeepTitleMusic()
@@ -54,6 +61,12 @@ public class SceneMover : MonoBehaviour {
 
     public void QuitGame()
     {
+        StartCoroutine(QuitDelayed());
+    }
+
+    private IEnumerator QuitDelayed()
+    {
+        yield return wait;
         Application.Quit();
     }
 

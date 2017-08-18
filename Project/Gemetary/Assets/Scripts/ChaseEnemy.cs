@@ -45,6 +45,11 @@ public class ChaseEnemy : Enemy
         }
     }
 
+    //public override void Update()
+    //{
+    //    base.Update();
+    //}
+
     protected override void OnLandReturn(Vector3 toPos)
     {
         // snap
@@ -65,10 +70,27 @@ public class ChaseEnemy : Enemy
         }
     }
 
+    private float Step(float current, out float last)
+    {
+        last = current;
+        return Time.realtimeSinceStartup;
+    }
+
+    //private static float add1;
+    //private static float add2;
+    //private static float add3;
+    //private static float add4;
+    //private static float add5;
+    //private static float add6;
+    //private static int calls;
+
     protected override void OnLand(Vector3 toPos)
     {
         // snap
         base.OnLand(toPos);
+        //++calls;
+
+        float last = Time.realtimeSinceStartup, current = Time.realtimeSinceStartup;
 
         if (path.Count == 0)
         {
@@ -76,12 +98,21 @@ public class ChaseEnemy : Enemy
             from = mazeRef.SectionLocFor(myRigidBody.position);
         }
 
-        bool playerFound = mazeRef.SectionAt(playerRef.transform.position) ==  mazeSection && GetPath(playerRef.GetPos(), ref playerPath);
+        //current = Step(current, out last);
+        //add1 += (current - last);
+
+        bool playerFound = mazeRef.SectionAt(playerRef.transform.position) == mazeSection && GetPath(playerRef.GetPos(), ref playerPath);
+
+        //current = Step(current, out last);
+        //add2 += (current - last);
 
         for (int i = 0; i < friendCount; ++i)
         {
             GetPath(myFriends[i].GetPos(), ref friendPaths[i]);
         }
+
+        //current = Step(current, out last);
+        //add3 += (current - last);
 
         int selected = 0, num = friendPaths[0].Count;
         for (int i = 1; i < friendCount; ++i)
@@ -93,7 +124,13 @@ public class ChaseEnemy : Enemy
             }
         }
 
+        //current = Step(current, out last);
+        //add4 += (current - last);
+
         path = (playerFound && playerPath.Count <= num) ? playerPath : friendPaths[selected];
+
+        //current = Step(current, out last);
+        //add5 += (current - last);
 
         if (path != null && path.Count > 0)
         {
@@ -101,6 +138,15 @@ public class ChaseEnemy : Enemy
             next = path.Pop();
         }
 
+        //current = Step(current, out last);
+        //add6 += (current - last);
+        //Debug.Log("Total time: " + Time.realtimeSinceStartup
+        //        + "\n1: " + (1000f * add1 / calls)
+        //        + "\n2: " + (1000f * add2 / calls)
+        //        + "\n3: " + (1000f * add3 / calls)
+        //        + "\n4: " + (1000f * add4 / calls)
+        //        + "\n5: " + (1000f * add5 / calls)
+        //        + "\n6: " + (1000f * add6 / calls));
     }
 
     public override void UpdateRef(MazeSectionGenerator mazeSection)

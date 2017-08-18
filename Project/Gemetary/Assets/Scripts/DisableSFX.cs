@@ -18,4 +18,9 @@ public class DisableSFX : MonoBehaviour
     {
         AudioHelper.SFXEnabled = !myToggle.isOn;
     }
+
+    public void OnToggleMe()
+    {
+        AudioHelper.SFXEnabled = !myToggle.isOn;
+    }
 }
