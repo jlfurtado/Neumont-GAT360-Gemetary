@@ -1308,7 +1308,7 @@ MonoBehaviour:
   Value: 2500
   SlerpRate: 10
   Speed: 0
-  BaseSpeed: 1
+  BaseSpeed: 0.75
   NormalMat: {fileID: 2100000, guid: 1626be1f93013dc46abd35ec9887ceea, type: 2}
   StoppedMat: {fileID: 2100000, guid: fc8510a6c813a244589f7f9451357e0c, type: 2}
   EatenMat: {fileID: 2100000, guid: 9b8b4731c85f8884d8c66e63361d0081, type: 2}
