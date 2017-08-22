@@ -2214,6 +2214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3100d582a495324594238122161f4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GhostParticlePrefab: {fileID: 1129515727523870, guid: 7290e6500d903a74f85869fd4c2b644e,
+    type: 2}
   Value: 1500
   SlerpRate: 10
   Speed: 0

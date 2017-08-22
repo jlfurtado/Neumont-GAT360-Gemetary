@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class Enemy : MonoBehaviour {
+    public GameObject GhostParticlePrefab;
     public int Value;
     public float SlerpRate = 10.0f;
     public float Speed = 1.0f;
@@ -30,11 +31,18 @@ public class Enemy : MonoBehaviour {
     protected Animator myAnimator;
     protected Animation myAnim;
     protected AudioSource myAudioSFX;
+    protected GameObject myGhostTrail;
 
     // Use this for initialization
     public virtual void Awake() {
         Eaten = false;
         myAudioSFX = GetComponent<AudioSource>();
+
+        myGhostTrail = Instantiate(GhostParticlePrefab);
+        myGhostTrail.transform.parent = transform;
+        myGhostTrail.name = "GhostParticles";
+        myGhostTrail.SetActive(false);
+
         AudioHelper.InitSFX(myAudioSFX);
 
         myAnimator = GetComponent<Animator>();
@@ -157,6 +165,7 @@ public class Enemy : MonoBehaviour {
         Eaten = true;
         UnStop();
         SetMat(EatenMat);
+        myGhostTrail.SetActive(true);
     }
 
     protected void Restore()
@@ -164,6 +173,7 @@ public class Enemy : MonoBehaviour {
         Eaten = false;
         SpeedMult = 1.0f;
         SetMat(NormalMat);
+        myGhostTrail.SetActive(false);
     }
 
     public void BlowMeUp()
