@@ -96,7 +96,7 @@ public class ChaseEnemy : Enemy
         {
             path = playerPath;
         }
-        else
+        else if (friendCount > 0)
         {
             GetPath(myFriends[friendIdx].GetPos(), ref friendPaths[friendIdx]);
             path = friendPaths[friendIdx];
@@ -112,7 +112,10 @@ public class ChaseEnemy : Enemy
             //}
 
              /*(playerFound && playerPath.Count <= num) ? playerPath : friendPaths[selected];*/
-
+        }
+        else
+        {
+            GetPath(playerRef.GetPos(), ref path);
         }
 
         if (path != null && path.Count > 0)

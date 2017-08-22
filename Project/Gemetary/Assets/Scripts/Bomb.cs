@@ -100,7 +100,7 @@ public class Bomb : MonoBehaviour {
             hit.transform.gameObject.SetActive(false);
         }
 
-        if ((playerRef.transform.position - (from + dir)).sqrMagnitude < 1.0f && !playerRef.PoweredUp && !playerRef.Dodging)
+        if ((playerRef.transform.position - (from + dir)).sqrMagnitude < 1.0f && !playerRef.PoweredUp && !playerRef.Dodging && !playerRef.PlayerDead)
         {
             playerRef.Die();
         }
@@ -116,7 +116,7 @@ public class Bomb : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !exploding)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !exploding && !playerRef.PlayerDead)
         {
             exploding = true;
             flashTime = ExplodeTime;

@@ -268,8 +268,8 @@ public class MazeSectionGenerator : MonoBehaviour {
     {
         float xPos = mazeLoc.x * Size * SquareSize, zPos = mazeLoc.z * Size * SquareSize;
         float distSqrd = xPos * xPos + zPos * zPos;
-        float m = ScoreManager.IsHardcore() ? 1.5f : 1.0f;
-        diffMult = m * Mathf.Log10(10.0f + m*distSqrd);
+        float m = ScoreManager.IsHardcore() ? 1.25f : 0.75f;
+        diffMult = m * Mathf.Log10(15.0f + m*distSqrd);
     }
 
     private IEnumerator SpawnEnemy(int index, float delay)

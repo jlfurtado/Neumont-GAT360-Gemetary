@@ -28,7 +28,7 @@ public class EatForPoints : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !playerRef.PlayerDead)
         {
             AudioHelper.PlaySFX(gemSFX);
             playerRef.AddEndurance(EnduranceRegen);

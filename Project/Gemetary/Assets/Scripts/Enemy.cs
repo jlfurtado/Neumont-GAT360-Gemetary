@@ -185,7 +185,7 @@ public class Enemy : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(Strings.PLAYER_TAG) && !Eaten)
+        if (other.CompareTag(Strings.PLAYER_TAG) && !Eaten && !playerRef.PlayerDead)
         {
             // only get comp if we hit the player
             if (playerRef.PoweredUp || stopped)

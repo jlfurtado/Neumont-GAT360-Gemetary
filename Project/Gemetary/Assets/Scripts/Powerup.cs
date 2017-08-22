@@ -17,11 +17,13 @@ public class Powerup : MonoBehaviour {
     private HintText hinter;
     private AudioSource myAudioSFX;
     private bool flashing = false;
+    private PlayerController playerRef;
 
     //private Collider myCollider;
     // Use this for initialization
     void Awake()
     {
+        playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         myAudioSFX = GameObject.FindGameObjectWithTag(Strings.THUNDER_SFX_TAG).GetComponent<AudioSource>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
         flasherRef = GameObject.FindGameObjectWithTag(Strings.FLASHER_TAG).GetComponent<Flasher>();
@@ -38,7 +40,7 @@ public class Powerup : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !flashing)
+        if (other.CompareTag(Strings.PLAYER_TAG) && scoreRef != null && !flashing && !playerRef.PlayerDead)
         {
             StartCoroutine(DelayedFlash(0.25f));
         }
