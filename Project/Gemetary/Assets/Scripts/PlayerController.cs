@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
     public float Speed;
     public float SlerpRate = 10.0f;
     public GameObject PowerupParticlePrefab;
+    public GameObject WalkParticlePrefab;
     public Material[] Colors;
     public float PowerupTime;
     public float DodgeTime;
@@ -44,14 +45,29 @@ public class PlayerController : MonoBehaviour {
     private PauseMenu pauseMenuRef = null;
     private AxisInputHelper axisInput = null;
     private SceneMover sceneMoverRef = null;
+    private ParticleSystem playerWalkParticles;
+    private FollowTarget mainCamera;
 
     private void Triggered(string trigger)
     {
         myAnimator.SetTrigger(trigger);
     }
 
+    private void SetEmissionRate()
+    {
+        ParticleSystem.EmissionModule e = playerWalkParticles.emission;
+        e.rateOverTime = Speed * 2.5f;
+    }
+
     // Use this for initialization
     void Awake() {
+        mainCamera = GameObject.FindGameObjectWithTag(Strings.MAIN_CAMERA_TAG).GetComponent<FollowTarget>();
+        playerWalkParticles = Instantiate(WalkParticlePrefab).GetComponentInChildren<ParticleSystem>();
+        playerWalkParticles.gameObject.transform.parent = transform;
+        playerWalkParticles.transform.localPosition = Vector3.zero;
+        playerWalkParticles.transform.localScale = Vector3.one;
+        SetEmissionRate();
+
         PlayerDead = false;
         sceneMoverRef = GameObject.FindGameObjectWithTag(Strings.SCENE_MOVER_TAG).GetComponent<SceneMover>();
         axisInput = GameObject.FindGameObjectWithTag(Strings.AXIS_INPUT_HELPER_TAG).GetComponent<AxisInputHelper>();
@@ -240,6 +256,7 @@ public class PlayerController : MonoBehaviour {
 
     public void PowerUp()
     {
+        playerWalkParticles.gameObject.SetActive(false);
         PlayPowerMusic();
         EndDodge();
         PoweredUp = true;
@@ -263,6 +280,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (!PlayerDead)
         {
+            playerWalkParticles.gameObject.SetActive(false);
             EndDodge();
             Restore();
             Triggered(Strings.DEATH_ANIM);
@@ -302,6 +320,7 @@ public class PlayerController : MonoBehaviour {
 
     private void EndDodge()
     {
+        mainCamera.BeginShake(0.25f, 5.0f);
         Dodging = false;
         Triggered(moving ? Strings.BEGIN_MOVE_ANIM : Strings.END_MOVE_ANIM);
         myRigidBody.position = new Vector3(myRigidBody.position.x, 0.0f, myRigidBody.position.z);
@@ -310,6 +329,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Restore()
     {
+        playerWalkParticles.gameObject.SetActive(true);
         PlayGameMusic();
         PoweredUp = false;
         RestoreMaterials();

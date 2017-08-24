@@ -32,15 +32,22 @@ public class Enemy : MonoBehaviour {
     protected Animation myAnim;
     protected AudioSource myAudioSFX;
     protected GameObject myGhostTrail;
+    protected ParticleSystem trailParticles;
+    protected FollowTarget mainCamera;
 
     // Use this for initialization
     public virtual void Awake() {
+        mainCamera = GameObject.FindGameObjectWithTag(Strings.MAIN_CAMERA_TAG).GetComponent<FollowTarget>();
         Eaten = false;
         myAudioSFX = GetComponent<AudioSource>();
 
         myGhostTrail = Instantiate(GhostParticlePrefab);
         myGhostTrail.transform.parent = transform;
         myGhostTrail.name = "GhostParticles";
+
+        trailParticles = myGhostTrail.GetComponentInChildren<ParticleSystem>();
+        SetEmissionRate();
+
         myGhostTrail.SetActive(false);
 
         AudioHelper.InitSFX(myAudioSFX);
@@ -52,6 +59,12 @@ public class Enemy : MonoBehaviour {
         myRigidBody = GetComponent<Rigidbody>();
         myRenderers = GetComponentsInChildren<Renderer>();
         scoreRef = GameObject.FindGameObjectWithTag(Strings.SCORE_MANAGER_TAG).GetComponent<ScoreManager>();
+    }
+
+    private void SetEmissionRate()
+    {
+        ParticleSystem.EmissionModule e = trailParticles.emission;
+        e.rateOverTime = 7.5f * Speed;
     }
 
     protected int IdxFromXZ(int x, int z)
@@ -161,11 +174,13 @@ public class Enemy : MonoBehaviour {
 
     protected void EatMe()
     {
+        mainCamera.BeginShake(0.1f, 5.0f);
         AudioHelper.PlaySFX(myAudioSFX);
         Eaten = true;
         UnStop();
         SetMat(EatenMat);
         myGhostTrail.SetActive(true);
+        SetEmissionRate();
     }
 
     protected void Restore()
@@ -197,6 +212,7 @@ public class Enemy : MonoBehaviour {
             else if (!playerRef.Dodging)
             {
                 // only move to game over if they aren't powered up
+                mainCamera.BeginShake(0.5f, 7.5f);
                 playerRef.Die();
             }
         }
@@ -232,6 +248,7 @@ public class Enemy : MonoBehaviour {
         } 
 
         if (myRigidBody != null) { myRigidBody.velocity = Vector3.zero; myRigidBody.position = mazeSection.PositionAt(home); }
+        if (trailParticles != null) { SetEmissionRate();  myGhostTrail.SetActive(false); }
     }
 
     protected void SetMat(Material mat)

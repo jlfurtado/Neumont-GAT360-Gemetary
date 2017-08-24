@@ -35,6 +35,7 @@ static class Strings
     public const string GEM_SFX_TAG = "GemSFX";
     public const string BUTTON_CLICK_SFX_TAG = "ButtonClickSFX";
     public const string BUTTON_HOVER_SFX_TAG = "ButtonHoverSFX";
+    public const string MAIN_CAMERA_TAG = "MainCamera";
 
     #endregion
 

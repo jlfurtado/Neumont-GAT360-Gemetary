@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class Powerup : MonoBehaviour {
     public int Value;
+    public float MinIntensity;
+    public float MaxIntensity;
+    public float CycleLength;
     public float StopTime;
     public float FlashTime;
     public IVec2 mazeLoc;
@@ -18,11 +21,17 @@ public class Powerup : MonoBehaviour {
     private AudioSource myAudioSFX;
     private bool flashing = false;
     private PlayerController playerRef;
+    private Light lightRef;
+    private bool brighten;
+    private float timer;
+    private FollowTarget mainCamera;
 
     //private Collider myCollider;
     // Use this for initialization
     void Awake()
     {
+        mainCamera = GameObject.FindGameObjectWithTag(Strings.MAIN_CAMERA_TAG).GetComponent<FollowTarget>();
+        lightRef = GetComponentInChildren<Light>();
         playerRef = GameObject.FindGameObjectWithTag(Strings.PLAYER_TAG).GetComponent<PlayerController>();
         myAudioSFX = GameObject.FindGameObjectWithTag(Strings.THUNDER_SFX_TAG).GetComponent<AudioSource>();
         hinter = GameObject.FindGameObjectWithTag(Strings.HINTER_TAG).GetComponent<HintText>();
@@ -35,6 +44,30 @@ public class Powerup : MonoBehaviour {
         for (int i = 0; i < enemyObjects.Length; ++i)
         {
             enemies[i] = enemyObjects[i].GetComponent<Enemy>();
+        }
+        
+        lightRef.intensity = MinIntensity;
+        brighten = true;
+    }
+
+    private void ToggleBrightDir()
+    {
+        brighten = !brighten;
+        timer = CycleLength;
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+        if (timer <= 0.0f)
+        {
+            ToggleBrightDir();
+        }
+        else
+        {
+            float perc = (1.0f - (timer / CycleLength));
+            lightRef.intensity = brighten ? Mathf.Lerp(MinIntensity, MaxIntensity, perc)
+                                          : Mathf.Lerp(MaxIntensity, MinIntensity, perc);
         }
     }
 
@@ -55,6 +88,7 @@ public class Powerup : MonoBehaviour {
 
         yield return new WaitForSeconds(delay);
 
+        mainCamera.BeginShake(0.25f, 2.5f);
         foreach (Enemy enemy in enemies)
         {
             enemy.StopFor(StopTime);

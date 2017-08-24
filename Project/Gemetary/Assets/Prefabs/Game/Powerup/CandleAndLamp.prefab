@@ -279,7 +279,7 @@ Light:
   m_Type: 2
   m_Color: {r: 0.9044118, g: 0.75040495, b: 0.41895548, a: 1}
   m_Intensity: 4
-  m_Range: 5.6
+  m_Range: 6
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -316,5 +316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 100
+  MinIntensity: 2
+  MaxIntensity: 5
+  CycleLength: 1
   StopTime: 10
   FlashTime: 0.5

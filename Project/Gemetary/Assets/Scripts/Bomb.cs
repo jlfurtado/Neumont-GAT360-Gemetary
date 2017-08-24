@@ -23,10 +23,12 @@ public class Bomb : MonoBehaviour {
     private Enemy[] enemies;
     private Explosion explosion = null;
     private HintText hinter;
+    private FollowTarget mainCamera;
     public static bool hinted = false;
 
     // Use this for initialization
     void Awake() {
+        mainCamera = GameObject.FindGameObjectWithTag(Strings.MAIN_CAMERA_TAG).GetComponent<FollowTarget>();
         tombstoneTick = GetComponent<AudioSource>();
         AudioHelper.InitSFX(tombstoneTick);
 
@@ -69,6 +71,7 @@ public class Bomb : MonoBehaviour {
     
     private void Explode()
     {
+        mainCamera.BeginShake(.75f, 7.5f);
         AudioHelper.PlaySFX(explosionSource);
         scoreRef.AddScore(Value);
         maze.EatAt(mazeLoc, sectionLoc);
