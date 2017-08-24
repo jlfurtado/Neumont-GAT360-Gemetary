@@ -86,10 +86,10 @@ public class Bomb : MonoBehaviour {
         BlowUp(checkFrom, Vector3.left + Vector3.back);
         BlowUp(checkFrom, Vector3.forward + Vector3.left);
         BlowUp(checkFrom, Vector3.back + Vector3.right);
-        //BlowUp(checkFrom, 2.0f * Vector3.right);
-        //BlowUp(checkFrom, 2.0f * Vector3.left);
-        //BlowUp(checkFrom, 2.0f * Vector3.forward);
-        //BlowUp(checkFrom, 2.0f * Vector3.back);
+        BlowUp(checkFrom, 2.0f * Vector3.right);
+        BlowUp(checkFrom, 2.0f * Vector3.left);
+        BlowUp(checkFrom, 2.0f * Vector3.forward);
+        BlowUp(checkFrom, 2.0f * Vector3.back);
 
         explosion.Explode();
     }

@@ -14,7 +14,9 @@ public class DisplayHighScores : MonoBehaviour {
         for (int i = 0; i < Strings.HIGH_SCORE_KEYS.Length; ++i)
         {
             string[] vals = PlayerPrefs.GetString(Strings.HIGH_SCORE_KEYS[i], Strings.DEFAULT_SCORE_TEXT).Split(':');
-            scoreText = string.Concat(scoreText, vals[0], Strings.SPACE_COLON_SPACE, vals[1], Strings.NEWLINE);
+            bool yourScore = vals[1].Equals(ScoreManager.StoreScore.ToString()) && vals[0].Equals(ScoreManager.GetName());
+            string colorHex = ColorUtility.ToHtmlStringRGB((yourScore) ? Color.red : Color.black);
+            scoreText = string.Concat(scoreText, Strings.OPEN_COLOR_PREFIX, colorHex, Strings.OPEN_COLOR_POSTFIX, vals[0], Strings.SPACE_COLON_SPACE, vals[1], Strings.CLOSE_COLOR); 
         }
 
         textComp.text = scoreText;

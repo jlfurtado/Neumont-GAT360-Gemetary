@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour {
     private void SetEmissionRate()
     {
         ParticleSystem.EmissionModule e = playerWalkParticles.emission;
-        e.rateOverTime = Speed * 2.5f;
+        e.rateOverTime =  moving ? Speed * 2.5f : 0.0f;
     }
 
     // Use this for initialization
@@ -181,6 +181,7 @@ public class PlayerController : MonoBehaviour {
             }            
 
             moving = true;
+            SetEmissionRate();
             this.fromPos = fromPos;
             this.toPos = toPos;
             if (!Dodging) { Triggered(Strings.BEGIN_MOVE_ANIM); }
@@ -203,6 +204,7 @@ public class PlayerController : MonoBehaviour {
             myRigidBody.velocity = Vector3.zero;
             myRigidBody.position = toPos;
             moving = false;
+            SetEmissionRate();
             if (!Dodging && (dir.x == 0 && dir.z == 0)) { Triggered(Strings.END_MOVE_ANIM); }
         }
 

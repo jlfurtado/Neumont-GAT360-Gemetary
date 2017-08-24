@@ -128,12 +128,13 @@ static class Strings
 
     #endregion
 
-    #region Text Colorization
+    #region Text Effects
 
     public const string OPEN_COLOR_PREFIX = "<color=\"#";
     public const string OPEN_COLOR_POSTFIX = "\">";
     public const string CLOSE_COLOR = "</color>\n";
-
+    public const string BOLD_PREFIX = "<b>";
+    public const string BOLD_POSTFIX = "</b>\n";
     #endregion
 
 }
