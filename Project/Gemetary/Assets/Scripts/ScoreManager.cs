@@ -52,8 +52,7 @@ public class ScoreManager : MonoBehaviour {
 
     public void AddScore(int value)
     {
-        value /= 5;
-        value *= 5;
+        value = (value / 5) * 5;
         scoreValue += value;
         SetScoreText();
         if (Mathf.Abs(value) >= BonusThreshold)

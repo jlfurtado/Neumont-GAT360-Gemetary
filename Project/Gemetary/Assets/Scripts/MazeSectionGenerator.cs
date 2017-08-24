@@ -329,6 +329,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                     GemPool.reference[gemCount].SetMat(GemMat);
                     GemPool.reference[gemCount].mazeLoc = mazeLoc;
                     GemPool.reference[gemCount].sectionLoc = new IVec2(x, z);
+                    GemPool.reference[gemCount].ResetMe();
                     gemCount++;
                 }
                 else if (mazeSections[idx] == MazeSquare.SPECIAL)

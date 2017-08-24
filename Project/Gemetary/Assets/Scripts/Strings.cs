@@ -36,6 +36,8 @@ static class Strings
     public const string BUTTON_CLICK_SFX_TAG = "ButtonClickSFX";
     public const string BUTTON_HOVER_SFX_TAG = "ButtonHoverSFX";
     public const string MAIN_CAMERA_TAG = "MainCamera";
+    public const string POWERUP_BAR_TAG = "PowerupBar";
+    public const string GEM_OPTIMIZER_COLLECTOR_TAG = "GemCollectorOptimizerThing";
 
     #endregion
 
@@ -135,6 +137,7 @@ static class Strings
     public const string CLOSE_COLOR = "</color>\n";
     public const string BOLD_PREFIX = "<b>";
     public const string BOLD_POSTFIX = "</b>\n";
+
     #endregion
 
 }

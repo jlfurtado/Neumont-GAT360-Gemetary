@@ -110,6 +110,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnduranceRegen: 1
+  Speed: 500
+  offset: {x: 0, y: 5, z: 0}
+  SlowdownRadius: 50
   Value: 5
 --- !u!135 &135101060223448474
 SphereCollider:
