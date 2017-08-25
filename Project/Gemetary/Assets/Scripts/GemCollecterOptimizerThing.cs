@@ -15,7 +15,7 @@ public class GemCollecterOptimizerThing : MonoBehaviour {
 
         mainCamera = GameObject.FindGameObjectWithTag(Strings.MAIN_CAMERA_TAG).GetComponent<Camera>();
         powerupBarRef = GameObject.FindGameObjectWithTag(Strings.POWERUP_BAR_TAG).GetComponent<RectTransform>();
-        screenPowPos = new Vector3(powerupBarRef.position.x + (powerupBarRef.rect.width) - 10.0f, powerupBarRef.position.y, mainCamera.nearClipPlane);
+        screenPowPos = new Vector3(powerupBarRef.position.x + (powerupBarRef.rect.width) - 25.0f, powerupBarRef.position.y, mainCamera.nearClipPlane);
     }
 
     void LateUpdate()

@@ -306,7 +306,7 @@ public class MazeSectionGenerator : MonoBehaviour {
             PowerupPool.reference[PowerupPool.start].mazeLoc = mazeLoc;
             PowerupPool.reference[PowerupPool.start].sectionLoc = powerupPos;
         }
-     
+
         int pillarCount = PillarPool.start, gemCount = GemPool.start, fenceCount = FencePool.start, bombCount = BombPool.start, idx = 0;
         for (int x = 0; x < Size; ++x)
         {
@@ -323,7 +323,7 @@ public class MazeSectionGenerator : MonoBehaviour {
                         MakeAt(FencePool, fenceCount++, location).transform.localRotation = Quaternion.Euler(0.0f, (z & 1) == 0 ? 90.0f : 0.0f, 0.0f);
                     }
                 }
-                else if (mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION)
+                else if ((mazeSections[idx] == MazeSquare.VISITED || mazeSections[idx] == MazeSquare.SOLUTION))
                 {
                     MakeAt(GemPool, gemCount, location);
                     GemPool.reference[gemCount].SetMat(GemMat);

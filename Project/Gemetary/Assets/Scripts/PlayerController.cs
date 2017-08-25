@@ -282,7 +282,6 @@ public class PlayerController : MonoBehaviour {
     {
         if (!PlayerDead)
         {
-            playerWalkParticles.gameObject.SetActive(false);
             EndDodge();
             Restore();
             Triggered(Strings.DEATH_ANIM);
@@ -291,6 +290,8 @@ public class PlayerController : MonoBehaviour {
             if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Stop(); }
             AudioHelper.PlaySFX(PlayerDeadSFX);
             StartCoroutine(GoToGameOver(3.0f));
+            moving = false;
+            SetEmissionRate();
             PlayerDead = true;
         }
     }
