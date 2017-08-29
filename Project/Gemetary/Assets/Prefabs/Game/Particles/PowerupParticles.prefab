@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4254910314298078}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: PowerupParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4029315761152558}
   - component: {fileID: 198529203563456972}
   - component: {fileID: 199484547545288738}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: PowerupParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}

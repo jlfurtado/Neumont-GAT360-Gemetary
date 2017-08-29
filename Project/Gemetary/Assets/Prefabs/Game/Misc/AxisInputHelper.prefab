@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4399955405913558}
   - component: {fileID: 114687589988722606}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AxisInputHelper
   m_TagString: AxisInputHelper
   m_Icon: {fileID: 0}

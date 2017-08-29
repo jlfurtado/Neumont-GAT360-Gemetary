@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4626954653785890}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: PlayerTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4447268980973662}
   - component: {fileID: 198859056820398484}
   - component: {fileID: 199428224619297634}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: GhostTrailParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour {
     private SceneMover sceneMoverRef = null;
     private ParticleSystem playerWalkParticles;
     private FollowTarget mainCamera;
+    private int raycastLayers;
 
     private void Triggered(string trigger)
     {
@@ -109,6 +110,8 @@ public class PlayerController : MonoBehaviour {
         AudioHelper.InitSFX(PlayerDeadSFX);
         AudioHelper.InitSFX(PlayerJumpSFX);
         AudioHelper.InitSFX(WallDestructSFX);
+
+        raycastLayers = ~((1 << LayerMask.NameToLayer(Strings.PLAYER_LAYER)) | Physics.IgnoreRaycastLayer | (1 << LayerMask.NameToLayer(Strings.NO_COLLIDE_NO_RAYCAST_LAYER)));
     }
 
     void Start()
@@ -211,7 +214,7 @@ public class PlayerController : MonoBehaviour {
         if (PoweredUp)
         {
             RaycastHit hit;
-            if (Physics.Raycast(myRigidBody.position + (Vector3.up * 0.5f), new Vector3(dir.x, 0.0f, dir.z), out hit, 1.0f))
+            if (Physics.Raycast(myRigidBody.position + (Vector3.up * 0.5f), new Vector3(dir.x, 0.0f, dir.z), out hit, 1.0f, raycastLayers))
             {
                 mazeRef.EatAt(hit.transform.position);
                 hit.transform.gameObject.SetActive(false);
@@ -243,10 +246,10 @@ public class PlayerController : MonoBehaviour {
             pauseMenuRef.Show();
         }
 
-        //if (Input.GetKey(KeyCode.Space))
-        //{
-        //    PowerUp();
-        //}
+        if (Input.GetKey(KeyCode.Space))
+        {
+            PowerUp();
+        }
 
         mazeRef.GenerateAround(myRigidBody.position);
     }
@@ -289,10 +292,11 @@ public class PlayerController : MonoBehaviour {
             if (GameBackgroundMusic.isPlaying) { GameBackgroundMusic.Stop(); }
             if (PowerupBackgroundMusic.isPlaying) { PowerupBackgroundMusic.Stop(); }
             AudioHelper.PlaySFX(PlayerDeadSFX);
+            PlayerDead = true;
+
             StartCoroutine(GoToGameOver(3.0f));
             moving = false;
             SetEmissionRate();
-            PlayerDead = true;
         }
     }
 

@@ -287,16 +287,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
-        type: 2}
-      propertyPath: PillarPrefab
-      value: 
-      objectReference: {fileID: 104448, guid: c45061ad131cfce4c8fd453b667f1186, type: 2}
-    - target: {fileID: 114581117807531068, guid: 96bbb4f1673d99c4fa19685653775157,
-        type: 2}
-      propertyPath: MaxEnemiesPerSection
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96bbb4f1673d99c4fa19685653775157, type: 2}
   m_IsPrefabParent: 0

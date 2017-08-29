@@ -24,6 +24,7 @@ public class Bomb : MonoBehaviour {
     private Explosion explosion = null;
     private HintText hinter;
     private FollowTarget mainCamera;
+    private int raycastLayers;
     public static bool hinted = false;
 
     // Use this for initialization
@@ -52,6 +53,8 @@ public class Bomb : MonoBehaviour {
         {
             enemies[i] = enemyObjects[i].GetComponent<Enemy>();
         }
+
+        raycastLayers = ~((1 << LayerMask.NameToLayer(Strings.PLAYER_LAYER)) | Physics.IgnoreRaycastLayer | (1 << LayerMask.NameToLayer(Strings.NO_COLLIDE_NO_RAYCAST_LAYER)));
     }
 
     void Update()
@@ -97,7 +100,7 @@ public class Bomb : MonoBehaviour {
     private void BlowUp(Vector3 from, Vector3 dir)
     {
         RaycastHit hit;
-        if (Physics.Raycast(from, dir, out hit, dir.magnitude))
+        if (Physics.Raycast(from, dir, out hit, dir.magnitude, raycastLayers))
         {
             maze.EatAt(hit.transform.position);
             hit.transform.gameObject.SetActive(false);

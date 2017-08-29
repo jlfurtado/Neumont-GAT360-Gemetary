@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4530229278394110}
   - component: {fileID: 114454914135568546}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Flasher
   m_TagString: Flasher
   m_Icon: {fileID: 0}

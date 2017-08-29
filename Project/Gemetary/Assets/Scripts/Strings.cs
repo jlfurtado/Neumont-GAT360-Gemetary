@@ -130,6 +130,13 @@ static class Strings
 
     #endregion
 
+    #region Layers
+
+    public const string PLAYER_LAYER = "Player";
+    public const string NO_COLLIDE_NO_RAYCAST_LAYER = "NoRayNoCollide";
+
+    #endregion
+
     #region Text Effects
 
     public const string OPEN_COLOR_PREFIX = "<color=\"#";

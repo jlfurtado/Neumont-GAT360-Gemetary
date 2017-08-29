@@ -55,7 +55,7 @@ MonoBehaviour:
     type: 2}
   MazeSectorPrefab: {fileID: 1981083637158120, guid: e5d727fc450b3f0409b231d37c30d2bf,
     type: 2}
-  PillarPrefab: {fileID: 104448, guid: 7617cf3261020e143b25e48ecb8c5ac6, type: 2}
+  PillarPrefab: {fileID: 104448, guid: c45061ad131cfce4c8fd453b667f1186, type: 2}
   FencePrefab: {fileID: 103032, guid: 9cd69f976eeeb8849975bba487d6d4fc, type: 2}
   GemPrefab: {fileID: 1254880983954834, guid: 07803455a6cd9ee4c9d34e29518ca18b, type: 2}
   FloorPrefab: {fileID: 193794, guid: b1f3b805b17bf7d459a91b53c5b289bf, type: 2}
