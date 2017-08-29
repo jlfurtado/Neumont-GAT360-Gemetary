@@ -246,10 +246,10 @@ public class PlayerController : MonoBehaviour {
             pauseMenuRef.Show();
         }
 
-        if (Input.GetKey(KeyCode.Space))
-        {
-            PowerUp();
-        }
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    PowerUp();
+        //}
 
         mazeRef.GenerateAround(myRigidBody.position);
     }
