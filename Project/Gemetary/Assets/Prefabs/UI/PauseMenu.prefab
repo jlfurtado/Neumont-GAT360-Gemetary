@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 224974351140016572}
   - component: {fileID: 222869427127302176}
   - component: {fileID: 114392393607290702}
+  - component: {fileID: 114560568854716838}
   m_Layer: 5
   m_Name: PauseText
   m_TagString: Untagged
@@ -955,11 +956,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5c366876ae2f6574f942cd03913ff2a8, type: 3}
-    m_FontSize: 36
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 40
+    m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1023,6 +1024,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hover: {fileID: 8300000, guid: 638730ba0c2fc37469c9eb849fd54478, type: 3}
   Click: {fileID: 8300000, guid: 1ce172247e4b4ae498f681bc95219828, type: 3}
+--- !u!114 &114560568854716838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1211625179891568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.5}
+  m_EffectDistance: {x: 4, y: -4}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114562495458211414
 MonoBehaviour:
   m_ObjectHideFlags: 1
