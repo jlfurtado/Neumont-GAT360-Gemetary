@@ -27,10 +27,9 @@ public class GemCollecterOptimizerThing : MonoBehaviour {
         }
     }
 
-    public float BeginFlyGem(EatForPoints gem)
+    public void BeginFlyGem(EatForPoints gem)
     {
         gem.transform.parent = mainCamera.transform;
         flyingGems.Add(gem);
-        return mainCamera.WorldToScreenPoint(transform.position).z;
     }
 }

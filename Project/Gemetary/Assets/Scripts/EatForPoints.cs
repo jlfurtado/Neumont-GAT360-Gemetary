@@ -22,7 +22,6 @@ public class EatForPoints : MonoBehaviour {
     private Vector3 startScale;
     private Rigidbody myRigidBody;
     private GemCollecterOptimizerThing collectorOptimizer;
-    private float startZ;
     
     //private Collider myCollider;
 	// Use this for initialization
@@ -53,7 +52,7 @@ public class EatForPoints : MonoBehaviour {
 
             transform.position = c.ScreenToWorldPoint(myScreenPoint);
 
-            float f = 1.0f - (myScreenPoint.z - c.nearClipPlane) / startZ;
+            float f = 1.0f - (myScreenPoint.z - c.nearClipPlane) / 12.5f;
 
             transform.localScale = Vector3.Lerp(startScale, Vector3.one, f);
 
@@ -75,7 +74,7 @@ public class EatForPoints : MonoBehaviour {
             maze.EatAt(mazeLoc, sectionLoc);
             Collected = true;
             myRigidBody.detectCollisions = false;
-            startZ = collectorOptimizer.BeginFlyGem(this);
+            collectorOptimizer.BeginFlyGem(this);
          }
     }
 
